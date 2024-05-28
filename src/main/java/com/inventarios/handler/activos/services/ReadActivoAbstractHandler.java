@@ -55,21 +55,6 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
               .withStatusCode(500);
     }
   }
-
-  private String convertResultToJson(Result<Record> result) {
-    List<Map<String, Object>> resultList = new ArrayList<>();
-    for (Record record : result) {
-      Map<String, Object> recordMap = new LinkedHashMap<>();
-      for (Field<?> field : result.fields()) {
-        recordMap.put(field.getName(), record.get(field));
-      }
-      System.out.println("recordMap: "+recordMap);
-      resultList.add(recordMap);
-    }
-    System.out.println("resultList: "+resultList);
-    return new Gson().toJson(resultList);
-  }
-
   protected List<Activo> convertResultToList(Result<Record> result) {
     List<Activo> listaActivos = new ArrayList<>();
     for (Record record : result) {
@@ -82,8 +67,14 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
       activo.setFechaingreso(record.getValue("fechaingreso", Date.class));
       activo.setImporte(record.getValue("importe", BigDecimal.class));
       activo.setMoneda(record.getValue("moneda", String.class));
-      ///activo.setResponsable(record.getValue("responsableId", Responsable.class));
-      ///activo.setGrupo(record.getValue("grupoId", Grupo.class));
+      //activo.setResponsable(record.getValue("responsableId", Responsable.class));
+      //activo.setGrupo(record.getValue("grupoId", Grupo.class));
+      Responsable responsable=new Responsable();
+      responsable.setId(record.getValue("responsableid", Long.class));
+      ///activo.setResponsable(responsable);
+      Grupo grupo=new Grupo();
+      grupo.setId(record.getValue("grupoid", Long.class));
+      ///activo.setGrupo(grupo);
       //activo.setPicture(record.getValue("picture", byte[].class));
       listaActivos.add(activo);
     }

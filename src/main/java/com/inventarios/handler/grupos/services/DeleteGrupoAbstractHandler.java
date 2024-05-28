@@ -11,6 +11,7 @@ import com.inventarios.handler.grupos.response.GrupoResponseRest;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
+
 public abstract class DeleteGrupoAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   protected final static Table<Record> GRUPO_TABLE = DSL.table("grupo");
@@ -33,7 +34,7 @@ public abstract class DeleteGrupoAbstractHandler implements RequestHandler<APIGa
             .withHeaders(headers);
     Map<String, String> pathParameters = input.getPathParameters();
     String idString = pathParameters.get("id");
-    context.getLogger().log("id from path: " + idString);
+    context.getLogger().log("Eliminando: " + idString);
 
     Long id = null;
     String output ="";

@@ -33,7 +33,7 @@ public abstract class DeleteProveedorAbstractHandler implements RequestHandler<A
             .withHeaders(headers);
     Map<String, String> pathParameters = input.getPathParameters();
     String idString = pathParameters.get("id");
-    context.getLogger().log("id from path: " + idString);
+    context.getLogger().log("Eliminando: " + idString);
 
     Long id = null;
     String output ="";
