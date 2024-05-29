@@ -1,7 +1,7 @@
 CREATE TABLE proveedor (
     id SERIAL PRIMARY KEY,
-    ruc VARCHAR(18) NOT NULL,
-    razonsocial VARCHAR(255) NOT NULL
+    razonsocial VARCHAR(255) NOT NULL,
+    ruc VARCHAR(18) NOT NULL
 );
 
 CREATE TABLE grupo (
@@ -65,19 +65,21 @@ CREATE TABLE atributos (
 
 CREATE TABLE activo (
     id SERIAL PRIMARY KEY,
+    responsableId INTEGER NOT NULL,
+    proveedorId INTEGER NOT NULL,
+    tipoId INTEGER NOT NULL,
+    grupoId INTEGER NOT NULL,
+    articuloId INTEGER NOT NULL,
     codinventario VARCHAR(50)  NULL,
     modelo VARCHAR(255)  NULL,
     marca VARCHAR(255) NOT NULL,
     nroserie VARCHAR(255) NOT NULL,
     fechaingreso DATE NOT NULL,
-    importe NUMERIC NOT NULL,
     moneda VARCHAR(10) NOT NULL,
-    grupoId INTEGER NOT NULL,
-    articuloId INTEGER NOT NULL,
-    responsableId INTEGER NOT NULL,
-    tipoId INTEGER NOT NULL,
+    importe NUMERIC NOT NULL,
     FOREIGN KEY (grupoId) REFERENCES grupo(id),
     FOREIGN KEY (articuloId) REFERENCES articulo(id),
     FOREIGN KEY (responsableId) REFERENCES responsable(id),
-    FOREIGN KEY (tipoId) REFERENCES tipo(id)
+    FOREIGN KEY (tipoId) REFERENCES tipo(id),
+    FOREIGN KEY (proveedorId) REFERENCES proveedor(id)
 );

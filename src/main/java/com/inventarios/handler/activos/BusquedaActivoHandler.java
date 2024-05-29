@@ -2,8 +2,10 @@ package com.inventarios.handler.activos;
 
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.activos.services.BusquedaActivoAbstractHandler;
-import org.jooq.*;
+import org.jooq.Condition;
+import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.jooq.Result;
 import org.jooq.impl.DSL;
 import java.time.LocalDate;
 import static org.jooq.impl.DSL.field;
@@ -11,11 +13,14 @@ import static org.jooq.impl.DSL.field;
 public class BusquedaActivoHandler extends BusquedaActivoAbstractHandler {
 
   @Override
-  protected Result<Record> busquedaActivo(String responsable, String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta) {
+  protected Result<Record> busquedaActivo(String responsable, String proveedor, String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta) {
     DSLContext dsl = RDSConexion.getDSL();
     Condition condition = DSL.trueCondition();
     if (responsable != null && !responsable.isEmpty()) {
       condition = condition.and(RESPONSABLE_TABLE.field("arearesponsable").likeIgnoreCase("%" + responsable + "%"));
+    }
+    if (proveedor != null && !proveedor.isEmpty()) {
+      condition = condition.and(PROVEEDOR_TABLE.field("razonsocial").likeIgnoreCase("%" + proveedor + "%"));
     }
     if (codinventario != null && !codinventario.isEmpty()) {
       condition = condition.and(field("codinventario").likeIgnoreCase("%" + codinventario + "%"));
@@ -35,6 +40,7 @@ public class BusquedaActivoHandler extends BusquedaActivoAbstractHandler {
     return dsl.select()
             .from(ACTIVO_TABLE)
             .join(RESPONSABLE_TABLE).on(field("responsableId").eq(RESPONSABLE_TABLE.field("id")))
+            .join(PROVEEDOR_TABLE).on(field("proveedorId").eq(PROVEEDOR_TABLE.field("id")))
             .where(condition)
             .fetch();
   }
@@ -47,6 +53,16 @@ public class BusquedaActivoHandler extends BusquedaActivoAbstractHandler {
             .where(DSL.field("id", Long.class).eq(id))
             .fetchOne();
     return record != null ? record.getValue(RESPONSABLE_TABLE_COLUMNA) : null;
+  }
+
+  @Override
+  protected String mostrarProveedor(Long id) {
+    var dsl = RDSConexion.getDSL();
+    Record record = dsl.select(PROVEEDOR_TABLE_COLUMNA)
+            .from(PROVEEDOR_TABLE)
+            .where(DSL.field("id", Long.class).eq(id))
+            .fetchOne();
+    return record != null ? record.getValue(PROVEEDOR_TABLE_COLUMNA) : null;
   }
 
   @Override

@@ -13,8 +13,8 @@ public class Proveedor  implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String ruc;
     private String razonsocial;
+    private String ruc;
 
     public Long getId() {
         return id;

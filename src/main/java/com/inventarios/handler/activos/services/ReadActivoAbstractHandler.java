@@ -27,6 +27,8 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
   protected static final Field<String> GRUPO_TABLE_COLUMNA = DSL.field("nombregrupo", String.class);
   protected final static Table<Record> ARTICULO_TABLE = DSL.table("articulo");
   protected static final Field<String> ARTICULO_TABLE_COLUMNA = DSL.field("nombrearticulo", String.class);
+  protected final static Table<Record> PROVEEDOR_TABLE = DSL.table("proveedor");
+  protected static final Field<String> PROVEEDOR_TABLE_COLUMNA = DSL.field("razonsocial", String.class);
 
   final static Map<String, String> headers = new HashMap<>();
 
@@ -43,6 +45,7 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
   protected abstract String mostrarTipoBien(Long id);
   protected abstract String mostrarGrupo(Long id);
   protected abstract String mostrarArticulo(Long id);
+  protected abstract String mostrarProveedor(Long id);
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -77,23 +80,49 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
       activo.setFechaingreso(record.getValue("fechaingreso", Date.class));
       activo.setMoneda(record.getValue("moneda", String.class));
       activo.setImporte(record.getValue("importe", BigDecimal.class));
-      Responsable responsable = new Responsable();
+
+      /*Responsable responsable = new Responsable();
       responsable.setId(record.getValue("responsableid", Long.class));
       responsable.setNombreusuario(mostrarResponsable(responsable.getId()));
+      activo.setResponsable(responsable);*/
+
+      Responsable responsable = new Responsable();
+      responsable.setId(record.getValue("responsableid", Long.class));
+      responsable.setArearesponsable(mostrarResponsable(responsable.getId()));
+      //responsable.setArearesponsable(record.getValue(RESPONSABLE_TABLE.field("arearesponsable"), String.class));
+      /*responsable.setNombreusuario(record.getValue(RESPONSABLE_TABLE.field("nombreusuario"), String.class));
+      responsable.setNombresyapellidos(record.getValue(RESPONSABLE_TABLE.field("nombresyapellidos"), String.class));
+      responsable.setCorreo(record.getValue(RESPONSABLE_TABLE.field("correo"), String.class));*/
+
       activo.setResponsable(responsable);
+      /*responsable.setArearesponsable(record.getValue(RESPONSABLE_TABLE.field("arearesponsable"), String.class));
+      responsable.setNombreusuario(record.getValue(RESPONSABLE_TABLE.field("nombreusuario"), String.class));
+      responsable.setNombresyapellidos(record.getValue(RESPONSABLE_TABLE.field("nombresyapellidos"), String.class));
+      responsable.setCorreo(record.getValue(RESPONSABLE_TABLE.field("correo"), String.class));
+      */
+
+      Proveedor proveedor = new Proveedor();
+      proveedor.setId(record.getValue("proveedorid", Long.class));
+      proveedor.setRazonsocial(mostrarProveedor(proveedor.getId()));
+      activo.setProveedor(proveedor);
+
       Tipo tipo = new Tipo();
       tipo.setId(record.getValue("tipoid", Long.class));
       tipo.setNombretipo(mostrarTipoBien(tipo.getId()));
       activo.setTipo(tipo);
+
       Grupo grupo=new Grupo();
       grupo.setId(record.getValue("grupoid", Long.class));
       grupo.setNombregrupo(mostrarGrupo(grupo.getId()));
       activo.setGrupo(grupo);
+
       Articulo articulo = new Articulo();
       articulo.setId(record.getValue("tipoid", Long.class));
       articulo.setNombrearticulo(mostrarArticulo(articulo.getId()));
       activo.setArticulo(articulo);
+
       //activo.setPicture(record.getValue("picture", byte[].class));
+
       listaActivos.add(activo);
     }
     return listaActivos;

@@ -25,6 +25,16 @@ public class ReadActivoHandler extends ReadActivoAbstractHandler {
   }
 
   @Override
+  protected String mostrarProveedor(Long id) {
+    var dsl = RDSConexion.getDSL();
+    Record record = dsl.select(PROVEEDOR_TABLE_COLUMNA)
+            .from(PROVEEDOR_TABLE)
+            .where(DSL.field("id", Long.class).eq(id))
+            .fetchOne();
+    return record != null ? record.getValue(PROVEEDOR_TABLE_COLUMNA) : null;
+  }
+
+  @Override
   protected String mostrarTipoBien(Long id) {
     var dsl = RDSConexion.getDSL();
     Record record = dsl.select(TIPO_TABLE_COLUMNA)

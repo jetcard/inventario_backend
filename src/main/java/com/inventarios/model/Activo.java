@@ -34,7 +34,6 @@ public class Activo implements Serializable {
   private Date finLeasing;//de laptop
   private String moneda;
   private BigDecimal importe;
-  private String proveedor;//
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -55,6 +54,10 @@ public class Activo implements Serializable {
   @Basic(fetch = FetchType.LAZY)
   @Column(name = "picture", columnDefinition = "bigint")
   private byte[] picture;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+  private Proveedor proveedor;
 
   public Long getId() {
     return id;
@@ -168,14 +171,6 @@ public class Activo implements Serializable {
     this.importe = importe;
   }
 
-  public String getProveedor() {
-    return proveedor;
-  }
-
-  public void setProveedor(String proveedor) {
-    this.proveedor = proveedor;
-  }
-
   public Responsable getResponsable() {
     return responsable;
   }
@@ -214,5 +209,13 @@ public class Activo implements Serializable {
 
   public void setPicture(byte[] picture) {
     this.picture = picture;
+  }
+
+  public Proveedor getProveedor() {
+    return proveedor;
+  }
+
+  public void setProveedor(Proveedor proveedor) {
+    this.proveedor = proveedor;
   }
 }

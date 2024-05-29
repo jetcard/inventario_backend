@@ -33,6 +33,8 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
   protected static final Field<String> GRUPO_TABLE_COLUMNA = DSL.field("nombregrupo", String.class);
   protected final static Table<Record> ARTICULO_TABLE = DSL.table("articulo");
   protected static final Field<String> ARTICULO_TABLE_COLUMNA = DSL.field("nombrearticulo", String.class);
+  protected final static Table<Record> PROVEEDOR_TABLE = DSL.table("proveedor");
+  protected static final Field<String> PROVEEDOR_TABLE_COLUMNA = DSL.field("razonsocial", String.class);
 
   final static Map<String, String> headers = new HashMap<>();
 
@@ -48,7 +50,8 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
   protected abstract String mostrarTipoBien(Long id);
   protected abstract String mostrarGrupo(Long id);
   protected abstract String mostrarArticulo(Long id);
-  protected abstract Result<Record> busquedaActivo(String responsable, String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta);
+  protected abstract String mostrarProveedor(Long id);
+  protected abstract Result<Record> busquedaActivo(String responsable, String proveedor, String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta);
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -57,11 +60,11 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
     ActivoResponseRest responseRest = new ActivoResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
     // Obtener los parámetros de consulta
-    // Obtener los parámetros de consulta
     Map<String, String> queryParameters = input.getQueryStringParameters();
     String responsable = queryParameters != null ? queryParameters.get("responsable") : null;
     logger.log("responsable: " + responsable);
-
+    String proveedor = queryParameters != null ? queryParameters.get("proveedor") : null;
+    logger.log("proveedor: " + proveedor);
     String codinventario = queryParameters != null ? queryParameters.get("codinventario") : null;
     logger.log("codinventario: " + codinventario);
     String modelo = queryParameters != null ? queryParameters.get("modelo") : null;
@@ -78,7 +81,7 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
     LocalDate fechaDesde = new Conversiones().convertirALocalDate(fechaCompraDesde);
     LocalDate fechaHasta = new Conversiones().convertirALocalDate(fechaCompraHasta);
     try {
-      Result<Record> result = busquedaActivo(responsable, codinventario, modelo, marca, nroSerie, fechaDesde, fechaHasta);
+      Result<Record> result = busquedaActivo(responsable, proveedor, codinventario, modelo, marca, nroSerie, fechaDesde, fechaHasta);
       responseRest.getActivoResponse().setListaactivos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");
       output = new Gson().toJson(responseRest);
@@ -107,22 +110,34 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
 
       Responsable responsable = new Responsable();
       responsable.setId(record.getValue("responsableid", Long.class));
-      responsable.setNombreusuario(record.getValue(RESPONSABLE_TABLE.field("nombreusuario"), String.class));
-      responsable.setArearesponsable(record.getValue(RESPONSABLE_TABLE.field("arearesponsable"), String.class));
+      responsable.setArearesponsable(mostrarResponsable(responsable.getId()));
+      //responsable.setArearesponsable(record.getValue(RESPONSABLE_TABLE.field("arearesponsable"), String.class));
+      /*responsable.setNombreusuario(record.getValue(RESPONSABLE_TABLE.field("nombreusuario"), String.class));
+      responsable.setNombresyapellidos(record.getValue(RESPONSABLE_TABLE.field("nombresyapellidos"), String.class));
+      responsable.setCorreo(record.getValue(RESPONSABLE_TABLE.field("correo"), String.class));*/
+
       activo.setResponsable(responsable);
+
+      Proveedor proveedor = new Proveedor();
+      proveedor.setId(record.getValue("proveedorid", Long.class));
+      proveedor.setRazonsocial(mostrarProveedor(proveedor.getId()));
+      activo.setProveedor(proveedor);
 
       Tipo tipo = new Tipo();
       tipo.setId(record.getValue("tipoid", Long.class));
       tipo.setNombretipo(mostrarTipoBien(tipo.getId()));
       activo.setTipo(tipo);
+
       Grupo grupo=new Grupo();
       grupo.setId(record.getValue("grupoid", Long.class));
       grupo.setNombregrupo(mostrarGrupo(grupo.getId()));
       activo.setGrupo(grupo);
+
       Articulo articulo = new Articulo();
       articulo.setId(record.getValue("tipoid", Long.class));
       articulo.setNombrearticulo(mostrarArticulo(articulo.getId()));
       activo.setArticulo(articulo);
+
       listaActivos.add(activo);
     }
     return listaActivos;
