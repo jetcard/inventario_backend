@@ -7,8 +7,9 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
 import com.inventarios.handler.activos.response.ActivoResponseRest;
-import com.inventarios.model.Activo;
+import com.inventarios.model.*;
 import com.inventarios.util.Conversiones;
+import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.Table;
@@ -24,6 +25,14 @@ import java.util.Map;
 public abstract class BusquedaActivoAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   protected static final Table<Record> ACTIVO_TABLE = DSL.table("activo");
+  protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
+  protected static final Field<String> RESPONSABLE_TABLE_COLUMNA = DSL.field("arearesponsable", String.class);
+  protected final static Table<Record> TIPO_TABLE = DSL.table("tipo");
+  protected static final Field<String> TIPO_TABLE_COLUMNA = DSL.field("nombretipo", String.class);
+  protected final static Table<Record> GRUPO_TABLE = DSL.table("grupo");
+  protected static final Field<String> GRUPO_TABLE_COLUMNA = DSL.field("nombregrupo", String.class);
+  protected final static Table<Record> ARTICULO_TABLE = DSL.table("articulo");
+  protected static final Field<String> ARTICULO_TABLE_COLUMNA = DSL.field("nombrearticulo", String.class);
 
   final static Map<String, String> headers = new HashMap<>();
 
@@ -34,7 +43,12 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
     headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     headers.put("Access-Control-Allow-Methods", "GET");
   }
-  protected abstract Result<Record> busquedaActivo(String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta);
+
+  protected abstract String mostrarResponsable(Long id);
+  protected abstract String mostrarTipoBien(Long id);
+  protected abstract String mostrarGrupo(Long id);
+  protected abstract String mostrarArticulo(Long id);
+  protected abstract Result<Record> busquedaActivo(String responsable, String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta);
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -43,7 +57,11 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
     ActivoResponseRest responseRest = new ActivoResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
     // Obtener los parámetros de consulta
+    // Obtener los parámetros de consulta
     Map<String, String> queryParameters = input.getQueryStringParameters();
+    String responsable = queryParameters != null ? queryParameters.get("responsable") : null;
+    logger.log("responsable: " + responsable);
+
     String codinventario = queryParameters != null ? queryParameters.get("codinventario") : null;
     logger.log("codinventario: " + codinventario);
     String modelo = queryParameters != null ? queryParameters.get("modelo") : null;
@@ -60,7 +78,7 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
     LocalDate fechaDesde = new Conversiones().convertirALocalDate(fechaCompraDesde);
     LocalDate fechaHasta = new Conversiones().convertirALocalDate(fechaCompraHasta);
     try {
-      Result<Record> result = busquedaActivo(codinventario, modelo, marca, nroSerie, fechaDesde, fechaHasta);
+      Result<Record> result = busquedaActivo(responsable, codinventario, modelo, marca, nroSerie, fechaDesde, fechaHasta);
       responseRest.getActivoResponse().setListaactivos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");
       output = new Gson().toJson(responseRest);
@@ -86,10 +104,25 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
       activo.setFechaingreso(record.getValue("fechaingreso", Date.class));
       activo.setMoneda(record.getValue( "nroserie", String.class));
       activo.setImporte(record.getValue("importe", BigDecimal.class));
-      //Responsable responsable = new Responsable();
-      //activo.setResponsable(responsable);
-      ///activo.setResponsable(record.getValue("responsableId", Responsable.class));
-      ///activo.setGrupo(record.getValue("grupoId", Grupo.class));
+
+      Responsable responsable = new Responsable();
+      responsable.setId(record.getValue("responsableid", Long.class));
+      responsable.setNombreusuario(record.getValue(RESPONSABLE_TABLE.field("nombreusuario"), String.class));
+      responsable.setArearesponsable(record.getValue(RESPONSABLE_TABLE.field("arearesponsable"), String.class));
+      activo.setResponsable(responsable);
+
+      Tipo tipo = new Tipo();
+      tipo.setId(record.getValue("tipoid", Long.class));
+      tipo.setNombretipo(mostrarTipoBien(tipo.getId()));
+      activo.setTipo(tipo);
+      Grupo grupo=new Grupo();
+      grupo.setId(record.getValue("grupoid", Long.class));
+      grupo.setNombregrupo(mostrarGrupo(grupo.getId()));
+      activo.setGrupo(grupo);
+      Articulo articulo = new Articulo();
+      articulo.setId(record.getValue("tipoid", Long.class));
+      articulo.setNombrearticulo(mostrarArticulo(articulo.getId()));
+      activo.setArticulo(articulo);
       listaActivos.add(activo);
     }
     return listaActivos;

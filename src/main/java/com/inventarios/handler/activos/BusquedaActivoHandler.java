@@ -5,23 +5,18 @@ import com.inventarios.handler.activos.services.BusquedaActivoAbstractHandler;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
-
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.jooq.impl.DSL.field;
 
 public class BusquedaActivoHandler extends BusquedaActivoAbstractHandler {
 
-  /*private static final Map<String, Field<String>> campoMap = new HashMap<>();
-
-  static {
-    campoMap.put("inputfecha", DSL.field("fechacompra", String.class));
-  }*/
-  protected Result<Record> busquedaActivo(String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta) {
+  @Override
+  protected Result<Record> busquedaActivo(String responsable, String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta) {
     DSLContext dsl = RDSConexion.getDSL();
     Condition condition = DSL.trueCondition();
+    if (responsable != null && !responsable.isEmpty()) {
+      condition = condition.and(RESPONSABLE_TABLE.field("arearesponsable").likeIgnoreCase("%" + responsable + "%"));
+    }
     if (codinventario != null && !codinventario.isEmpty()) {
       condition = condition.and(field("codinventario").likeIgnoreCase("%" + codinventario + "%"));
     }
@@ -39,60 +34,49 @@ public class BusquedaActivoHandler extends BusquedaActivoAbstractHandler {
     }
     return dsl.select()
             .from(ACTIVO_TABLE)
+            .join(RESPONSABLE_TABLE).on(field("responsableId").eq(RESPONSABLE_TABLE.field("id")))
             .where(condition)
             .fetch();
-
-
-    /*if (fechaCompraDesde != null && fechaCompraHasta != null) {
-      // Use both 'fechaingreso' and 'fechaegreso' for date range condition
-      condition = condition.and(field("fechaingreso").between(fechaCompraDesde).and(fechaCompraHasta)
-              .or(field("fechaegreso").between(fechaCompraDesde).and(fechaCompraHasta)));
-    }*/
-   /* if (fechaCompraDesde != null && fechaCompraHasta != null) {
-      condition = condition.and(field("fechaingreso").between(fechaCompraDesde).and(fechaCompraHasta));
-    }*/
-    /*if (fechaCompraDesde != null && !fechaCompraDesde.isEmpty() && fechaCompraHasta != null && !fechaCompraHasta.isEmpty()) {
-      condition = condition.and(field("fechacompra").between(fechaCompraDesde).and(fechaCompraHasta));
-    } else if (fechaCompraDesde != null && !fechaCompraDesde.isEmpty()) {
-      condition = condition.and(field("fechacompra").greaterOrEqual(fechaCompraDesde));
-    } else if (fechaCompraHasta != null && !fechaCompraHasta.isEmpty()) {
-      condition = condition.and(field("fechacompra").lessOrEqual(fechaCompraHasta));
-    }*/
-
-
-
-    /*return dsl.select()
-            .from(ACTIVO_TABLE)
-            .where(field("modelo").eq(modelo)
-                    .and(field("marca").eq(marca))
-                    .and(field("nroserie").eq(nroSerie))
-                    .and(field("fechacompra").eq(fechaCompra)))
-            .fetch();*/
-    /*return dsl.select()
-            .from(ACTIVO_TABLE)
-            .where(DSL.field(ACTIVO_TABLE_COLUMNA).eq(id))
-            .fetch();*/
-    /*Field<String> field = campoMap.get(campo);
-    if (field == null) {
-      throw new IllegalArgumentException("Campo de búsqueda no válido: " + campo);
-    }
-    return dsl.select()
-            .from(ACTIVO_TABLE)
-            .where(field.eq(id))
-            .fetch();*/
-    /*return dsl.select()
-            .from(ACTIVO_TABLE)
-            .where(ACTIVO_TABLE_COLUMNA.like("%" + filter + "%"))
-            .fetch();*/
-    /*switch (campo) {
-      case "inputfecha":
-        return dsl.select()
-                .from(ACTIVO_TABLE)
-                .where(ACTIVO_TABLE_COLUMNA.eq(id)) // Suponiendo que 'id' corresponde a la fecha
-                .fetch();
-      // Otros casos según los diferentes tipos de búsqueda que puedas tener
-      default:
-        throw new IllegalArgumentException("Campo de búsqueda no válido: " + campo);
-    }*/
   }
+
+  @Override
+  protected String mostrarResponsable(Long id) {
+    var dsl = RDSConexion.getDSL();
+    Record record = dsl.select(RESPONSABLE_TABLE_COLUMNA)
+            .from(RESPONSABLE_TABLE)
+            .where(DSL.field("id", Long.class).eq(id))
+            .fetchOne();
+    return record != null ? record.getValue(RESPONSABLE_TABLE_COLUMNA) : null;
+  }
+
+  @Override
+  protected String mostrarTipoBien(Long id) {
+    var dsl = RDSConexion.getDSL();
+    Record record = dsl.select(TIPO_TABLE_COLUMNA)
+            .from(TIPO_TABLE)
+            .where(DSL.field("id", Long.class).eq(id))
+            .fetchOne();
+    return record != null ? record.getValue(TIPO_TABLE_COLUMNA) : null;
+  }
+
+  @Override
+  protected String mostrarGrupo(Long id) {
+    var dsl = RDSConexion.getDSL();
+    Record record = dsl.select(GRUPO_TABLE_COLUMNA)
+            .from(GRUPO_TABLE)
+            .where(DSL.field("id", Long.class).eq(id))
+            .fetchOne();
+    return record != null ? record.getValue(GRUPO_TABLE_COLUMNA) : null;
+  }
+
+  @Override
+  protected String mostrarArticulo(Long id) {
+    var dsl = RDSConexion.getDSL();
+    Record record = dsl.select(ARTICULO_TABLE_COLUMNA)
+            .from(ARTICULO_TABLE)
+            .where(DSL.field("id", Long.class).eq(id))
+            .fetchOne();
+    return record != null ? record.getValue(ARTICULO_TABLE_COLUMNA) : null;
+  }
+
 }

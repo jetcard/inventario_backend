@@ -9,9 +9,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.*;
 import com.inventarios.handler.activos.response.ActivoResponseRest;
-import com.inventarios.model.Activo;
-import com.inventarios.model.Grupo;
-import com.inventarios.model.Responsable;
+import com.inventarios.model.*;
 import org.jooq.Field;
 import org.jooq.Table;
 import org.jooq.Record;
@@ -21,6 +19,14 @@ import org.jooq.impl.DSL;
 public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   protected final static Table<Record> ACTIVO_TABLE = DSL.table("activo");
+  protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
+  protected static final Field<String> RESPONSABLE_TABLE_COLUMNA = DSL.field("arearesponsable", String.class);
+  protected final static Table<Record> TIPO_TABLE = DSL.table("tipo");
+  protected static final Field<String> TIPO_TABLE_COLUMNA = DSL.field("nombretipo", String.class);
+  protected final static Table<Record> GRUPO_TABLE = DSL.table("grupo");
+  protected static final Field<String> GRUPO_TABLE_COLUMNA = DSL.field("nombregrupo", String.class);
+  protected final static Table<Record> ARTICULO_TABLE = DSL.table("articulo");
+  protected static final Field<String> ARTICULO_TABLE_COLUMNA = DSL.field("nombrearticulo", String.class);
 
   final static Map<String, String> headers = new HashMap<>();
 
@@ -33,6 +39,10 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
   }
 
   protected abstract Result<Record> read();
+  protected abstract String mostrarResponsable(Long id);
+  protected abstract String mostrarTipoBien(Long id);
+  protected abstract String mostrarGrupo(Long id);
+  protected abstract String mostrarArticulo(Long id);
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -65,16 +75,24 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
       activo.setMarca(record.getValue("marca", String.class));
       activo.setNroserie(record.getValue("nroserie", String.class));
       activo.setFechaingreso(record.getValue("fechaingreso", Date.class));
-      activo.setImporte(record.getValue("importe", BigDecimal.class));
       activo.setMoneda(record.getValue("moneda", String.class));
-      //activo.setResponsable(record.getValue("responsableId", Responsable.class));
-      //activo.setGrupo(record.getValue("grupoId", Grupo.class));
-      Responsable responsable=new Responsable();
+      activo.setImporte(record.getValue("importe", BigDecimal.class));
+      Responsable responsable = new Responsable();
       responsable.setId(record.getValue("responsableid", Long.class));
-      ///activo.setResponsable(responsable);
+      responsable.setNombreusuario(mostrarResponsable(responsable.getId()));
+      activo.setResponsable(responsable);
+      Tipo tipo = new Tipo();
+      tipo.setId(record.getValue("tipoid", Long.class));
+      tipo.setNombretipo(mostrarTipoBien(tipo.getId()));
+      activo.setTipo(tipo);
       Grupo grupo=new Grupo();
       grupo.setId(record.getValue("grupoid", Long.class));
-      ///activo.setGrupo(grupo);
+      grupo.setNombregrupo(mostrarGrupo(grupo.getId()));
+      activo.setGrupo(grupo);
+      Articulo articulo = new Articulo();
+      articulo.setId(record.getValue("tipoid", Long.class));
+      articulo.setNombrearticulo(mostrarArticulo(articulo.getId()));
+      activo.setArticulo(articulo);
       //activo.setPicture(record.getValue("picture", byte[].class));
       listaActivos.add(activo);
     }
