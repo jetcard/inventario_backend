@@ -295,7 +295,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${ReadGrupoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   BusquedaGrupoFunction:
     Type: AWS::Serverless::Function
@@ -343,7 +343,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${BusquedaGrupoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   CrearGrupoFunction:
     Type: AWS::Serverless::Function
@@ -391,7 +391,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${CrearGrupoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   UpdateGrupoFunction:
     Type: AWS::Serverless::Function
@@ -439,7 +439,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${UpdateGrupoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   DeleteGrupoFunction:
     Type: AWS::Serverless::Function
@@ -487,7 +487,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${DeleteGrupoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   GrupoGetApiGatewayInvoke:
     Type: AWS::Lambda::Permission
@@ -803,7 +803,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${ReadActivoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   BusquedaActivoFunction:
     Type: AWS::Serverless::Function
@@ -851,7 +851,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${BusquedaActivoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   CrearActivoFunction:
     Type: AWS::Serverless::Function
@@ -899,7 +899,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${CrearActivoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   UpdateActivoFunction:
     Type: AWS::Serverless::Function
@@ -947,7 +947,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${UpdateActivoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   DeleteActivoFunction:
     Type: AWS::Serverless::Function
@@ -995,7 +995,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${DeleteActivoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   ActivoGetApiGatewayInvoke:
     Type: AWS::Lambda::Permission
@@ -1310,7 +1310,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${ReadResponsableFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   BusquedaPorIdResponsableFunction:
     Type: AWS::Serverless::Function
@@ -1358,7 +1358,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdResponsableFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   CrearResponsableFunction:
     Type: AWS::Serverless::Function
@@ -1406,7 +1406,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${CrearResponsableFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   UpdateResponsableFunction:
     Type: AWS::Serverless::Function
@@ -1454,7 +1454,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${UpdateResponsableFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   DeleteResponsableFunction:
     Type: AWS::Serverless::Function
@@ -1502,7 +1502,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${DeleteResponsableFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   ResponsableGetApiGatewayInvoke:
     Type: AWS::Lambda::Permission
@@ -1807,7 +1807,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${ReadTipobienFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   BusquedaPorIdTipobienFunction:
     Type: AWS::Serverless::Function
@@ -1854,7 +1854,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdTipobienFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   CrearTipobienFunction:
     Type: AWS::Serverless::Function
@@ -1902,7 +1902,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${CrearTipobienFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   UpdateTipobienFunction:
     Type: AWS::Serverless::Function
@@ -1950,7 +1950,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${UpdateTipobienFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   DeleteTipobienFunction:
     Type: AWS::Serverless::Function
@@ -1998,7 +1998,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${DeleteTipobienFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   TipobienGetApiGatewayInvoke:
     Type: AWS::Lambda::Permission
@@ -2302,7 +2302,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${ReadArticuloFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   BusquedaPorIdArticuloFunction:
     Type: AWS::Serverless::Function
@@ -2349,7 +2349,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdArticuloFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   CrearArticuloFunction:
     Type: AWS::Serverless::Function
@@ -2397,7 +2397,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${CrearArticuloFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   UpdateArticuloFunction:
     Type: AWS::Serverless::Function
@@ -2445,7 +2445,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${UpdateArticuloFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   DeleteArticuloFunction:
     Type: AWS::Serverless::Function
@@ -2493,7 +2493,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${DeleteArticuloFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   ArticuloGetApiGatewayInvoke:
     Type: AWS::Lambda::Permission
@@ -2540,8 +2540,6 @@ Resources:
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/articulos/{id}
 
   ############################### PROVEEDORES #######################################
-  ############################## PROVEEDORES #######################################
-  # /proveedores
   ResourceProveedor:
     Type: AWS::ApiGateway::Resource
     Properties:
@@ -2549,7 +2547,6 @@ Resources:
       PathPart: proveedores
       RestApiId: !Ref MyApi
 
-  # /proveedores/{id}
   ResourceProveedorId:
     Type: AWS::ApiGateway::Resource
     Properties:
@@ -2557,37 +2554,6 @@ Resources:
       PathPart: "{id}"
       RestApiId: !Ref MyApi
 
-  # /proveedores/busqueda/{id}
-  ResourceProveedorBusqueda:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      ParentId: !Ref ResourceProveedor
-      PathPart: busqueda
-      RestApiId: !Ref MyApi
-
-  ResourceProveedorBusquedaId:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      ParentId: !Ref ResourceProveedorBusqueda
-      PathPart: "{id}"
-      RestApiId: !Ref MyApi
-
-  # /proveedores/autocompletar/{id}
-  ResourceProveedorAutocompletar:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      ParentId: !Ref ResourceProveedor
-      PathPart: autocompletar
-      RestApiId: !Ref MyApi
-
-  ResourceProveedorAutocompletarId:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      ParentId: !Ref ResourceProveedorAutocompletar
-      PathPart: "{id}"
-      RestApiId: !Ref MyApi
-
-  # OPTIONS method for /proveedores
   ProveedorOptionsMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -2602,7 +2568,9 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{ \"statusCode\": 200 }"
+          "application/json": "{
+            \"statusCode\": 200
+            }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -2613,7 +2581,6 @@ Resources:
       ResourceId: !Ref ResourceProveedor
       RestApiId: !Ref MyApi
 
-  # OPTIONS method for /proveedores/{id}
   ProveedorIdOptionsMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -2628,7 +2595,9 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{  \"statusCode\": 200 }"
+          "application/json": "{
+            \"statusCode\": 200
+            }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -2639,91 +2608,6 @@ Resources:
       ResourceId: !Ref ResourceProveedorId
       RestApiId: !Ref MyApi
 
-  # Método GET para /proveedores/busqueda/{id}
-  ProveedorBuscarMethod:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      HttpMethod: GET
-      AuthorizationType: NONE
-      Integration:
-        IntegrationHttpMethod: POST
-        Type: AWS_PROXY
-        Uri: !Sub
-          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BusquedaProveedorFunction.Arn}/invocations"
-      ResourceId: !Ref ResourceProveedorBusquedaId
-      RestApiId: !Ref MyApi
-      MethodResponses:
-        - StatusCode: '200'
-        - StatusCode: '500'
-
-  # Método OPTIONS para manejo de CORS en /proveedores/busqueda/{id}
-  ProveedorBuscarOptionsMethod:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      HttpMethod: OPTIONS
-      AuthorizationType: NONE
-      ResourceId: !Ref ResourceProveedorBusquedaId
-      RestApiId: !Ref MyApi
-      Integration:
-        IntegrationResponses:
-          - StatusCode: '200'
-            ResponseParameters:
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-        RequestTemplates:
-          "application/json": "{ \"statusCode\": 200 }"
-        Type: MOCK
-      MethodResponses:
-        - StatusCode: '200'
-          ResponseParameters:
-            method.response.header.Access-Control-Allow-Headers: true
-            method.response.header.Access-Control-Allow-Methods: true
-            method.response.header.Access-Control-Allow-Origin: true
-
-  # Método GET para /proveedores/autocompletar/{id}
-  ProveedorAutocompletarMethod:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      HttpMethod: GET
-      AuthorizationType: NONE
-      Integration:
-        IntegrationHttpMethod: POST
-        Type: AWS_PROXY
-        Uri: !Sub
-          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BusquedaProveedorFunction.Arn}/invocations"
-      ResourceId: !Ref ResourceProveedorAutocompletarId
-      RestApiId: !Ref MyApi
-      MethodResponses:
-        - StatusCode: '200'
-        - StatusCode: '500'
-
-  # Método OPTIONS para manejo de CORS en /proveedores/autocompletar/{id}
-  ProveedorAutocompletarOptionsMethod:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      HttpMethod: OPTIONS
-      AuthorizationType: NONE
-      ResourceId: !Ref ResourceProveedorAutocompletarId
-      RestApiId: !Ref MyApi
-      Integration:
-        IntegrationResponses:
-          - StatusCode: '200'
-            ResponseParameters:
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-        RequestTemplates:
-          "application/json": "{ \"statusCode\": 200 }"
-        Type: MOCK
-      MethodResponses:
-        - StatusCode: '200'
-          ResponseParameters:
-            method.response.header.Access-Control-Allow-Headers: true
-            method.response.header.Access-Control-Allow-Methods: true
-            method.response.header.Access-Control-Allow-Origin: true
-
-  # GET method for /proveedores
   ProveedorGetMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -2743,7 +2627,8 @@ Resources:
             StatusCode: '200'
         Type: AWS_PROXY
         Uri: !Sub
-          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ReadProveedorFunction.Arn}/invocations"
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
+          - Arn: !GetAtt ReadProveedorFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -2754,7 +2639,37 @@ Resources:
       ResourceId: !Ref ResourceProveedor
       RestApiId: !Ref MyApi
 
-  # POST method for /proveedores
+  ProveedorGetByIdMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        RequestTemplates:
+          "application/json": "{
+            \"statusCode\": 200
+            }"
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
+          - Arn: !GetAtt BusquedaPorIdProveedorFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: proveedores
+      ResourceId: !Ref ResourceProveedorId
+      RestApiId: !Ref MyApi
+
   ProveedorPostMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -2770,7 +2685,8 @@ Resources:
             StatusCode: '200'
         Type: AWS_PROXY
         Uri: !Sub
-          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CreateProveedorFunction.Arn}/invocations"
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations"
+          - lambdaArn: !GetAtt CrearProveedorFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -2781,12 +2697,11 @@ Resources:
       ResourceId: !Ref ResourceProveedor
       RestApiId: !Ref MyApi
 
-  # PUT method for /proveedores/{id}
-  ProveedorPutMethod:
+  ProveedorUpdateMethod:
     Type: AWS::ApiGateway::Method
     Properties:
-      HttpMethod: PUT
       AuthorizationType: NONE
+      HttpMethod: PUT
       Integration:
         IntegrationHttpMethod: POST
         IntegrationResponses:
@@ -2797,7 +2712,8 @@ Resources:
             StatusCode: '200'
         Type: AWS_PROXY
         Uri: !Sub
-          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UpdateProveedorFunction.Arn}/invocations"
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambArn}/invocations"
+          - lambArn: !GetAtt UpdateProveedorFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -2808,12 +2724,11 @@ Resources:
       ResourceId: !Ref ResourceProveedorId
       RestApiId: !Ref MyApi
 
-  # DELETE method for /proveedores/{id}
   ProveedorDeleteMethod:
     Type: AWS::ApiGateway::Method
     Properties:
-      HttpMethod: DELETE
       AuthorizationType: NONE
+      HttpMethod: DELETE
       Integration:
         IntegrationHttpMethod: POST
         IntegrationResponses:
@@ -2824,7 +2739,8 @@ Resources:
             StatusCode: '200'
         Type: AWS_PROXY
         Uri: !Sub
-          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DeleteProveedorFunction.Arn}/invocations"
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdarn}/invocations"
+          - lambdarn: !GetAtt DeleteProveedorFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -2835,6 +2751,299 @@ Resources:
       ResourceId: !Ref ResourceProveedorId
       RestApiId: !Ref MyApi
 
+  ReadProveedorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ReadProveedor
+      Handler: com.inventarios.handler.proveedores.ReadProveedorHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        ReadRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /proveedores
+            Method: get
+
+  ReadProveedorFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${ReadProveedorFunction}"
+      RetentionInDays: 1
+
+  BusquedaPorIdProveedorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.inventarios.handler.proveedores.BusquedaProveedorHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        BusquedaPorIdRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /proveedores/{id}
+            Method: get
+
+  BusquedaPorIdProveedorFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdProveedorFunction}"
+      RetentionInDays: 1
+
+  CrearProveedorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CrearProveedor
+      Handler: com.inventarios.handler.proveedores.CreateProveedorHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        CrearRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /proveedores
+            Method: post
+
+  CrearProveedorFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${CrearProveedorFunction}"
+      RetentionInDays: 1
+
+  UpdateProveedorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateProveedor
+      Handler: com.inventarios.handler.proveedores.UpdateProveedorHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        PutRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /proveedores/{id}
+            Method: put
+
+  UpdateProveedorFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${UpdateProveedorFunction}"
+      RetentionInDays: 1
+
+  DeleteProveedorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DeleteProveedor
+      Handler: com.inventarios.handler.proveedores.DeleteProveedorHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        DeleteRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /proveedores/{id}
+            Method: delete
+
+  DeleteProveedorFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${DeleteProveedorFunction}"
+      RetentionInDays: 1
+
+  ProveedorGetApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - ReadProveedorFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt ReadProveedorFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/proveedores
+
+  ProveedorBusquedaApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - BusquedaPorIdProveedorFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt BusquedaPorIdProveedorFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/proveedores/{id}
+
+  ProveedorPostApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - CrearProveedorFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt CrearProveedorFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/proveedores
+
+  ProveedorUpdateApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - UpdateProveedorFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt UpdateProveedorFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/PUT/proveedores/{id}
+
+  ProveedorDeleteApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - DeleteProveedorFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt DeleteProveedorFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/proveedores/{id}
 
   ################################# COMUNES #########################################
   ResourceComun:
@@ -3094,7 +3303,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${ReadComunFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   BusquedaPorIdComunFunction:
     Type: AWS::Serverless::Function
@@ -3141,7 +3350,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdComunFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   CrearComunFunction:
     Type: AWS::Serverless::Function
@@ -3189,7 +3398,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${CrearComunFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   UpdateComunFunction:
     Type: AWS::Serverless::Function
@@ -3237,7 +3446,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${UpdateComunFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   DeleteComunFunction:
     Type: AWS::Serverless::Function
@@ -3285,7 +3494,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${DeleteComunFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   ComunGetApiGatewayInvoke:
     Type: AWS::Lambda::Permission
@@ -3589,7 +3798,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${ReadAtributoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   BusquedaPorIdAtributoFunction:
     Type: AWS::Serverless::Function
@@ -3636,7 +3845,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdAtributoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   CrearAtributoFunction:
     Type: AWS::Serverless::Function
@@ -3684,7 +3893,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${CrearAtributoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
 
   UpdateAtributoFunction:
@@ -3733,7 +3942,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${UpdateAtributoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   DeleteAtributoFunction:
     Type: AWS::Serverless::Function
@@ -3781,7 +3990,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${DeleteAtributoFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   AtributoGetApiGatewayInvoke:
     Type: AWS::Lambda::Permission
@@ -4085,7 +4294,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${ReadAtributosFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   BusquedaPorIdAtributosFunction:
     Type: AWS::Serverless::Function
@@ -4132,7 +4341,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdAtributosFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   CrearAtributosFunction:
     Type: AWS::Serverless::Function
@@ -4180,7 +4389,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${CrearAtributosFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
 
   UpdateAtributosFunction:
@@ -4229,7 +4438,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${UpdateAtributosFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   DeleteAtributosFunction:
     Type: AWS::Serverless::Function
@@ -4277,7 +4486,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${DeleteAtributosFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   AtributosGetApiGatewayInvoke:
     Type: AWS::Lambda::Permission
@@ -4432,7 +4641,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${CrearKeycloakFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   KeycloakPostApiGatewayInvoke:
     Type: AWS::Lambda::Permission
@@ -4553,7 +4762,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${CrearAdminFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   AdminPostApiGatewayInvoke:
     Type: AWS::Lambda::Permission
@@ -4673,7 +4882,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${CrearUserFunction}"
-      RetentionInDays: 7
+      RetentionInDays: 1
 
   UserPostApiGatewayInvoke:
     Type: AWS::Lambda::Permission
@@ -4750,7 +4959,7 @@ Resources:
       - TipobienUpdateMethod
       - TipobienDeleteMethod
       - ProveedorGetMethod
-      - ProveedorBuscarMethod
+      - ProveedorGetByIdMethod
       - ProveedorPostMethod
       - ProveedorUpdateMethod
       - ProveedorDeleteMethod

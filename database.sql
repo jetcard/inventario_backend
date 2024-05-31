@@ -66,7 +66,7 @@ CREATE TABLE atributos (
 CREATE TABLE activo (
     id SERIAL PRIMARY KEY,
     responsableId INTEGER NOT NULL,
-    proveedorId INTEGER NOT NULL,
+    proveedorId INTEGER NULL,
     tipoId INTEGER NOT NULL,
     grupoId INTEGER NOT NULL,
     articuloId INTEGER NOT NULL,
