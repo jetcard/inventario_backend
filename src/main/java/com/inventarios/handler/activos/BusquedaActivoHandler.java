@@ -9,9 +9,7 @@ import org.jooq.Result;
 import org.jooq.impl.DSL;
 import java.time.LocalDate;
 import static org.jooq.impl.DSL.field;
-
 public class BusquedaActivoHandler extends BusquedaActivoAbstractHandler {
-
   @Override
   protected Result<Record> busquedaActivo(String responsable, String proveedor, String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta) {
     DSLContext dsl = RDSConexion.getDSL();

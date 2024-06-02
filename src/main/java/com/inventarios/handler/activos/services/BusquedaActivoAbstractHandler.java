@@ -25,15 +25,15 @@ import java.util.Map;
 public abstract class BusquedaActivoAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   protected static final Table<Record> ACTIVO_TABLE = DSL.table("activo");
-  protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
+  protected static final Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
   protected static final Field<String> RESPONSABLE_TABLE_COLUMNA = DSL.field("arearesponsable", String.class);
-  protected final static Table<Record> TIPO_TABLE = DSL.table("tipo");
+  protected static final Table<Record> TIPO_TABLE = DSL.table("tipo");
   protected static final Field<String> TIPO_TABLE_COLUMNA = DSL.field("nombretipo", String.class);
-  protected final static Table<Record> GRUPO_TABLE = DSL.table("grupo");
+  protected static final Table<Record> GRUPO_TABLE = DSL.table("grupo");
   protected static final Field<String> GRUPO_TABLE_COLUMNA = DSL.field("nombregrupo", String.class);
-  protected final static Table<Record> ARTICULO_TABLE = DSL.table("articulo");
+  protected static final Table<Record> ARTICULO_TABLE = DSL.table("articulo");
   protected static final Field<String> ARTICULO_TABLE_COLUMNA = DSL.field("nombrearticulo", String.class);
-  protected final static Table<Record> PROVEEDOR_TABLE = DSL.table("proveedor");
+  protected static final Table<Record> PROVEEDOR_TABLE = DSL.table("proveedor");
   protected static final Field<String> PROVEEDOR_TABLE_COLUMNA = DSL.field("razonsocial", String.class);
 
   final static Map<String, String> headers = new HashMap<>();
@@ -56,7 +56,23 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
     input.setHeaders(headers);
+    String output = "";
     LambdaLogger logger = context.getLogger();
+
+    String path = input.getPath();
+    Map<String, String> pathParameters = input.getPathParameters();
+
+    if (path.contains("/campo/")) {
+      logger.log("==================================== C A M P O ===================================== ");
+      String idString = pathParameters.get("id");
+      logger.log("==================================== C A M P O ===================================== " + idString);
+    } else if (path.contains("/busqueda/")) {
+      logger.log("=================================== ELSE  IF ====================================== " );
+    } else {
+      logger.log("==================================== E L S E ===================================== " );
+    }
+    //input.setHeaders(headers);
+
     ActivoResponseRest responseRest = new ActivoResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
     // Obtener los parámetros de consulta
@@ -77,7 +93,7 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
     logger.log("fechadesde: " + fechaCompraDesde);
     String fechaCompraHasta = queryParameters != null ? queryParameters.get("fechahasta") : null;
     logger.log("fechahasta: " + fechaCompraHasta);
-    String output = "";
+
     LocalDate fechaDesde = new Conversiones().convertirALocalDate(fechaCompraDesde);
     LocalDate fechaHasta = new Conversiones().convertirALocalDate(fechaCompraHasta);
     try {
@@ -94,7 +110,7 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
                     .withStatusCode(500);
     }
   }
-
+  
   protected List<Activo> convertResultToList(Result<Record> result) {
     List<Activo> listaActivos = new ArrayList<>();
     for (Record record : result) {
