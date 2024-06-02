@@ -1,0 +1,195 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Codepipeline pre requisites
+
+Resources:
+  S3ArtifactsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub codepipeline-artefactos-${AWS::AccountId}-${AWS::Region}
+
+  S3ArtifactsBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3ArtifactsBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Id: SSEAndSSLPolicy
+        Statement:
+          - Sid: ""
+            Effect: Allow
+            Principal:
+              AWS:
+                - !GetAtt CodeBuildRole.Arn
+                - !GetAtt CodePipelineRole.Arn
+            Action:
+              - s3:Get*
+              - s3:Put*
+            Resource: !Sub "arn:aws:s3:::${S3ArtifactsBucket}/*"
+
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codebuild.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/service-role/"
+      Policies:
+        - PolicyName: codebuild-policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ecr:GetAuthorizationToken
+                  - ec2:CreateNetworkInterface
+                  - ec2:DescribeDhcpOptions
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:DeleteNetworkInterface
+                  - ec2:DescribeSubnets
+                  - ec2:DescribeSecurityGroups
+                  - ec2:DescribeVpcs
+                  - ec2:CreateNetworkInterfacePermission
+                  - lambda:*
+                  - cloudformation:Describe*
+                  - cloudformation:Get*
+                  - cloudformation:List*
+                  - cloudformation:ValidateTemplate
+                  - cloudformation:ExecuteChangeSet
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - s3:*
+                  - sqs:*
+                  - sns:*
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource:
+                  - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/*
+
+  CodePipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codepipeline.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      Policies:
+        - PolicyName: codepipeline-policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:GetObjectVersion
+                  - s3:GetBucketVersioning
+                Resource:
+                  - !Sub "arn:aws:s3:::${S3ArtifactsBucket}/*"
+              - Effect: Allow
+                Action:
+                  - codebuild:BatchGetBuilds
+                  - codebuild:BatchGetProjects
+                  - codebuild:ListBuilds
+                  - codebuild:ListBuildsForProject
+                  - codebuild:ListConnectedOAuthAccounts
+                  - codebuild:ListProjects
+                  - codebuild:ListRepositories
+                  - codebuild:StartBuild
+                  - codebuild:StopBuild
+                  - sns:Publish
+                  - cloudwatch:*
+                  - lambda:InvokeFunction
+                  - lambda:ListFunctions
+                  - s3:*
+                  - iam:PassRole
+                  - cloudformation:DescribeStacks
+                Resource: "*"
+
+  LambdaPolicyRDSSecrets:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - rds:DescribeDBInstances
+              - rds:DescribeDBClusters
+              - rds:DescribeDBClusterEndpoints
+              - rds-db:Connect
+              - secretsmanager:GetSecretValue
+              - secretsmanager:DescribeSecret
+            Resource: "*"
+
+  LambdaPolicyS3:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:ListAllMyBuckets
+              - s3:HeadBucket
+              - s3:ListObjects
+            Resource: "*"
+          - Effect: Allow
+            Action:
+              - s3:*
+            Resource: "*"
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns:
+        - !Ref LambdaPolicyRDSSecrets
+        - !Ref LambdaPolicyS3
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+
+Outputs:
+  PipelineRole:
+    Value: !GetAtt CodePipelineRole.Arn
+    Export:
+      Name: PipelineRole
+  CodeBuildRole:
+    Value: !GetAtt CodeBuildRole.Arn
+    Export:
+      Name: CodeBuildRole
+  S3ArtifactsBucket:
+    Value: !Ref S3ArtifactsBucket
+    Export:
+      Name: S3ArtifactsBucket
+  LambdaPolicyRDSSecrets:
+    Value: !Ref LambdaPolicyRDSSecrets
+    Export:
+      Name: LambdaPolicyRDSSecrets
+  LambdaPolicyS3:
+    Value: !Ref LambdaPolicyS3
+    Export:
+      Name: LambdaPolicyS3

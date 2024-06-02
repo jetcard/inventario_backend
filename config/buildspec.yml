@@ -1,0 +1,13 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      java: 21
+  build:
+    commands:
+      - aws cloudformation package --template-file template.yaml --s3-bucket ${S3_BUCKET} --output-template-file output.yml
+artifacts:
+  type: zip
+  files:
+    - template.yaml
+    - output.yml
