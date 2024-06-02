@@ -7,7 +7,7 @@ import org.jooq.impl.DSL;
 
 public class CreateActivoHandler extends CreateActivoAbstractHandler {
   @Override
-  protected void save(Activo activo, Long responsableID, Long tipoID, Long grupoID, Long articuloID) {
+  protected void save(Activo activo, Long responsableID, Long tipoID, Long grupoID, Long articuloID, Long proveedorID) {
     var dsl = RDSConexion.getDSL();
     dsl.insertInto(ACTIVO_TABLE)
             .set(DSL.field("codinventario"), activo.getCodinventario())
@@ -21,6 +21,7 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
             .set(DSL.field("tipoID"), tipoID)
             .set(DSL.field("grupoId"), grupoID)
             .set(DSL.field("articuloID"), articuloID)
+            .set(DSL.field("proveedorID"), proveedorID)
             .execute();
   }
 }

@@ -25,6 +25,7 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
     protected final static Table<Record> TIPO_TABLE = DSL.table("tipo");
     protected final static Table<Record> GRUPO_TABLE = DSL.table("grupo");
     protected final static Table<Record> ARTICULO_TABLE = DSL.table("articulo");
+    protected final static Table<Record> PROVEEDOR_TABLE = DSL.table("proveedor");
 
     final static Map<String, String> headers = new HashMap<>();
 
@@ -36,11 +37,11 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
         headers.put("Access-Control-Allow-Methods", "POST");
     }
 
-    protected abstract void save(Activo activo, Long responsableID, Long tipoID, Long grupoID, Long articuloID);
+    protected abstract void save(Activo activo, Long responsableID, Long tipoID, Long grupoID, Long articuloID, Long proveedorID);
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
-        input.setHeaders(headers);
+        //input.setHeaders(headers);
         LambdaLogger logger = context.getLogger();
         ActivoResponseRest responseRest = new ActivoResponseRest();
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
@@ -58,21 +59,14 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
 
             //PostgreSQL utiliza el formato yyyy-MM-dd
             Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+
             Activo activo = gson.fromJson(body, Activo.class);
 
-            /*Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(Date.class, new SqlDateDeserializer())
-                    .create();
-            //Activo activo = new Gson().fromJson(body, Activo.class);
-            Activo activo = gson.fromJson(body, Activo.class);*/
-
-            logger.log("debe llegar aquí 1 ya tenemos Activo");
             if (activo == null) {
                 return response
                         .withBody("El cuerpo de la solicitud no contiene datos válidos para un activo")
                         .withStatusCode(400);
             }
-            logger.log("debe llegar aquí 2");
             logger.log("Activo: ");
             //if (activo != null) {
             logger.log("Activo.getId() = " + activo.getId());
@@ -86,23 +80,22 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
             logger.log("Activo.getFechaIngreso() = " + activo.getFechaingreso());
             logger.log("Activo.getMoneda() = " + activo.getMoneda());
             logger.log("Activo.getImporte() = " + activo.getImporte());
+            logger.log("Activo.getProveedor() = " + activo.getProveedor());
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(body);
 
-            String responsableId = jsonNode.get("responsableId").asText();
-            String tipoId = jsonNode.get("tipoId").asText();
-            String grupoId = jsonNode.get("grupoId").asText();
-            String articuloId = jsonNode.get("articuloId").asText();
             Long responsableID = null;
             Long tipoID = null;
             Long grupoID = null;
             Long articuloID = null;
+            Long proveedorID = null;
             try {
-                responsableID = Long.parseLong(responsableId);
-                tipoID = Long.parseLong(tipoId);
-                grupoID = Long.parseLong(grupoId);
-                articuloID = Long.parseLong(articuloId);
+                responsableID = Long.parseLong(jsonNode.get("responsableId").asText());
+                tipoID = Long.parseLong(jsonNode.get("tipoId").asText());
+                grupoID = Long.parseLong(jsonNode.get("grupoId").asText());
+                articuloID = Long.parseLong(jsonNode.get("articuloId").asText());
+                proveedorID = Long.parseLong(jsonNode.get("proveedorID").asText());
             } catch (NumberFormatException e) {
                 return response
                         .withBody("Invalid id in path")
@@ -150,13 +143,24 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
                         .withStatusCode(404);
             }
 
+            Optional<Proveedor> proveedorSearch = dsl.select()
+                    .from(PROVEEDOR_TABLE)
+                    .where(DSL.field("id", Long.class).eq(proveedorID))
+                    .fetchOptionalInto(Proveedor.class);
+            if (!proveedorSearch.isPresent()) {
+                return response
+                        .withBody("El proveedor especificado no existe")
+                        .withStatusCode(404);
+            }
+
             activo.setResponsable(responsableSearch.get());
             activo.setTipo(tipoSearch.get());
             activo.setGrupo(grupoSearch.get());
             activo.setArticulo(articuloSearch.get());
+            activo.setProveedor(proveedorSearch.get());
 
             logger.log(":::::::::::::::::::::::::::::::::: PREPARANDO PARA INSERTAR ::::::::::::::::::::::::::::::::::");
-            save(activo, responsableID, tipoID, grupoID, articuloID);
+            save(activo, responsableID, tipoID, grupoID, articuloID, proveedorID);
             logger.log(":::::::::::::::::::::::::::::::::: INSERCIÓN COMPLETA ::::::::::::::::::::::::::::::::::");
             list.add(activo);
             responseRest.getActivoResponse().setListaactivos(list);
