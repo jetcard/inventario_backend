@@ -8,12 +8,15 @@ Parameters:
   PostgresUsername:
     Type: String
     Description: Master user name for the RDS PostgreSQL instance
+    Default: postgres
   PostgresPassword:
     Type: String
     Description: Master password for the RDS PostgreSQL instance
+    Default: 1234567890
   PostgresDatabaseName:
     Type: String
     Description: RDS PostgreSQL database name
+    Default: basededatos
 
 Globals:
   Function:
