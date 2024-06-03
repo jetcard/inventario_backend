@@ -91,38 +91,6 @@ public class Activo implements Serializable {
     this.marca = marca;
   }
 
-  public String getProcesador() {
-    return procesador;
-  }
-
-  public void setProcesador(String procesador) {
-    this.procesador = procesador;
-  }
-
-  public String getTipodisco() {
-    return tipodisco;
-  }
-
-  public void setTipodisco(String tipodisco) {
-    this.tipodisco = tipodisco;
-  }
-
-  public String getCapacidadDisco() {
-    return capacidadDisco;
-  }
-
-  public void setCapacidadDisco(String capacidadDisco) {
-    this.capacidadDisco = capacidadDisco;
-  }
-
-  public String getMemoria() {
-    return memoria;
-  }
-
-  public void setMemoria(String memoria) {
-    this.memoria = memoria;
-  }
-
   public String getNroserie() {
     return nroserie;
   }
@@ -137,22 +105,6 @@ public class Activo implements Serializable {
 
   public void setFechaingreso(Date fechaingreso) {
     this.fechaingreso = fechaingreso;
-  }
-
-  public Date getFechaLeasing() {
-    return fechaLeasing;
-  }
-
-  public void setFechaLeasing(Date fechaLeasing) {
-    this.fechaLeasing = fechaLeasing;
-  }
-
-  public Date getFinLeasing() {
-    return finLeasing;
-  }
-
-  public void setFinLeasing(Date finLeasing) {
-    this.finLeasing = finLeasing;
   }
 
   public String getMoneda() {

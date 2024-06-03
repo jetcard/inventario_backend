@@ -37,7 +37,7 @@ public abstract class UpdateActivoAbstractHandler implements RequestHandler<APIG
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
-    input.setHeaders(headers);
+    //input.setHeaders(headers);
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
             .withHeaders(headers);
     Map<String, String> pathParameters = input.getPathParameters();

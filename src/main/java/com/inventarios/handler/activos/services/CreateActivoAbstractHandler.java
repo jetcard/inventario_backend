@@ -95,7 +95,7 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
                 tipoID = Long.parseLong(jsonNode.get("tipoId").asText());
                 grupoID = Long.parseLong(jsonNode.get("grupoId").asText());
                 articuloID = Long.parseLong(jsonNode.get("articuloId").asText());
-                proveedorID = Long.parseLong(jsonNode.get("proveedorID").asText());
+                proveedorID = Long.parseLong(jsonNode.get("proveedorId").asText());
             } catch (NumberFormatException e) {
                 return response
                         .withBody("Invalid id in path")

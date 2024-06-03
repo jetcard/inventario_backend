@@ -17,6 +17,7 @@ import org.jooq.impl.DSL;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,13 +56,14 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
-    input.setHeaders(headers);
+    //input.setHeaders(headers);
     String output = "";
     LambdaLogger logger = context.getLogger();
-
+    logger.log("==================================== busquedaActivo ===================================== ");
     String path = input.getPath();
+    logger.log("==================================== path =  "+path);
     Map<String, String> pathParameters = input.getPathParameters();
-
+    logger.log("==================================== pathParameters =  "+pathParameters);
     if (path.contains("/campo/")) {
       logger.log("==================================== C A M P O ===================================== ");
       String idString = pathParameters.get("id");
@@ -94,8 +96,26 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
     String fechaCompraHasta = queryParameters != null ? queryParameters.get("fechahasta") : null;
     logger.log("fechahasta: " + fechaCompraHasta);
 
-    LocalDate fechaDesde = new Conversiones().convertirALocalDate(fechaCompraDesde);
-    LocalDate fechaHasta = new Conversiones().convertirALocalDate(fechaCompraHasta);
+    LocalDate fechaDesde = null;
+    LocalDate fechaHasta = null;
+
+    if (fechaCompraDesde != null && !fechaCompraDesde.isEmpty()) {
+      try {
+        fechaDesde = LocalDate.parse(fechaCompraDesde);
+      } catch (DateTimeParseException e) {
+        e.printStackTrace();
+        // Manejar el error de formato de fecha aquí si es necesario
+      }
+    }
+
+    if (fechaCompraHasta != null && !fechaCompraHasta.isEmpty()) {
+      try {
+        fechaHasta = LocalDate.parse(fechaCompraHasta);
+      } catch (DateTimeParseException e) {
+        e.printStackTrace();
+        // Manejar el error de formato de fecha aquí si es necesario
+      }
+    }
     try {
       Result<Record> result = busquedaActivo(responsable, proveedor, codinventario, modelo, marca, nroSerie, fechaDesde, fechaHasta);
       responseRest.getActivoResponse().setListaactivos(convertResultToList(result));

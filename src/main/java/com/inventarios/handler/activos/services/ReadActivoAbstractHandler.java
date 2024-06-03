@@ -49,7 +49,7 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
-    input.setHeaders(headers);
+    //input.setHeaders(headers);
     ActivoResponseRest responseRest = new ActivoResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
             .withHeaders(headers);
