@@ -138,7 +138,7 @@
     <dependency>
       <groupId>org.jooq</groupId>
       <artifactId>jooq</artifactId>
-      <version>3.19.6</version>
+      <version>3.19.9</version>
     </dependency>
     <!--dependency>
       <groupId>org.apache.tomcat.embed</groupId>
@@ -146,6 +146,11 @@
       <version>6.1.0-M2</version>
     </dependency-->
     <dependency>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-core</artifactId>
+      <version>24.0.4</version>
+    </dependency>
+    <dependency>      
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-mutiny</artifactId>
     </dependency>
@@ -168,23 +173,23 @@
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt</artifactId>
-      <version>0.9.1</version>
+      <version>0.12.5</version>
     </dependency>
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-api</artifactId>
-      <version>0.11.5</version>
+      <version>0.12.5</version>
     </dependency>
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-impl</artifactId>
-      <version>0.11.5</version>
+      <version>0.12.5</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if you prefer -->
-      <version>0.11.5</version>
+      <version>0.12.5</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>

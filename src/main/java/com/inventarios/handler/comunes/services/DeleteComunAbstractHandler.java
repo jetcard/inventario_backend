@@ -36,7 +36,7 @@ public abstract class DeleteComunAbstractHandler implements RequestHandler<APIGa
             .withHeaders(headers);
     Map<String, String> pathParameters = input.getPathParameters();
     String idString = pathParameters.get("id");
-    context.getLogger().log("Eliminando: " + idString);
+    context.getLogger().log("...eliminando: " + idString);
 
     Long id = null;
     String output ="";

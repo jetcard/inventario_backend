@@ -41,8 +41,8 @@ public abstract class ReadComunAbstractHandler implements RequestHandler<APIGate
     String output ="";
     try {
       Result<Record> result = read();
-      responseRest.getComunResponse().setListacomuns(convertResultToList(result));
-      responseRest.setMetadata("Respuesta ok", "00", "Comuns encontrados");
+      responseRest.getComunResponse().setListacomunes(convertResultToList(result));
+      responseRest.setMetadata("Respuesta ok", "00", "Comunes listados");
       output = new Gson().toJson(responseRest);
       return response.withStatusCode(200)
               .withBody(output);

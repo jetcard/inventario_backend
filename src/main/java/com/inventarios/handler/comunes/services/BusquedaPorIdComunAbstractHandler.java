@@ -40,7 +40,7 @@ public abstract class BusquedaPorIdComunAbstractHandler implements RequestHandle
     String output = "";
     try {
       Result<Record> result = busquedaPorNombreComun(idString);
-      responseRest.getComunResponse().setListacomuns(convertResultToList(result));
+      responseRest.getComunResponse().setListacomunes(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Comuns encontrados");
       output = new Gson().toJson(responseRest);
       return response.withStatusCode(200)

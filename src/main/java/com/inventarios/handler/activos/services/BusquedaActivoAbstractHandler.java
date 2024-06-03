@@ -60,20 +60,39 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
     String output = "";
     LambdaLogger logger = context.getLogger();
     logger.log("==================================== busquedaActivo ===================================== ");
+    ///String path = "/activos/campo?responsable=adm&proveedor=&codinventario=&modelo=&marca=&nroserie=&fechadesde=2024-01-01&fechahasta=2025-06-01";//input.getPath();
     String path = input.getPath();
-    logger.log("==================================== path =  "+path);
+    logger.log("==================================== path =  "+path);//path = /activos/campo/
     Map<String, String> pathParameters = input.getPathParameters();
     logger.log("==================================== pathParameters =  "+pathParameters);
-    if (path.contains("/campo/")) {
+    //pathParameters = {id=campo}
+    if (path.contains("campo")) {
       logger.log("==================================== C A M P O ===================================== ");
-      String idString = pathParameters.get("id");
-      logger.log("==================================== C A M P O ===================================== " + idString);
+      String idString1 = pathParameters.get("id");
+      logger.log("==================================== C A M P O ===================================== " + idString1);
+      //==================================== C A M P O ===================================== campo
     } else if (path.contains("/busqueda/")) {
-      logger.log("=================================== ELSE  IF ====================================== " );
+      logger.log("=================================== ELSE  IF BUSQUEDA ====================================== " );
+      String idString2 = pathParameters.get("id");
+      logger.log("==================================== E L S E ===================================== " + idString2);
     } else {
-      logger.log("==================================== E L S E ===================================== " );
+      logger.log("==================================== ELSE  ===================================== " );
+      String idString3 = pathParameters.get("id");
+      logger.log("==================================== E L S E ===================================== " + idString3);
     }
     //input.setHeaders(headers);
+    String idString = pathParameters.get("id");
+    if (idString.contains("campo")) {
+      logger.log("==================================== trabajao cpn C A M P O ===================================== ");
+
+
+    } else if (path.contains("busqueda")) {
+      logger.log("=================================== trabajo con  BUSQUEDA ====================================== " );
+    } else {
+      logger.log("==================================== ELSE  ===================================== " );
+    }
+    String idCampo = pathParameters.get("campo");
+    logger.log("C A M P O =====================================> "+idCampo);
 
     ActivoResponseRest responseRest = new ActivoResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);

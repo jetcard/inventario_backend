@@ -2,9 +2,10 @@ package com.inventarios.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-
 import java.io.Serializable;
 
+@Entity
+@Table(name="comun")
 public class Comun implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +18,7 @@ public class Comun implements Serializable {
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties ( {"hibernateLazyInitializer", "handler"})
     private Tipo tipo;
+
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties ( {"hibernateLazyInitializer", "handler"})
     private Grupo grupo;

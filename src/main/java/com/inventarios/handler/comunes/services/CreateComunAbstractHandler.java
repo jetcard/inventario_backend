@@ -7,11 +7,14 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.comunes.response.ComunResponseRest;
 import com.inventarios.model.Comun;
-import java.util.*;
 import com.inventarios.model.Grupo;
+import com.inventarios.model.Responsable;
+import com.inventarios.model.Tipo;
+import java.util.*;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -21,6 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public abstract class CreateComunAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     protected final static Table<Record> COMUN_TABLE = DSL.table("comun");
+    protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
+    protected final static Table<Record> TIPO_TABLE = DSL.table("tipo");
     protected final static Table<Record> GRUPO_TABLE = DSL.table("grupo");
     final static Map<String, String> headers = new HashMap<>();
 
@@ -34,7 +39,7 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
         headers.put("Access-Control-Allow-Methods", "POST");
     }
 
-    protected abstract void save(Comun comun, Long grupoID);
+    protected abstract void save(Comun comun, Long responsableID, Long tipoID, Long grupoID);
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -51,13 +56,13 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
 
             String body = input.getBody();
             //String body = "{\"modelo\":\"AS\",\"marca\":\"AS\",\"nroserie\":\"1\",\"fechacompra\":\"1\",\"importe\":777,\"grupoId\":1,\"account\":55555}";
-            logger.log("######################################### BODY ################################################");
+            logger.log("##################### BODY COMUN ######################");
             logger.log(body);
-            logger.log("###############################################################################################");
+            logger.log("#######################################################");
 
-
-
-            Comun comun = new Gson().fromJson(body, Comun.class);
+            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+            //Comun comun = new Gson().fromJson(body, Comun.class);
+            Comun comun = gson.fromJson(body, Comun.class);
 
             logger.log("debe llegar aquí 1 ya tenemos Comun");
             if (comun == null) {
@@ -80,32 +85,52 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(body);
 
-            // Acceder a los datos del cuerpo de la solicitud
-            String grupoId = jsonNode.get("grupoId").asText();
-
-            logger.log("id from path grupoId --->  " + grupoId);
+            Long responsableID = null;
+            Long tipoID = null;
             Long grupoID = null;
             try {
-                grupoID = Long.parseLong(grupoId);
-                logger.log("ID del grupo: " + grupoID);
+                responsableID = Long.parseLong(jsonNode.get("responsableId").asText());
+                tipoID = Long.parseLong(jsonNode.get("tipoId").asText());
+                grupoID = Long.parseLong(jsonNode.get("grupoId").asText());
             } catch (NumberFormatException e) {
                 return response
                         .withBody("Invalid id in path")
                         .withStatusCode(400);
             }
+
+
             /*String bodyparaque = "{\"modelo\":\"+comun.getModelo()+\",\"marca\":\"+comun.getMarca()+" +
                     "\",\"nroserie\":\"+comun.getNroserie()+\",\"fechacompra\":\"+comun.getFechacompra()+" +
                     "\",\"importe\":+comun.getImporte()+,\"grupoId\":1,\"account\":+comun.getAccount()}";
             logger.log("bodyparaque: ");
             logger.log(bodyparaque);*/
             DSLContext dsl = RDSConexion.getDSL();
+
+            Optional<Responsable> responsableSearch = dsl.select()
+                    .from(RESPONSABLE_TABLE)
+                    .where(DSL.field("id", Long.class).eq(responsableID))
+                    .fetchOptionalInto(Responsable.class);
+            if (!responsableSearch.isPresent()) {
+                return response
+                        .withBody("El responsable especificado no existe")
+                        .withStatusCode(404);
+            }
+
+            Optional<Tipo> tipoSearch = dsl.select()
+                    .from(TIPO_TABLE)
+                    .where(DSL.field("id", Long.class).eq(tipoID))
+                    .fetchOptionalInto(Tipo.class);
+            if (!tipoSearch.isPresent()) {
+                return response
+                        .withBody("El tipo especificado no existe")
+                        .withStatusCode(404);
+            }
+
             Optional<Grupo> grupoSearch = dsl.select()
                     .from(GRUPO_TABLE)
                     .where(DSL.field("id", Long.class).eq(grupoID))
                     .fetchOptionalInto(Grupo.class);
             if (!grupoSearch.isPresent()) {
-                //Long grupoId = comun.getGrupo().getId();
-
                 return response
                         .withBody("El grupo especificado no existe")
                         .withStatusCode(404);
@@ -113,32 +138,27 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
             //if (grupoSearch.isPresent()) {
             logger.log("grupoSearch.isPresent()");
             logger.log("Comun.getGrupo I  : "+comun.getGrupo());
-            comun.setGrupo(grupoSearch.get());
-            logger.log("Comun.getGrupo II : "+comun.getGrupo());
           /*byte[] compressedPicture = null;
           if (comun.getPicture() != null) {
             compressedPicture = Util.compressZLib(comun.getPicture());
           }*/
             logger.log(":::::::::::::::::::::::::::::::::: PREPARANDO PARA INSERTAR ::::::::::::::::::::::::::::::::::");
-            save(comun, grupoID);
+
+            comun.setResponsable(responsableSearch.get());
+            comun.setTipo(tipoSearch.get());
+            comun.setGrupo(grupoSearch.get());
+            logger.log("Comun.getGrupo II : "+comun.getGrupo());
+
+            save(comun, responsableID, tipoID, grupoID);
             logger.log(":::::::::::::::::::::::::::::::::: INSERCIÓN COMPLETA ::::::::::::::::::::::::::::::::::");
             list.add(comun);
-            responseRest.getComunResponse().setListacomuns(list);
-            responseRest.setMetadata("Respuesta ok", "00", "Comun guardado");
-              /*} else {
-                responseRest.setMetadata("Respuesta nok", "-1", "Comun no encontrado");
-              }*/
+            responseRest.getComunResponse().setListacomunes(list);
+            responseRest.setMetadata("Respuesta ok", "00", "Común guardado");
+
             output = new Gson().toJson(responseRest);
             return response.withStatusCode(200)
                     .withBody(output);
-            /*} else {
-              return response
-                      .withBody("Invalid group data in request body, comun is null")
-                      .withStatusCode(400);
-            }*/
-        /*} else {
 
-      }*/
         } catch (Exception e) {
             responseRest.setMetadata("Respuesta nok", "-1", "Error al insertar");
             return response

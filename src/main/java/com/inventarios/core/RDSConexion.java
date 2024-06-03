@@ -26,6 +26,7 @@ public class RDSConexion {
     info = new Properties();
     info.put("user", rdsSecretArn());
   }
+
   public static Connection getConnection() {
     try {
       final String dbURL = "jdbc-secretsmanager:postgresql://" + rdsEndpoint() + "/" + rdsDatabase();
@@ -42,12 +43,12 @@ public class RDSConexion {
   }
 
   public static String rdsSecretArn() {
-    //return "arn:aws:secretsmanager:ap-southeast-2:905418357889:secret:RDSSecret-xeVNF5iy2LlO-kwCqXP";
+    //return "arn:aws:secretsmanager:ap-southeast-2:905418357889:secret:RDSSecret-FypwSALsXwRv-7s3vvR";
     return System.getenv(POSTGRES_SECRET_ARN_ENV);
   }
 
   public static String rdsEndpoint() {
-    //return "sam-app-rdsinstance-zys32lgbjo8q.ctcosak24j76.ap-southeast-2.rds.amazonaws.com";
+    //return "sam-app-rdsinstance-uutixd0j7zlb.ctcosak24j76.ap-southeast-2.rds.amazonaws.com";
     return System.getenv(DB_ENDPOINT);
   }
 
