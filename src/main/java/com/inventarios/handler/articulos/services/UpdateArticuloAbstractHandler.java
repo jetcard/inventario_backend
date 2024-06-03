@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.articulos.response.ArticuloResponseRest;
 import com.inventarios.model.Articulo;
+import java.sql.SQLException;
 import java.util.*;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -25,7 +26,7 @@ public abstract class UpdateArticuloAbstractHandler implements RequestHandler<AP
     headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     headers.put("Access-Control-Allow-Methods", "PUT");
   }
-  protected abstract void update(Articulo articulo, Long id);
+  protected abstract void update(Articulo articulo, Long id) throws SQLException;
    @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
      input.setHeaders(headers);

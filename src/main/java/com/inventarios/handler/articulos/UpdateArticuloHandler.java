@@ -3,11 +3,11 @@ package com.inventarios.handler.articulos;
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.articulos.services.UpdateArticuloAbstractHandler;
 import com.inventarios.model.Articulo;
+import java.sql.SQLException;
 import org.jooq.impl.DSL;
 
 public class UpdateArticuloHandler extends UpdateArticuloAbstractHandler {
-
-  protected void update(Articulo articulo, Long id) {
+  protected void update(Articulo articulo, Long id) throws SQLException {
     var dsl = RDSConexion.getDSL();
     dsl.update(ARTICULO_TABLE)
       .set(DSL.field("nombrearticulo"), articulo.getNombrearticulo())
@@ -15,5 +15,4 @@ public class UpdateArticuloHandler extends UpdateArticuloAbstractHandler {
       .where(DSL.field("id", Long.class).eq(id))
       .execute();
   }
-
 }

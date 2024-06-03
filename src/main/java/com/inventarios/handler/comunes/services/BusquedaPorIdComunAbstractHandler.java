@@ -8,6 +8,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import com.inventarios.handler.comunes.response.ComunResponseRest;
 import com.inventarios.model.Comun;
+import java.sql.SQLException;
 import java.util.*;
 import org.jooq.*;
 import org.jooq.Record;
@@ -26,7 +27,7 @@ public abstract class BusquedaPorIdComunAbstractHandler implements RequestHandle
 
   protected static final org.jooq.Table<?> COMUN_TABLE = DSL.table("comun");
   protected static final org.jooq.Field<String> COMUN_TABLE_COLUMNA = DSL.field("nombrecomun", String.class);
-  protected abstract Result<Record> busquedaPorNombreComun(String argv);
+  protected abstract Result<Record> busquedaPorNombreComun(String argv) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

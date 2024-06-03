@@ -8,6 +8,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import com.inventarios.handler.articulos.response.ArticuloResponseRest;
 import com.inventarios.model.Articulo;
+import java.sql.SQLException;
 import java.util.*;
 import org.jooq.*;
 import org.jooq.Record;
@@ -26,7 +27,7 @@ public abstract class BusquedaPorIdArticuloAbstractHandler implements RequestHan
 
   protected static final org.jooq.Table<?> ARTICULO_TABLE = DSL.table("articulo");
   protected static final org.jooq.Field<String> ARTICULO_TABLE_COLUMNA = DSL.field("nombrearticulo", String.class);
-  protected abstract Result<Record> busquedaPorNombreArticulo(String argv);
+  protected abstract Result<Record> busquedaPorNombreArticulo(String argv) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

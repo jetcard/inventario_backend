@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.atributos.response.AtributosResponseRest;
 import com.inventarios.model.Atributos;
+import java.sql.SQLException;
 import java.util.*;
 import com.inventarios.model.Grupo;
 import org.jooq.DSLContext;
@@ -34,7 +35,7 @@ public abstract class CreateAtributosAbstractHandler implements RequestHandler<A
         headers.put("Access-Control-Allow-Methods", "POST");
     }
 
-    protected abstract void save(Atributos atributos, Long grupoID);
+    protected abstract void save(Atributos atributos, Long grupoID) throws SQLException;
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.responsables.response.ResponsableResponseRest;
 import com.inventarios.model.Responsable;
+import java.sql.SQLException;
 import java.util.*;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -25,7 +26,7 @@ public abstract class UpdateResponsableAbstractHandler implements RequestHandler
     headers.put("Access-Control-Allow-Methods", "PUT");
   }
   protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
-  protected abstract void update(Responsable responsable, Long id);
+  protected abstract void update(Responsable responsable, Long id) throws SQLException;
    @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
      input.setHeaders(headers);

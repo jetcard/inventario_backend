@@ -8,6 +8,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import com.inventarios.handler.responsables.response.ResponsableResponseRest;
 import com.inventarios.model.Responsable;
+import java.sql.SQLException;
 import java.util.*;
 import org.jooq.*;
 import org.jooq.Record;
@@ -27,7 +28,7 @@ public abstract class BusquedaPorIdResponsableAbstractHandler implements Request
     headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     headers.put("Access-Control-Allow-Methods", "GET");
   }
-  protected abstract Result<Record> busquedaPorNombreResponsable(String argv);
+  protected abstract Result<Record> busquedaPorNombreResponsable(String argv) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

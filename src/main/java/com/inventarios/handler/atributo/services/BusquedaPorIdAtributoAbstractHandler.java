@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.inventarios.handler.atributo.response.AtributoResponseRest;
 import com.inventarios.model.Articulo;
 import com.inventarios.model.Atributo;
+import java.sql.SQLException;
 import java.util.*;
 import com.inventarios.model.Responsable;
 import org.jooq.*;
@@ -29,7 +30,7 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
     headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     headers.put("Access-Control-Allow-Methods", "GET");
   }
-  protected abstract Result<Record> busquedaPorNombreAtributo(String argv);
+  protected abstract Result<Record> busquedaPorNombreAtributo(String argv) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

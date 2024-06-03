@@ -6,6 +6,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
 import com.inventarios.handler.atributo.response.AtributoResponseRest;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import org.jooq.Record;
@@ -23,7 +24,7 @@ public abstract class DeleteAtributoAbstractHandler implements RequestHandler<AP
     headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     headers.put("Access-Control-Allow-Methods", "DELETE");
   }
-  protected abstract void delete(long id);
+  protected abstract void delete(long id) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

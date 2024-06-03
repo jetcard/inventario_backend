@@ -6,6 +6,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
 import com.inventarios.model.Responsable;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import com.inventarios.handler.responsables.response.ResponsableResponseRest;
@@ -24,7 +25,7 @@ public abstract class CreateResponsableAbstractHandler implements RequestHandler
     headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     headers.put("Access-Control-Allow-Methods", "POST");
   }
-  protected abstract void save(String arearesponsable, String nombresyapellidos);
+  protected abstract void save(String arearesponsable, String nombresyapellidos) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

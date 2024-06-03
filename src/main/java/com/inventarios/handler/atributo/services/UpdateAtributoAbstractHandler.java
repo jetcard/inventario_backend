@@ -7,6 +7,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import com.inventarios.model.Articulo;
 import com.inventarios.model.Atributo;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public abstract class UpdateAtributoAbstractHandler implements RequestHandler<AP
     headers.put("Access-Control-Allow-Methods", "PUT");
   }
 
-  protected abstract void update(Long id, Responsable responsable, Articulo articulo);
+  protected abstract void update(Long id, Responsable responsable, Articulo articulo) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

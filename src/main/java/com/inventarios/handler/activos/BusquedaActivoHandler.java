@@ -7,11 +7,16 @@ import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import static org.jooq.impl.DSL.field;
+
 public class BusquedaActivoHandler extends BusquedaActivoAbstractHandler {
   @Override
-  protected Result<Record> busquedaActivo(String responsable, String proveedor, String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta) {
+  protected Result<Record> busquedaActivo(String responsable, String proveedor, String codinventario,
+                                          String modelo, String marca, String nroSerie,
+                                          LocalDate fechaCompraDesde,
+                                          LocalDate fechaCompraHasta) throws SQLException {
     DSLContext dsl = RDSConexion.getDSL();
     Condition condition = DSL.trueCondition();
     if (responsable != null && !responsable.isEmpty()) {
@@ -44,7 +49,7 @@ public class BusquedaActivoHandler extends BusquedaActivoAbstractHandler {
   }
 
   @Override
-  protected String mostrarResponsable(Long id) {
+  protected String mostrarResponsable(Long id) throws SQLException {
     var dsl = RDSConexion.getDSL();
     Record record = dsl.select(RESPONSABLE_TABLE_COLUMNA)
             .from(RESPONSABLE_TABLE)
@@ -54,7 +59,7 @@ public class BusquedaActivoHandler extends BusquedaActivoAbstractHandler {
   }
 
   @Override
-  protected String mostrarProveedor(Long id) {
+  protected String mostrarProveedor(Long id) throws SQLException {
     var dsl = RDSConexion.getDSL();
     Record record = dsl.select(PROVEEDOR_TABLE_COLUMNA)
             .from(PROVEEDOR_TABLE)
@@ -64,7 +69,7 @@ public class BusquedaActivoHandler extends BusquedaActivoAbstractHandler {
   }
 
   @Override
-  protected String mostrarTipoBien(Long id) {
+  protected String mostrarTipoBien(Long id) throws SQLException {
     var dsl = RDSConexion.getDSL();
     Record record = dsl.select(TIPO_TABLE_COLUMNA)
             .from(TIPO_TABLE)
@@ -74,7 +79,7 @@ public class BusquedaActivoHandler extends BusquedaActivoAbstractHandler {
   }
 
   @Override
-  protected String mostrarGrupo(Long id) {
+  protected String mostrarGrupo(Long id) throws SQLException {
     var dsl = RDSConexion.getDSL();
     Record record = dsl.select(GRUPO_TABLE_COLUMNA)
             .from(GRUPO_TABLE)
@@ -84,7 +89,7 @@ public class BusquedaActivoHandler extends BusquedaActivoAbstractHandler {
   }
 
   @Override
-  protected String mostrarArticulo(Long id) {
+  protected String mostrarArticulo(Long id) throws SQLException {
     var dsl = RDSConexion.getDSL();
     Record record = dsl.select(ARTICULO_TABLE_COLUMNA)
             .from(ARTICULO_TABLE)

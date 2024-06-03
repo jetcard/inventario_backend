@@ -6,12 +6,13 @@ import com.inventarios.model.Atributo;
 import com.inventarios.model.Atributos;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
+import java.sql.SQLException;
 import java.util.List;
 
 public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
 
   @Override
-  public int getAtributoID(Atributo atributo) {
+  public int getAtributoID(Atributo atributo) throws SQLException {
     DSLContext dsl = RDSConexion.getDSL();
     try {
       int atributoid = dsl.transactionResult(configuration -> {
@@ -26,7 +27,7 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
   }
 
   @Override
-  public void save(Atributo atributo, List<Atributos> atributosList) {
+  public void save(Atributo atributo, List<Atributos> atributosList) throws SQLException{
     DSLContext dsl = RDSConexion.getDSL();
     try {
       dsl.transaction(configuration -> {

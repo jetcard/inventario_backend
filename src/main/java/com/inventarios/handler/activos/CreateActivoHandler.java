@@ -3,11 +3,14 @@ package com.inventarios.handler.activos;
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.activos.services.CreateActivoAbstractHandler;
 import com.inventarios.model.Activo;
+import java.sql.SQLException;
 import org.jooq.impl.DSL;
 
 public class CreateActivoHandler extends CreateActivoAbstractHandler {
   @Override
-  protected void save(Activo activo, Long responsableID, Long tipoID, Long grupoID, Long articuloID, Long proveedorID) {
+  protected void save(Activo activo, Long responsableID, Long tipoID, Long grupoID,
+                      Long articuloID,
+                      Long proveedorID) throws SQLException {
     var dsl = RDSConexion.getDSL();
     dsl.insertInto(ACTIVO_TABLE)
             .set(DSL.field("codinventario"), activo.getCodinventario())

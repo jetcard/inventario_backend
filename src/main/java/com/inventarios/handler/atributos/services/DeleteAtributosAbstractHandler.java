@@ -7,7 +7,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 //import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.inventarios.model.Atributos;
-
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +30,7 @@ public abstract class DeleteAtributosAbstractHandler implements RequestHandler<A
     headers.put("Access-Control-Allow-Methods", "DELETE");
   }
 
-  protected abstract void delete(long id);
+  protected abstract void delete(long id) throws SQLException;
 
   @Override
  

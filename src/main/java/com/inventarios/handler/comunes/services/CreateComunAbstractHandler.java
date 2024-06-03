@@ -14,6 +14,7 @@ import com.inventarios.model.Comun;
 import com.inventarios.model.Grupo;
 import com.inventarios.model.Responsable;
 import com.inventarios.model.Tipo;
+import java.sql.SQLException;
 import java.util.*;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -39,7 +40,7 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
         headers.put("Access-Control-Allow-Methods", "POST");
     }
 
-    protected abstract void save(Comun comun, Long responsableID, Long tipoID, Long grupoID);
+    protected abstract void save(Comun comun, Long responsableID, Long tipoID, Long grupoID) throws SQLException;
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

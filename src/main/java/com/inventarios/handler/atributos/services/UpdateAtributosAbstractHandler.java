@@ -6,6 +6,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
 import com.inventarios.model.Atributos;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import org.jooq.Record;
@@ -26,7 +27,7 @@ public abstract class UpdateAtributosAbstractHandler implements RequestHandler<A
     headers.put("Access-Control-Allow-Methods", "PUT");
   }
 
-  protected abstract void update(Long id, String descripatributo, String nombreatributo);
+  protected abstract void update(Long id, String descripatributo, String nombreatributo) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

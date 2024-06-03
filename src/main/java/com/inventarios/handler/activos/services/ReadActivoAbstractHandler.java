@@ -7,6 +7,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.*;
 import com.inventarios.handler.activos.response.ActivoResponseRest;
 import com.inventarios.model.*;
@@ -40,12 +41,12 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
     headers.put("Access-Control-Allow-Methods", "GET");
   }
 
-  protected abstract Result<Record> read();
-  protected abstract String mostrarResponsable(Long id);
-  protected abstract String mostrarTipoBien(Long id);
-  protected abstract String mostrarGrupo(Long id);
-  protected abstract String mostrarArticulo(Long id);
-  protected abstract String mostrarProveedor(Long id);
+  protected abstract Result<Record> read() throws SQLException;
+  protected abstract String mostrarResponsable(Long id) throws SQLException;
+  protected abstract String mostrarTipoBien(Long id) throws SQLException;
+  protected abstract String mostrarGrupo(Long id) throws SQLException;
+  protected abstract String mostrarArticulo(Long id) throws SQLException;
+  protected abstract String mostrarProveedor(Long id) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -68,7 +69,7 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
               .withStatusCode(500);
     }
   }
-  protected List<Activo> convertResultToList(Result<Record> result) {
+  protected List<Activo> convertResultToList(Result<Record> result) throws SQLException {
     List<Activo> listaActivos = new ArrayList<>();
     for (Record record : result) {
       Activo activo = new Activo();

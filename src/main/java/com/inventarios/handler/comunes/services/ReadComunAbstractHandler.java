@@ -5,6 +5,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
+import java.sql.SQLException;
 import java.util.*;
 
 import com.inventarios.handler.comunes.response.ComunResponseRest;
@@ -30,7 +31,7 @@ public abstract class ReadComunAbstractHandler implements RequestHandler<APIGate
     headers.put("Access-Control-Allow-Methods", "GET");
   }
 
-  protected abstract Result<Record> read();
+  protected abstract Result<Record> read() throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

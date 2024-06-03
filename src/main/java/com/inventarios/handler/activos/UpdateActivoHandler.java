@@ -3,13 +3,13 @@ package com.inventarios.handler.activos;
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.activos.services.UpdateActivoAbstractHandler;
 import org.jooq.impl.DSL;
-
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.SQLException;
 
 public class UpdateActivoHandler extends UpdateActivoAbstractHandler {
   protected void update(Long id, String codinventario, String modelo, String marca, String nroSerie, Date fechaingreso, BigDecimal importe,
-                        String moneda) {
+                        String moneda) throws SQLException {
     var dsl = RDSConexion.getDSL();
     //DSLContext dsl = DependencyFactory.getDSL();
     dsl.update(ACTIVO_TABLE)

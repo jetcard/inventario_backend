@@ -9,9 +9,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
 import com.inventarios.handler.atributo.response.AtributoResponseRest;
 import com.inventarios.model.*;
-
+import java.sql.SQLException;
 import java.util.*;
-
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -29,8 +28,8 @@ public abstract class CreateAtributoAbstractHandler implements RequestHandler<AP
         headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
         headers.put("Access-Control-Allow-Methods", "POST");
     }
-    protected abstract int getAtributoID(Atributo atributo);
-    protected abstract void save(Atributo atributo, List<Atributos> atributosList);
+    protected abstract int getAtributoID(Atributo atributo) throws SQLException;
+    protected abstract void save(Atributo atributo, List<Atributos> atributosList) throws SQLException;
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

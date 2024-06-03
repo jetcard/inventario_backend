@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.grupos.response.GrupoResponseRest;
 import com.inventarios.model.Grupo;
+import java.sql.SQLException;
 import java.util.*;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -25,7 +26,7 @@ public abstract class UpdateGrupoAbstractHandler implements RequestHandler<APIGa
     headers.put("Access-Control-Allow-Methods", "PUT");
   }
   protected final static Table<Record> GRUPO_TABLE = DSL.table("grupo");
-  protected abstract void update(Grupo grupo, Long id);
+  protected abstract void update(Grupo grupo, Long id) throws SQLException;
    @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
      input.setHeaders(headers);

@@ -2,6 +2,8 @@
 package com.inventarios.core;
 
 import com.amazonaws.secretsmanager.sql.AWSSecretsManagerPostgreSQLDriver;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -16,8 +18,8 @@ public class RDSConexion {
   public static final String DB_ENDPOINT = "DBEnpoint";
   public static final String DB_USER = "user";
   public static final String DB_PASS = "pass";
-
   static final Properties info;
+  private static HikariDataSource dataSource;
 
   static {
     System.setProperty("software.amazon.awssdk.http.service.impl",
@@ -25,9 +27,27 @@ public class RDSConexion {
     var driver = new AWSSecretsManagerPostgreSQLDriver();
     info = new Properties();
     info.put("user", rdsSecretArn());
+
+    //Pool de conexiones
+    HikariConfig config = new HikariConfig();
+    config.setJdbcUrl("jdbc-secretsmanager:postgresql://" + rdsEndpoint() + "/" + rdsDatabase());
+    config.setDriverClassName(AWSSecretsManagerPostgreSQLDriver.class.getName());
+    config.setMaximumPoolSize(10);  // Ajusta este valor según tus necesidades
+    config.setUsername(rdsUserDB());
+    config.setPassword(rdsPassDB());
+    config.setDataSourceProperties(info);
+    config.setMinimumIdle(5); // Número mínimo de conexiones inactivas en el pool
+    config.setIdleTimeout(30000); // Tiempo máximo de inactividad antes de cerrar una conexión
+    config.setConnectionTimeout(30000); // Tiempo máximo de espera para obtener una conexión del pool
+    config.setMaxLifetime(1800000); // Tiempo máximo de vida de una conexión
+    dataSource = new HikariDataSource(config);
   }
 
-  public static Connection getConnection() {
+  public static Connection getConnection() throws SQLException {
+    return dataSource.getConnection();
+  }
+
+  /*public static Connection getConnection() {
     try {
       final String dbURL = "jdbc-secretsmanager:postgresql://" + rdsEndpoint() + "/" + rdsDatabase();
       return DriverManager.getConnection(dbURL, info);
@@ -35,7 +55,7 @@ public class RDSConexion {
       System.err.println(se.getMessage());
       return null;
     }
-  }
+  }*/
 
   public static String rdsDatabase() {
     //return "basededatos";
@@ -62,7 +82,7 @@ public class RDSConexion {
     return System.getenv(DB_PASS);
   }
 
-  public static DSLContext getDSL() {
+  public static DSLContext getDSL() throws SQLException {
     return (DSL.using(getConnection(), SQLDialect.POSTGRES));
   }
 

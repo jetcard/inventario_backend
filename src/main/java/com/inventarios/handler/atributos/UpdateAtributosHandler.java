@@ -2,10 +2,11 @@ package com.inventarios.handler.atributos;
 
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.atributos.services.UpdateAtributosAbstractHandler;
+import java.sql.SQLException;
 import org.jooq.impl.DSL;
 
 public class UpdateAtributosHandler extends UpdateAtributosAbstractHandler {
-  protected void update(Long id, String descripatributo, String nombreatributo) {
+  protected void update(Long id, String descripatributo, String nombreatributo) throws SQLException {
     var dsl = RDSConexion.getDSL();
     //DSLContext dsl = DependencyFactory.getDSL();
     dsl.update(ATRIBUTOS_TABLE)

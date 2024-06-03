@@ -16,6 +16,7 @@ import org.jooq.Table;
 import org.jooq.impl.DSL;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -47,12 +48,16 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
     headers.put("Access-Control-Allow-Methods", "GET");
   }
 
-  protected abstract String mostrarResponsable(Long id);
-  protected abstract String mostrarTipoBien(Long id);
-  protected abstract String mostrarGrupo(Long id);
-  protected abstract String mostrarArticulo(Long id);
-  protected abstract String mostrarProveedor(Long id);
-  protected abstract Result<Record> busquedaActivo(String responsable, String proveedor, String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta);
+  protected abstract String mostrarResponsable(Long id) throws SQLException;
+  protected abstract String mostrarTipoBien(Long id) throws SQLException;
+  protected abstract String mostrarGrupo(Long id) throws SQLException;
+  protected abstract String mostrarArticulo(Long id) throws SQLException;
+  protected abstract String mostrarProveedor(Long id) throws SQLException;
+  protected abstract Result<Record> busquedaActivo(String responsable, String proveedor,
+                                                   String codinventario, String modelo,
+                                                   String marca, String nroSerie,
+                                                   LocalDate fechaCompraDesde,
+                                                   LocalDate fechaCompraHasta) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -150,7 +155,7 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
     }
   }
   
-  protected List<Activo> convertResultToList(Result<Record> result) {
+  protected List<Activo> convertResultToList(Result<Record> result) throws SQLException {
     List<Activo> listaActivos = new ArrayList<>();
     for (Record record : result) {
       Activo activo = new Activo();

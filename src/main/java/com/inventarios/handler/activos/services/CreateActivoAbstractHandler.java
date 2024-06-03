@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.activos.response.ActivoResponseRest;
 import com.inventarios.model.*;
+import java.sql.SQLException;
 import java.util.*;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -37,7 +38,9 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
         headers.put("Access-Control-Allow-Methods", "POST");
     }
 
-    protected abstract void save(Activo activo, Long responsableID, Long tipoID, Long grupoID, Long articuloID, Long proveedorID);
+    protected abstract void save(Activo activo, Long responsableID, Long tipoID, Long grupoID,
+                                 Long articuloID,
+                                 Long proveedorID) throws SQLException;
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

@@ -6,6 +6,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
 import com.inventarios.model.Comun;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import org.jooq.Record;
@@ -26,7 +27,7 @@ public abstract class UpdateComunAbstractHandler implements RequestHandler<APIGa
     headers.put("Access-Control-Allow-Methods", "PUT");
   }
 
-  protected abstract void update(Long id, String descripcomun, String descripcortacomun);
+  protected abstract void update(Long id, String descripcomun, String descripcortacomun) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

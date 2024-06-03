@@ -5,6 +5,8 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
+import java.sql.SQLException;
+import java.sql.SQLException;
 import java.util.*;
 import com.inventarios.model.Proveedor;
 import com.inventarios.handler.proveedores.response.ProveedorResponseRest;
@@ -13,6 +15,7 @@ import org.jooq.Table;
 import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
+
 public abstract class ReadProveedorAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
   protected final static Table<Record> PROVEEDOR_TABLE = DSL.table("proveedor");
   final static Map<String, String> headers = new HashMap<>();
@@ -24,7 +27,7 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
     headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     headers.put("Access-Control-Allow-Methods", "GET");
   }
-  protected abstract Result<Record> read();
+  protected abstract Result<Record> read() throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

@@ -6,9 +6,9 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
 import com.inventarios.model.Activo;
-
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import org.jooq.Record;
@@ -33,7 +33,7 @@ public abstract class UpdateActivoAbstractHandler implements RequestHandler<APIG
                                  BigDecimal importe, String moneda
                                  //String categoryId,
                                  //String picture
-                                 );
+                                 ) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
