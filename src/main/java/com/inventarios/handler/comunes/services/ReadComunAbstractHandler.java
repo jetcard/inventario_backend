@@ -9,8 +9,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 import com.inventarios.handler.comunes.response.ComunResponseRest;
-import com.inventarios.model.Comun;
-import com.inventarios.model.Grupo;
+import com.inventarios.model.*;
 import org.jooq.Field;
 import org.jooq.Table;
 import org.jooq.Record;
@@ -20,6 +19,12 @@ import org.jooq.impl.DSL;
 public abstract class ReadComunAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   protected final static Table<Record> COMUN_TABLE = DSL.table("comun");
+  protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
+  protected static final Field<String> RESPONSABLE_TABLE_COLUMNA = DSL.field("arearesponsable", String.class);
+  protected final static Table<Record> TIPO_TABLE = DSL.table("tipo");
+  protected static final Field<String> TIPO_TABLE_COLUMNA = DSL.field("nombretipo", String.class);
+  protected final static Table<Record> GRUPO_TABLE = DSL.table("grupo");
+  protected static final Field<String> GRUPO_TABLE_COLUMNA = DSL.field("nombregrupo", String.class);
 
   final static Map<String, String> headers = new HashMap<>();
 
@@ -32,6 +37,9 @@ public abstract class ReadComunAbstractHandler implements RequestHandler<APIGate
   }
 
   protected abstract Result<Record> read() throws SQLException;
+  protected abstract String mostrarResponsable(Long id) throws SQLException;
+  protected abstract String mostrarTipoBien(Long id) throws SQLException;
+  protected abstract String mostrarGrupo(Long id) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -55,7 +63,7 @@ public abstract class ReadComunAbstractHandler implements RequestHandler<APIGate
     }
   }
 
-  private String convertResultToJson(Result<Record> result) {
+  /*private String convertResultToJson(Result<Record> result) {
     List<Map<String, Object>> resultList = new ArrayList<>();
     for (Record record : result) {
       Map<String, Object> recordMap = new LinkedHashMap<>();
@@ -67,10 +75,10 @@ public abstract class ReadComunAbstractHandler implements RequestHandler<APIGate
     }
     System.out.println("resultList: "+resultList);
     return new Gson().toJson(resultList);
-  }
+  }*/
 
-  protected List<Comun> convertResultToList(Result<Record> result) {
-    List<Comun> listaComuns = new ArrayList<>();
+  protected List<Comun> convertResultToList(Result<Record> result) throws SQLException {
+    List<Comun> listaComunes = new ArrayList<>();
     for (Record record : result) {
       Comun comun = new Comun();
       comun.setId(record.getValue("id", Long.class));
@@ -79,9 +87,24 @@ public abstract class ReadComunAbstractHandler implements RequestHandler<APIGate
 
       //comun.setGrupo(record.getValue("grupoId", Grupo.class));
       ///comun.setPicture(record.getValue("picture", byte[].class));
-      listaComuns.add(comun);
+      Responsable responsable = new Responsable();
+      responsable.setId(record.getValue("responsableid", Long.class));
+      responsable.setArearesponsable(mostrarResponsable(responsable.getId()));
+      comun.setResponsable(responsable);
+
+      Tipo tipo = new Tipo();
+      tipo.setId(record.getValue("tipoid", Long.class));
+      tipo.setNombretipo(mostrarTipoBien(tipo.getId()));
+      comun.setTipo(tipo);
+
+      Grupo grupo=new Grupo();
+      grupo.setId(record.getValue("grupoid", Long.class));
+      grupo.setNombregrupo(mostrarGrupo(grupo.getId()));
+      comun.setGrupo(grupo);
+
+      listaComunes.add(comun);
     }
-    return listaComuns;
+    return listaComunes;
   }
 
 }

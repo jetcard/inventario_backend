@@ -9,9 +9,8 @@ import java.sql.SQLException;
 import java.util.*;
 
 import com.inventarios.handler.atributo.response.AtributoResponseRest;
-import com.inventarios.model.Articulo;
-import com.inventarios.model.Atributo;
-import com.inventarios.model.Responsable;
+import com.inventarios.model.*;
+import org.jooq.Field;
 import org.jooq.Table;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -20,6 +19,10 @@ import org.jooq.impl.DSL;
 public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   protected final static Table<Record> ATRIBUTO_TABLE = DSL.table("atributo");
+  protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
+  protected static final Field<String> RESPONSABLE_TABLE_COLUMNA = DSL.field("arearesponsable", String.class);
+  protected final static Table<Record> ARTICULO_TABLE = DSL.table("articulo");
+  protected static final Field<String> ARTICULO_TABLE_COLUMNA = DSL.field("nombrearticulo", String.class);
 
   final static Map<String, String> headers = new HashMap<>();
 
@@ -32,6 +35,8 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
   }
 
   protected abstract Result<Record> read() throws SQLException;
+  protected abstract String mostrarResponsable(Long id) throws SQLException;
+  protected abstract String mostrarArticulo(Long id) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -54,19 +59,30 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
     }
   }
 
-  protected List<Atributo> convertResultToList(Result<Record> result) {
+  protected List<Atributo> convertResultToList(Result<Record> result) throws SQLException {
     List<Atributo> listaAtributos = new ArrayList<>();
 
     for (Record record : result) {
       Atributo atributo = new Atributo();
       atributo.setId(record.getValue("id", Long.class));
 
-      Responsable responsable=new Responsable();
+      /*Responsable responsable=new Responsable();
       responsable.setId(record.getValue("responsableid", Long.class));
       Articulo articulo=new Articulo();
       articulo.setId(record.getValue("articuloid", Long.class));
       atributo.setResponsable(responsable);
+      atributo.setArticulo(articulo);*/
+
+      Responsable responsable = new Responsable();
+      responsable.setId(record.getValue("responsableid", Long.class));
+      responsable.setArearesponsable(mostrarResponsable(responsable.getId()));
+      atributo.setResponsable(responsable);
+
+      Articulo articulo = new Articulo();
+      articulo.setId(record.getValue("tipoid", Long.class));
+      articulo.setNombrearticulo(mostrarArticulo(articulo.getId()));
       atributo.setArticulo(articulo);
+
       listaAtributos.add(atributo);
     }
     return listaAtributos;
