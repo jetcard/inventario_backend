@@ -3053,7 +3053,7 @@ Resources:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt MyApi.RootResourceId
-      PathPart: comuns
+      PathPart: comunes
       RestApiId: !Ref MyApi
 
   ResourceComunId:
@@ -3086,7 +3086,7 @@ Resources:
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: comuns
+      OperationName: comunes
       ResourceId: !Ref ResourceComun
       RestApiId: !Ref MyApi
 
@@ -3099,7 +3099,7 @@ Resources:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'PUT,DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,PUT,DELETE,OPTIONS'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             StatusCode: '200'
         Type: MOCK
@@ -3113,7 +3113,7 @@ Resources:
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: comuns
+      OperationName: comunes
       ResourceId: !Ref ResourceComunId
       RestApiId: !Ref MyApi
 
@@ -3144,7 +3144,7 @@ Resources:
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: comuns
+      OperationName: comunes
       ResourceId: !Ref ResourceComun
       RestApiId: !Ref MyApi
 
@@ -3175,7 +3175,7 @@ Resources:
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: comuns
+      OperationName: comunes
       ResourceId: !Ref ResourceComunId
       RestApiId: !Ref MyApi
 
@@ -3202,7 +3202,7 @@ Resources:
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: comuns
+      OperationName: comunes
       ResourceId: !Ref ResourceComun
       RestApiId: !Ref MyApi
 
@@ -3229,7 +3229,7 @@ Resources:
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: comuns
+      OperationName: comunes
       ResourceId: !Ref ResourceComunId
       RestApiId: !Ref MyApi
 
@@ -3256,7 +3256,7 @@ Resources:
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: comuns
+      OperationName: comunes
       ResourceId: !Ref ResourceComunId
       RestApiId: !Ref MyApi
 
@@ -3264,7 +3264,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: ReadComun
-      Handler: com.inventarios.handler.comuns.ReadComunHandler
+      Handler: com.inventarios.handler.comunes.ReadComunHandler
       Runtime: java21
       Environment:
         Variables:
@@ -3311,7 +3311,7 @@ Resources:
   BusquedaPorIdComunFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: com.inventarios.handler.comuns.BusquedaPorIdComunHandler
+      Handler: com.inventarios.handler.comunes.BusquedaPorIdComunHandler
       Runtime: java21
       Environment:
         Variables:
@@ -3359,7 +3359,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: CrearComun
-      Handler: com.inventarios.handler.comuns.CreateComunHandler
+      Handler: com.inventarios.handler.comunes.CreateComunHandler
       Runtime: java21
       Environment:
         Variables:
@@ -3407,7 +3407,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: UpdateComun
-      Handler: com.inventarios.handler.comuns.UpdateComunHandler
+      Handler: com.inventarios.handler.comunes.UpdateComunHandler
       Runtime: java21
       Environment:
         Variables:
@@ -3455,7 +3455,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: DeleteComun
-      Handler: com.inventarios.handler.comuns.DeleteComunHandler
+      Handler: com.inventarios.handler.comunes.DeleteComunHandler
       Runtime: java21
       Environment:
         Variables:
