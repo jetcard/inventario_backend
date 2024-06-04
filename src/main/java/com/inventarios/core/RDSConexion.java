@@ -39,28 +39,28 @@ public class RDSConexion {
   }
 
   public static String rdsDatabase() {
-    return "basededatos";
-    //return System.getenv(DATABASE_NAME_ENV);
+    //return "basededatos";
+    return System.getenv(DATABASE_NAME_ENV);
   }
 
   public static String rdsSecretArn() {
-    return "arn:aws:secretsmanager:ap-southeast-2:905418357889:secret:RDSSecret-Rt0Xo4XBp2wD-lfBfOD";
-    //return System.getenv(POSTGRES_SECRET_ARN_ENV);
+    //return "arn:aws:secretsmanager:ap-southeast-2:905418357889:secret:RDSSecret-Rt0Xo4XBp2wD-lfBfOD";
+    return System.getenv(POSTGRES_SECRET_ARN_ENV);
   }
 
   public static String rdsEndpoint() {
-    return "sam-app-rdsinstance-hq0bhfumxqsr.ctcosak24j76.ap-southeast-2.rds.amazonaws.com";
-    //return System.getenv(DB_ENDPOINT);
+    //return "sam-app-rdsinstance-hq0bhfumxqsr.ctcosak24j76.ap-southeast-2.rds.amazonaws.com";
+    return System.getenv(DB_ENDPOINT);
   }
 
   public static String rdsUserDB() {
-    return "postgres";
-    //return System.getenv(DB_USER);
+    //return "postgres";
+    return System.getenv(DB_USER);
   }
 
   public static String rdsPassDB() {
-    return "1234567890";
-    //return System.getenv(DB_PASS);
+    //return "1234567890";
+    return System.getenv(DB_PASS);
   }
 
   public static DSLContext getDSL() {
