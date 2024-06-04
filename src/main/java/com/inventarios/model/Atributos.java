@@ -1,5 +1,6 @@
 package com.inventarios.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -12,10 +13,14 @@ public class Atributos implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "atributoid")
+    private Long atributoid;
+    /* Referencia cíclica
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "atributoid") // Nombre de la columna que establece la relación
+    @JoinColumn(name = "atributoid")
+    @JsonBackReference
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Atributo atributo;
+    private Atributo atributo;*/
 
     private String nombreatributo;
 
@@ -27,12 +32,12 @@ public class Atributos implements Serializable {
         this.id = id;
     }
 
-    public Atributo getAtributo() {
-        return atributo;
+    public Long getAtributoid() {
+        return atributoid;
     }
 
-    public void setAtributo(Atributo atributo) {
-        this.atributo = atributo;
+    public void setAtributoid(Long atributoid) {
+        this.atributoid = atributoid;
     }
 
     public String getNombreatributo() {

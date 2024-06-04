@@ -1,12 +1,14 @@
 package com.inventarios.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name="atributo")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Atributo  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +23,7 @@ public class Atributo  implements Serializable {
     private Articulo articulo;
 
     @OneToMany(mappedBy = "atributo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Atributos> atributos;
 
     public Long getId() {

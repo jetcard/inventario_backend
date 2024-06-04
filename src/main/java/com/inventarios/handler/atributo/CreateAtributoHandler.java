@@ -26,6 +26,30 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
     }
   }
 
+
+  /*
+  public void save(Atributo atributo, List<Atributos> atributosList) throws SQLException {
+    DSLContext dsl = RDSConexion.getDSL();
+    try {
+      dsl.transaction(configuration -> {
+        DSLContext transactionalDsl = DSL.using(configuration);
+
+        long atributoid = atributo.getId();
+        atributo.setId(atributoid);
+
+        for (Atributos atributos : atributosList) {
+          atributos.setAtributoid(atributo.getId());
+          //atributos.setAtributo(atributo);
+          ///atributos.setAtributo(null); // Rompe la referencia cíclica
+          insertAtributos(transactionalDsl, atributos);
+        }
+      });
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new SQLException("Error saving atributo and atributos", e);
+    }
+  }*/
+
   @Override
   public void save(Atributo atributo, List<Atributos> atributosList) throws SQLException{
     DSLContext dsl = RDSConexion.getDSL();
@@ -43,9 +67,11 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
         //System.out.println("WHERE atributoid = "+atributoid);
 
         for (Atributos atributos : atributosList) {
-          atributos.setAtributo(atributo);
+          atributos.setAtributoid(atributo.getId());
+          //atributos.setAtributo(atributo);
           //atributos.setAtributo(new Atributo(atributo.getId(), atributo.getResponsable(), atributo.getArticulo()));
           //atributos.setAtributo(atributo); // Establecer la relación con el Atributo padre
+          System.out.println("atributos.getAtributoid() para insertAtributos = "+atributos.getAtributoid());
           insertAtributos(transactionalDsl, atributos);
         }
       });
@@ -106,7 +132,8 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
 
   private void insertAtributos(DSLContext dsl, Atributos atributos) {
     dsl.insertInto(ATRIBUTOS_TABLE)
-            .set(DSL.field("atributoid"), atributos.getAtributo().getId())
+            //.set(DSL.field("atributoid"), atributos.getAtributo().getId())
+            .set(DSL.field("atributoid"), atributos.getAtributoid())
             .set(DSL.field("nombreatributo"), atributos.getNombreatributo())
             .execute();
   }

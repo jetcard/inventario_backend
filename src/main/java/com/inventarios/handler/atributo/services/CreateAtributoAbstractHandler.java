@@ -34,8 +34,7 @@ public abstract class CreateAtributoAbstractHandler implements RequestHandler<AP
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
         input.setHeaders(headers);
-        AtributoResponseRest responseRest = new AtributoResponseRest();
-        LambdaLogger logger = context.getLogger();
+        AtributoResponseRest responseRest = new AtributoResponseRest();LambdaLogger logger = context.getLogger();
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         List<Atributo> list = new ArrayList<>();
         List<Atributos> atributosList = new ArrayList<>();
@@ -47,7 +46,24 @@ public abstract class CreateAtributoAbstractHandler implements RequestHandler<AP
             if (body != null && !body.isEmpty()) {
                 logger.log(body);
                 Atributo atributo = new Gson().fromJson(body, Atributo.class);
+                ///Atributo atributo = mapper.readValue(body, Atributo.class);
                 if (atributo != null) {
+                    List<Atributos> atributosListaInicial = new ArrayList<>();
+
+                    // Initialize default value for atributoid
+                    Long defaultAtributoId = 0L;
+
+                    // Create a default Atributos object
+                    Atributos defaultAtributo = new Atributos();
+                    defaultAtributo.setAtributoid(defaultAtributoId);
+                    defaultAtributo.setNombreatributo(""); // You can set other properties if necessary
+
+                    // Add the default Atributos object to atributosList
+                    atributosListaInicial.add(defaultAtributo);
+
+                    // Set the atributosList to the atributos property of atributo
+                    atributo.setAtributos(atributosListaInicial);
+
                     logger.log("atributo = "+atributo);
                     Long responsableId = jsonNode.get("responsableId").asLong();
                     logger.log("responsableId = "+responsableId);
@@ -75,7 +91,9 @@ public abstract class CreateAtributoAbstractHandler implements RequestHandler<AP
                             //atributoNode.get("atributoid").asText();
                             //logger.log("atributoNode.get(atributoid).asText() = " + atributoNode.get("atributoid")!=null?atributoNode.get("atributoid").asText():"");
                             Atributos atributos = new Atributos();
-                            atributos.setAtributo(atributo);
+                            atributos.setAtributoid(atributo.getId());
+                            ///atributos.setAtributo(atributo);
+                            //atributos.setNombreatributo(atributoNode.get("nombreatributo").asText(""));
                             atributos.setNombreatributo(atributoNode.get("nombreatributo")!=null?atributoNode.get("nombreatributo").asText():"");
                             atributosList.add(atributos);
                         }
@@ -86,6 +104,7 @@ public abstract class CreateAtributoAbstractHandler implements RequestHandler<AP
                     responseRest.getAtributoResponse().setListaatributos(list);
                     responseRest.setMetadata("Respuesta ok", "00", "Atributo guardado");
                 }
+                //output = mapper.writeValueAsString(responseRest);
                 output = new Gson().toJson(responseRest);
             }
             return response.withStatusCode(200)
