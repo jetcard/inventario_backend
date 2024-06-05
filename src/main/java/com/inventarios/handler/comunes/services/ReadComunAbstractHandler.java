@@ -82,8 +82,8 @@ public abstract class ReadComunAbstractHandler implements RequestHandler<APIGate
     for (Record record : result) {
       Comun comun = new Comun();
       comun.setId(record.getValue("id", Long.class));
-      comun.setDescripcomun(record.getValue("modelo", String.class));
-      comun.setDescripcortacomun(record.getValue("marca", String.class));
+      comun.setDescripcomun(record.getValue("descripcomun", String.class));
+      comun.setDescripcortacomun(record.getValue("descripcortacomun", String.class));
 
       //comun.setGrupo(record.getValue("grupoId", Grupo.class));
       ///comun.setPicture(record.getValue("picture", byte[].class));

@@ -118,7 +118,7 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
       activo.setGrupo(grupo);
 
       Articulo articulo = new Articulo();
-      articulo.setId(record.getValue("tipoid", Long.class));
+      articulo.setId(record.getValue("articuloid", Long.class));
       articulo.setNombrearticulo(mostrarArticulo(articulo.getId()));
       activo.setArticulo(articulo);
 
