@@ -13,10 +13,10 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
                       Long proveedorID) throws SQLException {
     var dsl = RDSConexion.getDSL();
     dsl.insertInto(ACTIVO_TABLE)
-            .set(DSL.field("codinventario"), activo.getCodinventario())
-            .set(DSL.field("modelo"), activo.getModelo())
-            .set(DSL.field("marca"), activo.getMarca())
-            .set(DSL.field("nroserie"), activo.getNroserie())
+            .set(DSL.field("codinventario"), activo.getCodinventario().toUpperCase())
+            .set(DSL.field("modelo"), activo.getModelo().toUpperCase())
+            .set(DSL.field("marca"), activo.getMarca().toUpperCase())
+            .set(DSL.field("nroserie"), activo.getNroserie().toUpperCase())
             .set(DSL.field("fechaingreso"), activo.getFechaingreso())
             .set(DSL.field("importe"), activo.getImporte())
             .set(DSL.field("moneda"), activo.getMoneda())

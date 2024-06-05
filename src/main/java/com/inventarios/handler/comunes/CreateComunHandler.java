@@ -11,7 +11,7 @@ public class CreateComunHandler extends CreateComunAbstractHandler {
   protected void save(Comun comun, Long responsableID, Long tipoID, Long grupoID) throws SQLException {
     var dsl = RDSConexion.getDSL();
     dsl.insertInto(COMUN_TABLE)
-            .set(DSL.field("descripcomun"), comun.getDescripcomun())
+            .set(DSL.field("descripcomun"), comun.getDescripcomun().toUpperCase())
             //.set(DSL.field("descripcortacomun"), comun.getDescripcortacomun())
             .set(DSL.field("responsableID"), responsableID)
             .set(DSL.field("tipoID"), tipoID)

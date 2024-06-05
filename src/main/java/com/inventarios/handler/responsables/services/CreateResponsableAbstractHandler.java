@@ -42,7 +42,7 @@ public abstract class CreateResponsableAbstractHandler implements RequestHandler
         context.getLogger().log("body " + body);
         Responsable responsable = new Gson().fromJson(body, Responsable.class);
         if (responsable != null) {
-          save(responsable.getArearesponsable(), responsable.getNombresyapellidos());
+          save(responsable.getArearesponsable().toUpperCase(), responsable.getNombresyapellidos().toUpperCase());
           responseRest.setMetadata("Respuesta ok", "00", "Responsable guardado");
         }
         output = new Gson().toJson(responseRest);

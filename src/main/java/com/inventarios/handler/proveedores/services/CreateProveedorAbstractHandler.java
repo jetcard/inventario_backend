@@ -33,8 +33,6 @@ public abstract class CreateProveedorAbstractHandler implements RequestHandler<A
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
       .withHeaders(headers);
     String body = input.getBody();
-    //String body = "{ \"ruc\": \"hello world\", \"razonsocial\": \"As\" }"; //
-
     context.getLogger().log("body " + body);
     String output ="";
     try {
@@ -42,7 +40,7 @@ public abstract class CreateProveedorAbstractHandler implements RequestHandler<A
         context.getLogger().log("body " + body);
         Proveedor proveedor = new Gson().fromJson(body, Proveedor.class);
         if (proveedor != null) {
-          save(proveedor.getRuc(), proveedor.getRazonsocial());
+          save(proveedor.getRuc(), proveedor.getRazonsocial().toUpperCase());
           responseRest.setMetadata("Respuesta ok", "00", "Proveedor guardado");
         }
         output = new Gson().toJson(responseRest);

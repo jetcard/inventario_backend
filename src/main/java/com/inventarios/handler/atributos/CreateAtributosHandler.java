@@ -12,7 +12,7 @@ public class CreateAtributosHandler extends CreateAtributosAbstractHandler {
     var dsl = RDSConexion.getDSL();
     dsl.insertInto(ATRIBUTOS_TABLE)
             //.set(DSL.field("descripatributo"), atributos.getDescripatributo())
-            .set(DSL.field("nombreatributo"), atributos.getNombreatributo())
+            .set(DSL.field("nombreatributo"), atributos.getNombreatributo().toUpperCase())
             .set(DSL.field("grupoId"), grupoID)
             .execute();
 

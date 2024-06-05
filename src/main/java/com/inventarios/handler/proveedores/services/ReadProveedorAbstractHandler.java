@@ -6,7 +6,6 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
 import java.sql.SQLException;
-import java.sql.SQLException;
 import java.util.*;
 import com.inventarios.model.Proveedor;
 import com.inventarios.handler.proveedores.response.ProveedorResponseRest;
@@ -27,6 +26,7 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
     headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     headers.put("Access-Control-Allow-Methods", "GET");
   }
+
   protected abstract Result<Record> read() throws SQLException;
 
   @Override
@@ -50,17 +50,7 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
         .withStatusCode(500);
     }
   }
-  private String convertResultToJson(Result<Record> result) {
-    List<Map<String, Object>> resultList = new ArrayList<>();
-    for (Record record : result) {
-      Map<String, Object> recordMap = new LinkedHashMap<>();
-      for (Field<?> field : result.fields()) {
-        recordMap.put(field.getName(), record.get(field));
-      }
-      resultList.add(recordMap);
-    }
-    return new Gson().toJson(resultList);
-  }
+
   protected List<Proveedor> convertResultToList(Result<Record> result) {
     List<Proveedor> listaProveedores = new ArrayList<>();
     for (Record record : result) {

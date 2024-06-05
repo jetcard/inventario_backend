@@ -15,13 +15,6 @@ public class Atributos implements Serializable {
 
     @Column(name = "atributoid")
     private Long atributoid;
-    /* Referencia cíclica
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "atributoid")
-    @JsonBackReference
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Atributo atributo;*/
-
     private String nombreatributo;
 
     public Long getId() {

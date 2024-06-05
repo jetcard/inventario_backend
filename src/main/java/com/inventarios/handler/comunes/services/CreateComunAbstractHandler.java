@@ -81,7 +81,6 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
             //if (comun != null) {
             logger.log("Comun.getId() = " + comun.getId());
             logger.log("Comun.getDescripcomun() = " + comun.getDescripcomun());
-            logger.log("Comun.getDescripcortacomun() = " + comun.getDescripcortacomun());
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(body);

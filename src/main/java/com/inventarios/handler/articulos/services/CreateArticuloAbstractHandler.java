@@ -41,7 +41,7 @@ public abstract class CreateArticuloAbstractHandler implements RequestHandler<AP
         context.getLogger().log("body " + body);
         Articulo articulo = new Gson().fromJson(body, Articulo.class);
         if (articulo != null) {
-          save(articulo.getNombrearticulo(), articulo.getDescriparticulo());
+          save(articulo.getNombrearticulo().toUpperCase(), articulo.getDescriparticulo().toUpperCase());
           responseRest.setMetadata("Respuesta ok", "00", "Articulo guardado");
         }
         output = new Gson().toJson(responseRest);

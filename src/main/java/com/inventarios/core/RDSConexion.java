@@ -44,12 +44,12 @@ public class RDSConexion {
   }
 
   public static String rdsSecretArn() {
-    //return "arn:aws:secretsmanager:ap-southeast-2:905418357889:secret:RDSSecret-Rt0Xo4XBp2wD-lfBfOD";
+    //return "arn:aws:secretsmanager:ap-southeast-2:905418357889:secret:RDSSecret-9Y92Yutym6Nn-pHmSIO";
     return System.getenv(POSTGRES_SECRET_ARN_ENV);
   }
 
   public static String rdsEndpoint() {
-    //return "sam-app-rdsinstance-hq0bhfumxqsr.ctcosak24j76.ap-southeast-2.rds.amazonaws.com";
+    //return "sam-app-rdsinstance-9h2zgl16cgmg.ctcosak24j76.ap-southeast-2.rds.amazonaws.com";
     return System.getenv(DB_ENDPOINT);
   }
 

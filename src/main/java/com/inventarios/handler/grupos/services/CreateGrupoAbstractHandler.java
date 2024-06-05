@@ -42,7 +42,7 @@ public abstract class CreateGrupoAbstractHandler implements RequestHandler<APIGa
         context.getLogger().log("body " + body);
         Grupo grupo = new Gson().fromJson(body, Grupo.class);
         if (grupo != null) {
-          save(grupo.getNombregrupo(), grupo.getDescripgrupo());
+          save(grupo.getNombregrupo().toUpperCase(), grupo.getDescripgrupo().toUpperCase());
           responseRest.setMetadata("Respuesta ok", "00", "Grupo guardado");
         }
         output = new Gson().toJson(responseRest);

@@ -59,7 +59,6 @@ public abstract class BusquedaPorIdComunAbstractHandler implements RequestHandle
     for (Record record : result) {
       Comun comun = new Comun();
       comun.setId(record.getValue("id", Long.class));
-      comun.setDescripcortacomun(record.getValue("descripcortacomun", String.class));
       comun.setDescripcomun(record.getValue("descripcomun", String.class));
       listaComuns.add(comun);
     }
