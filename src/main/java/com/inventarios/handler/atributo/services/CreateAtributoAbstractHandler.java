@@ -33,8 +33,9 @@ public abstract class CreateAtributoAbstractHandler implements RequestHandler<AP
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
-        input.setHeaders(headers);
-        AtributoResponseRest responseRest = new AtributoResponseRest();LambdaLogger logger = context.getLogger();
+        //input.setHeaders(headers);
+        AtributoResponseRest responseRest = new AtributoResponseRest();
+        LambdaLogger logger = context.getLogger();
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         List<Atributo> list = new ArrayList<>();
         List<Atributos> atributosList = new ArrayList<>();
@@ -99,7 +100,9 @@ public abstract class CreateAtributoAbstractHandler implements RequestHandler<AP
                         }
                     }
                     atributo.setAtributos(atributosList);
+                    logger.log(":::::::::::::::::::::::::::::::::: PREPARANDO PARA INSERTAR ::::::::::::::::::::::::::::::::::");
                     save(atributo, atributosList);
+                    logger.log(":::::::::::::::::::::::::::::::::: INSERCIÓN COMPLETA ::::::::::::::::::::::::::::::::::");
                     list.add(atributo);
                     responseRest.getAtributoResponse().setListaatributos(list);
                     responseRest.setMetadata("Respuesta ok", "00", "Atributo guardado");
