@@ -42,7 +42,6 @@ CREATE TABLE comun (
     tipoId INTEGER NOT NULL,
     grupoId INTEGER NOT NULL,
     descripcomun VARCHAR(255) NOT NULL,
-    descripcortacomun VARCHAR(255) NOT NULL,
     FOREIGN KEY (responsableId) REFERENCES responsable(id),
     FOREIGN KEY (tipoId) REFERENCES tipo(id),
     FOREIGN KEY (grupoId) REFERENCES grupo(id)

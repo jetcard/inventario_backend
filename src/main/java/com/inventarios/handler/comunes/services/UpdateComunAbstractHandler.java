@@ -27,7 +27,7 @@ public abstract class UpdateComunAbstractHandler implements RequestHandler<APIGa
     headers.put("Access-Control-Allow-Methods", "PUT");
   }
 
-  protected abstract void update(Long id, String descripcomun, String descripcortacomun) throws SQLException;
+  protected abstract void update(Long id, String descripcomun) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -54,7 +54,7 @@ public abstract class UpdateComunAbstractHandler implements RequestHandler<APIGa
         Comun comun = new Gson().fromJson(body, Comun.class);
         if (comun != null) {
           if (id.equals(comun.getId())) {
-            update(comun.getId(), comun.getDescripcomun(), comun.getDescripcortacomun());
+            update(comun.getId(), comun.getDescripcomun());
           } else {
             return response
                     .withBody("Id in path does not match id in body")

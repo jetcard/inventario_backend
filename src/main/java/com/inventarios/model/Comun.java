@@ -24,7 +24,7 @@ public class Comun implements Serializable {
     private Grupo grupo;
 
     private String descripcomun;
-    private String descripcortacomun;
+    //private String descripcortacomun;
 
     public Long getId() {
         return id;
@@ -66,11 +66,4 @@ public class Comun implements Serializable {
         this.descripcomun = descripcomun;
     }
 
-    public String getDescripcortacomun() {
-        return descripcortacomun;
-    }
-
-    public void setDescripcortacomun(String descripcortacomun) {
-        this.descripcortacomun = descripcortacomun;
-    }
 }

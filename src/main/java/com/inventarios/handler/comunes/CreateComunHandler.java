@@ -12,7 +12,7 @@ public class CreateComunHandler extends CreateComunAbstractHandler {
     var dsl = RDSConexion.getDSL();
     dsl.insertInto(COMUN_TABLE)
             .set(DSL.field("descripcomun"), comun.getDescripcomun())
-            .set(DSL.field("descripcortacomun"), comun.getDescripcortacomun())
+            //.set(DSL.field("descripcortacomun"), comun.getDescripcortacomun())
             .set(DSL.field("responsableID"), responsableID)
             .set(DSL.field("tipoID"), tipoID)
             .set(DSL.field("grupoId"), grupoID)

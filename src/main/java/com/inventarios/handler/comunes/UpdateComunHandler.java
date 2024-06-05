@@ -7,11 +7,11 @@ import org.jooq.impl.DSL;
 
 public class UpdateComunHandler extends UpdateComunAbstractHandler {
 
-  protected void update(Long id, String descripcomun, String descripcortacomun) throws SQLException {
+  protected void update(Long id, String descripcomun) throws SQLException {
     var dsl = RDSConexion.getDSL();
     dsl.update(COMUN_TABLE)
       .set(DSL.field("descripcomun"), descripcomun)
-      .set(DSL.field("descripcortacomun"), descripcortacomun)
+      //.set(DSL.field("descripcortacomun"), descripcortacomun)
       .where(DSL.field("id", Long.class).eq(id))
       .execute();
   }
