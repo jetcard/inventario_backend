@@ -82,3 +82,9 @@ CREATE TABLE activo (
     FOREIGN KEY (tipoId) REFERENCES tipo(id),
     FOREIGN KEY (proveedorId) REFERENCES proveedor(id)
 );
+
+CREATE TABLE parametros (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    descripcion VARCHAR(255) NOT NULL
+);

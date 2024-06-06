@@ -45,6 +45,7 @@ Resources:
         Types:
           - REGIONAL
 
+  ############################## GRUPOS #######################################
   ResourceGrupo:
     Type: AWS::ApiGateway::Resource
     Properties:
@@ -3599,9 +3600,7 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{  \"statusCode\": 200   }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -3620,9 +3619,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{  \"statusCode\": 200  }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -3651,9 +3648,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{  \"statusCode\": 200  }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -3673,6 +3668,35 @@ Resources:
       OperationName: atributo
       ResourceId: !Ref ResourceAtributoId
       RestApiId: !Ref MyApi
+
+#  AtributoGetFiltroMethod:
+#    Type: AWS::ApiGateway::Method
+#    Properties:
+#      HttpMethod: GET
+#      AuthorizationType: NONE
+#      Integration:
+#        IntegrationHttpMethod: POST
+#        RequestTemplates:
+#          "application/json": "{  \"statusCode\": 200   }"
+#        IntegrationResponses:
+#          - ResponseParameters:
+#              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+#              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+#              method.response.header.Access-Control-Allow-Origin: "'*'"
+#            StatusCode: '200'
+#        Type: AWS_PROXY
+#        Uri: !Sub
+#          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
+#          - Arn: !GetAtt BusquedaPorIdsFunction.Arn
+#      MethodResponses:
+#        - ResponseParameters:
+#            method.response.header.Access-Control-Allow-Headers: true
+#            method.response.header.Access-Control-Allow-Methods: true
+#            method.response.header.Access-Control-Allow-Origin: true
+#          StatusCode: '200'
+#      OperationName: atributo
+#      ResourceId: !Ref ResourceAtributoId
+#      RestApiId: !Ref MyApi
 
   AtributoPostMethod:
     Type: AWS::ApiGateway::Method
@@ -3850,6 +3874,53 @@ Resources:
       LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdAtributoFunction}"
       RetentionInDays: 1
 
+#  BusquedaPorIdsFunction:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      Handler: com.inventarios.handler.atributo.BusquedaPorIdsHandler
+#      Runtime: java21
+#      Environment:
+#        Variables:
+#          DBName: !Ref PostgresDatabaseName
+#          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+#          user: !Ref PostgresUsername
+#          pass: !Ref PostgresPassword
+#          RDSSecretArn: !Ref RDSSecret
+#      Policies:
+#        - AWSLambdaBasicExecutionRole
+#        - AWSLambda_ReadOnlyAccess
+#        - AWSXrayWriteOnlyAccess
+#        - AWSLambdaVPCAccessExecutionRole
+#        - !Ref SecretsPolicy
+#        - AWSLambdaExecute
+#        - Version: '2012-10-17'
+#          Statement:
+#            - Effect: Allow
+#              Action:
+#                - rds:DescribeDBClusters
+#                - rds:DescribeDBInstances
+#                - rds:DescribeDBClusterEndpoints
+#                - rds-db:Connect
+#              Resource: "*"
+#            - Effect: Allow
+#              Action:
+#                - 'secretsmanager:GetSecretValue'
+#                - 'secretsmanager:DescribeSecret'
+#              Resource: !Ref RDSSecret
+#      Events:
+#        BusquedaPorIdRequest:
+#          Type: Api
+#          Properties:
+#            RestApiId: !Ref MyApi
+#            Path: /atributofiltro/{id}
+#            Method: get
+
+#  BusquedaPorIdsFunctionLogGroup:
+#    Type: AWS::Logs::LogGroup
+#    Properties:
+#      LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdsFunction}"
+#      RetentionInDays: 1
+
   CrearAtributoFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -3897,7 +3968,6 @@ Resources:
     Properties:
       LogGroupName: !Sub "/aws/lambda/${CrearAtributoFunction}"
       RetentionInDays: 1
-
 
   UpdateAtributoFunction:
     Type: AWS::Serverless::Function
@@ -4006,6 +4076,17 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/atributo
 
+  AtributoBusquedaApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - BusquedaPorIdAtributoFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt BusquedaPorIdAtributoFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/atributo/{id}
+
   AtributoPostApiGatewayInvoke:
     Type: AWS::Lambda::Permission
     DependsOn:
@@ -4095,9 +4176,7 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{  \"statusCode\": 200  }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -4116,9 +4195,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -4147,9 +4224,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{  \"statusCode\": 200   }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -4534,6 +4609,501 @@ Resources:
       FunctionName: !GetAtt DeleteAtributosFunction.Arn
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/atributos/{id}
+
+  ################################# PARAMETROS #########################################
+  ResourceParametro:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt MyApi.RootResourceId
+      PathPart: parametros
+      RestApiId: !Ref MyApi
+
+  ResourceParametroId:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !Ref ResourceParametro
+      PathPart: "{id}"
+      RestApiId: !Ref MyApi
+
+  ParametroOptionsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: OPTIONS
+      Integration:
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: MOCK
+        RequestTemplates:
+          "application/json": "{
+            \"statusCode\": 200
+            }"
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: parametros
+      ResourceId: !Ref ResourceParametro
+      RestApiId: !Ref MyApi
+
+  ParametroIdOptionsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: OPTIONS
+      Integration:
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,PUT,DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: MOCK
+        RequestTemplates:
+          "application/json": "{
+            \"statusCode\": 200
+            }"
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: parametros
+      ResourceId: !Ref ResourceParametroId
+      RestApiId: !Ref MyApi
+
+  ParametroGetMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        RequestTemplates:
+          "application/json": "{
+            \"statusCode\": 200
+            }"
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
+          - Arn: !GetAtt ReadParametroFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: parametros
+      ResourceId: !Ref ResourceParametro
+      RestApiId: !Ref MyApi
+
+  ParametroGetByIdMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        RequestTemplates:
+          "application/json": "{
+            \"statusCode\": 200
+            }"
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
+          - Arn: !GetAtt BusquedaPorIdParametroFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: parametros
+      ResourceId: !Ref ResourceParametroId
+      RestApiId: !Ref MyApi
+
+  ParametroPostMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations"
+          - lambdaArn: !GetAtt CrearParametroFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: parametros
+      ResourceId: !Ref ResourceParametro
+      RestApiId: !Ref MyApi
+
+  ParametroUpdateMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: PUT
+      Integration:
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'PUT,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambArn}/invocations"
+          - lambArn: !GetAtt UpdateParametroFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: parametros
+      ResourceId: !Ref ResourceParametroId
+      RestApiId: !Ref MyApi
+
+  ParametroDeleteMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: DELETE
+      Integration:
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdarn}/invocations"
+          - lambdarn: !GetAtt DeleteParametroFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: parametros
+      ResourceId: !Ref ResourceParametroId
+      RestApiId: !Ref MyApi
+
+  ReadParametroFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ReadParametro
+      Handler: com.inventarios.handler.parametros.ReadParametroHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        ReadRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /parametros
+            Method: get
+
+  ReadParametroFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${ReadParametroFunction}"
+      RetentionInDays: 1
+
+  BusquedaPorIdParametroFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.inventarios.handler.parametros.BusquedaPorIdParametroHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        BusquedaPorIdRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /parametros/{id}
+            Method: get
+
+  BusquedaPorIdParametroFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdParametroFunction}"
+      RetentionInDays: 1
+
+  CrearParametroFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CrearParametro
+      Handler: com.inventarios.handler.parametros.CreateParametroHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        CrearRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /parametros
+            Method: post
+
+  CrearParametroFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${CrearParametroFunction}"
+      RetentionInDays: 1
+
+  UpdateParametroFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateParametro
+      Handler: com.inventarios.handler.parametros.UpdateParametroHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        PutRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /parametros/{id}
+            Method: put
+
+  UpdateParametroFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${UpdateParametroFunction}"
+      RetentionInDays: 1
+
+  DeleteParametroFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DeleteParametro
+      Handler: com.inventarios.handler.parametros.DeleteParametroHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        DeleteRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /parametros/{id}
+            Method: delete
+
+  DeleteParametroFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${DeleteParametroFunction}"
+      RetentionInDays: 1
+
+  ParametroGetApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - ReadParametroFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt ReadParametroFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/parametros
+
+  ParametroPostApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - CrearParametroFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt CrearParametroFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/parametros
+
+  ParametroUpdateApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - UpdateParametroFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt UpdateParametroFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/PUT/parametros/{id}
+
+  ParametroDeleteApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - DeleteParametroFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt DeleteParametroFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/parametros/{id}
 
   ############################## KEYCLOAK #######################################
   ResourceKeycloak:
@@ -4943,6 +5513,7 @@ Resources:
       - ArticuloDeleteMethod
       - AtributoGetMethod
       - AtributoGetByIdMethod
+#      - AtributoGetFiltroMethod
       - AtributoPostMethod
       - AtributoUpdateMethod
       - AtributoDeleteMethod
