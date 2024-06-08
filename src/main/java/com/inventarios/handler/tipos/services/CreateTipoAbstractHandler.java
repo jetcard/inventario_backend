@@ -41,7 +41,7 @@ public abstract class CreateTipoAbstractHandler implements RequestHandler<APIGat
         context.getLogger().log("body " + body);
         Tipo tipo = new Gson().fromJson(body, Tipo.class);
         if (tipo != null) {
-          save(tipo.getNombretipo(), tipo.getDescriptipo());
+          save(tipo.getNombretipo().toUpperCase(), tipo.getDescriptipo().toUpperCase());
           responseRest.setMetadata("Respuesta ok", "00", "Tipo guardado");
         }
         output = new Gson().toJson(responseRest);

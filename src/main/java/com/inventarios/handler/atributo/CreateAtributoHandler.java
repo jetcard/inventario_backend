@@ -134,7 +134,7 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
     dsl.insertInto(ATRIBUTOS_TABLE)
             //.set(DSL.field("atributoid"), atributos.getAtributo().getId())
             .set(DSL.field("atributoid"), atributos.getAtributoid())
-            .set(DSL.field("nombreatributo"), atributos.getNombreatributo())
+            .set(DSL.field("nombreatributo"), atributos.getNombreatributo().toUpperCase())
             .execute();
   }
 

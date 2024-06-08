@@ -5,13 +5,12 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
-import com.inventarios.model.Articulo;
-import com.inventarios.model.Atributo;
+import com.inventarios.model.*;
+
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.inventarios.model.Responsable;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -30,7 +29,11 @@ public abstract class UpdateAtributoAbstractHandler implements RequestHandler<AP
     headers.put("Access-Control-Allow-Methods", "PUT");
   }
 
-  protected abstract void update(Long id, Responsable responsable, Articulo articulo) throws SQLException;
+  protected abstract void update(Long id,
+                                 Responsable responsable,
+                                 Articulo articulo,
+                                 Tipo tipo,
+                                 Grupo grupo) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -57,7 +60,11 @@ public abstract class UpdateAtributoAbstractHandler implements RequestHandler<AP
         Atributo atributo = new Gson().fromJson(body, Atributo.class);
         if (atributo != null) {
           if (id.equals(atributo.getId())) {
-            update(atributo.getId(), atributo.getResponsable(), atributo.getArticulo());
+            update(atributo.getId(),
+                    atributo.getResponsable(),
+                    atributo.getArticulo(),
+                    atributo.getTipo(),
+                    atributo.getGrupo());
           } else {
             return response
                     .withBody("Id in path does not match id in body")

@@ -15,6 +15,7 @@ public class Proveedor  implements Serializable{
     private Long id;
     private String razonsocial;
     private String ruc;
+    private String contacto;
 
     public Long getId() {
         return id;
@@ -22,6 +23,14 @@ public class Proveedor  implements Serializable{
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getRazonsocial() {
+        return razonsocial;
+    }
+
+    public void setRazonsocial(String razonsocial) {
+        this.razonsocial = razonsocial;
     }
 
     public String getRuc() {
@@ -32,11 +41,11 @@ public class Proveedor  implements Serializable{
         this.ruc = ruc;
     }
 
-    public String getRazonsocial() {
-        return razonsocial;
+    public String getContacto() {
+        return contacto;
     }
 
-    public void setRazonsocial(String razonsocial) {
-        this.razonsocial = razonsocial;
+    public void setContacto(String contacto) {
+        this.contacto = contacto;
     }
 }
