@@ -29,7 +29,8 @@ public abstract class UpdateActivoAbstractHandler implements RequestHandler<APIG
     headers.put("Access-Control-Allow-Methods", "PUT");
   }
 
-  protected abstract void update(Long id, String codinventario, String modelo, String marca, String nroSerie, Date fechaCompra,
+  protected abstract void update(Long id, String codinventario, String modelo, String marca, String nroSerie,
+                                 String fechaCompra,
                                  BigDecimal importe, String moneda
                                  //String categoryId,
                                  //String picture
@@ -60,7 +61,8 @@ public abstract class UpdateActivoAbstractHandler implements RequestHandler<APIG
         Activo activo = new Gson().fromJson(body, Activo.class);
         if (activo != null) {
           if (id.equals(activo.getId())) {
-            update(activo.getId(), activo.getCodinventario(), activo.getModelo(), activo.getMarca(), activo.getNroserie(), activo.getFechaingreso(),
+            update(activo.getId(), activo.getCodinventario(), activo.getModelo(), activo.getMarca(), activo.getNroserie(),
+                    activo.getFechaingreso(),
                     activo.getImporte(), activo.getMoneda());
           } else {
             return response

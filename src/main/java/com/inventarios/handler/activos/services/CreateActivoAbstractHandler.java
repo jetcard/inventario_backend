@@ -83,6 +83,10 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
             logger.log("Activo.getFechaIngreso() = " + activo.getFechaingreso());
             logger.log("Activo.getMoneda() = " + activo.getMoneda());
             logger.log("Activo.getImporte() = " + activo.getImporte());
+            logger.log("Activo.getResponsable() = " + activo.getResponsable());
+            logger.log("Activo.getGrupo() = " + activo.getGrupo());
+            logger.log("Activo.getTipo() = " + activo.getTipo());
+            logger.log("Activo.getArticulo() = " + activo.getArticulo());
             logger.log("Activo.getProveedor() = " + activo.getProveedor());
 
             ObjectMapper mapper = new ObjectMapper();
@@ -182,4 +186,3 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
     }
 
 }
-

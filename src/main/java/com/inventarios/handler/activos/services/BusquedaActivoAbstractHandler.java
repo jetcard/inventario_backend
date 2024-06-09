@@ -8,16 +8,15 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import com.inventarios.handler.activos.response.ActivoResponseRest;
 import com.inventarios.model.*;
-import com.inventarios.util.Conversiones;
 import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -156,6 +155,7 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
   }
   
   protected List<Activo> convertResultToList(Result<Record> result) throws SQLException {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     List<Activo> listaActivos = new ArrayList<>();
     for (Record record : result) {
       Activo activo = new Activo();
@@ -164,7 +164,14 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
       activo.setModelo(record.getValue("modelo", String.class));
       activo.setMarca(record.getValue("marca", String.class));
       activo.setNroserie(record.getValue("nroserie", String.class));
-      activo.setFechaingreso(record.getValue("fechaingreso", Date.class));
+      LocalDate fechaIngreso = record.getValue("fechaingreso", LocalDate.class);
+      if (fechaIngreso != null) {
+        String formattedDate = fechaIngreso.format(formatter);
+        activo.setFechaingreso(formattedDate);
+        // Asegúrate de que fechaingreso sea un String en la clase Activo
+      }
+      ///activo.setFechaingreso(record.getValue("fechaingreso", String.class));
+
       activo.setMoneda(record.getValue( "nroserie", String.class));
       activo.setImporte(record.getValue("importe", BigDecimal.class));
 

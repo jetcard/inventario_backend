@@ -3,6 +3,8 @@ package com.inventarios.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -29,9 +31,17 @@ public class Activo implements Serializable {
   private String capacidadDisco;
   private String memoria;
   private String nroserie;
-  private Date fechaingreso;
-  private Date fechaLeasing;//alquiladas
-  private Date finLeasing;//de laptop
+
+  /*Las fecha es consistente en el frontend
+   sin necesidad de lógica adicional para el formateo.
+   */
+  private String fechaingreso;
+  //private LocalDate fechaingreso;
+
+  //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  //private Date fechaingreso;
+  //private Date fechaLeasing;//alquiladas
+  //private Date finLeasing;//de laptop
   private String moneda;
   private BigDecimal importe;
 
@@ -91,6 +101,38 @@ public class Activo implements Serializable {
     this.marca = marca;
   }
 
+  public String getProcesador() {
+    return procesador;
+  }
+
+  public void setProcesador(String procesador) {
+    this.procesador = procesador;
+  }
+
+  public String getTipodisco() {
+    return tipodisco;
+  }
+
+  public void setTipodisco(String tipodisco) {
+    this.tipodisco = tipodisco;
+  }
+
+  public String getCapacidadDisco() {
+    return capacidadDisco;
+  }
+
+  public void setCapacidadDisco(String capacidadDisco) {
+    this.capacidadDisco = capacidadDisco;
+  }
+
+  public String getMemoria() {
+    return memoria;
+  }
+
+  public void setMemoria(String memoria) {
+    this.memoria = memoria;
+  }
+
   public String getNroserie() {
     return nroserie;
   }
@@ -99,11 +141,11 @@ public class Activo implements Serializable {
     this.nroserie = nroserie;
   }
 
-  public Date getFechaingreso() {
+  public String getFechaingreso() {
     return fechaingreso;
   }
 
-  public void setFechaingreso(Date fechaingreso) {
+  public void setFechaingreso(String fechaingreso) {
     this.fechaingreso = fechaingreso;
   }
 

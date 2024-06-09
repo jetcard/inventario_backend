@@ -8,7 +8,8 @@ import java.sql.Date;
 import java.sql.SQLException;
 
 public class UpdateActivoHandler extends UpdateActivoAbstractHandler {
-  protected void update(Long id, String codinventario, String modelo, String marca, String nroSerie, Date fechaingreso, BigDecimal importe,
+  protected void update(Long id, String codinventario, String modelo, String marca, String nroSerie,
+                        String fechaingreso, BigDecimal importe,
                         String moneda) throws SQLException {
     var dsl = RDSConexion.getDSL();
     //DSLContext dsl = DependencyFactory.getDSL();

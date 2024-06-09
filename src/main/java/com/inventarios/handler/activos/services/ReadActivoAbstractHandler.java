@@ -6,8 +6,9 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import com.inventarios.handler.activos.response.ActivoResponseRest;
 import com.inventarios.model.*;
@@ -69,7 +70,11 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
               .withStatusCode(500);
     }
   }
+
   protected List<Activo> convertResultToList(Result<Record> result) throws SQLException {
+    //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
     List<Activo> listaActivos = new ArrayList<>();
     for (Record record : result) {
       Activo activo = new Activo();
@@ -78,7 +83,19 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
       activo.setModelo(record.getValue("modelo", String.class));
       activo.setMarca(record.getValue("marca", String.class));
       activo.setNroserie(record.getValue("nroserie", String.class));
-      activo.setFechaingreso(record.getValue("fechaingreso", Date.class));
+      LocalDate fechaIngreso = record.getValue("fechaingreso", LocalDate.class);
+      if (fechaIngreso != null) {
+        String formattedDate = fechaIngreso.format(formatter);
+        activo.setFechaingreso(formattedDate);
+        // Asegúrate de que fechaingreso sea un String en la clase Activo
+      }
+      //activo.setFechaingreso(activo.getFechaingreso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+      /*
+      Date fechaIngreso = record.getValue("fechaingreso", Date.class);
+      if (fechaIngreso != null) {
+        activo.setFechaingreso(dateFormat.format(fechaIngreso));
+      }*/
+      //activo.setFechaingreso(record.getValue("fechaingreso", Date.class));
       activo.setMoneda(record.getValue("moneda", String.class));
       activo.setImporte(record.getValue("importe", BigDecimal.class));
 

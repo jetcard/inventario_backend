@@ -62,6 +62,7 @@ public abstract class UpdateProveedorAbstractHandler implements RequestHandler<A
                  dsl.update(PROVEEDOR_TABLE)
                          .set(DSL.field("ruc"), proveedorFromBody.getRuc())
                          .set(DSL.field("razonsocial"), proveedorFromBody.getRazonsocial())
+                         .set(DSL.field("contacto"), proveedorFromBody.getContacto())
                          .where(DSL.field("id").eq(proveedor.getId()))
                          .execute();
                  list.add(proveedor);

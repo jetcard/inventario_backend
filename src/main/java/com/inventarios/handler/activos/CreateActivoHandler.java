@@ -20,11 +20,11 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
             .set(DSL.field("fechaingreso"), activo.getFechaingreso())
             .set(DSL.field("importe"), activo.getImporte())
             .set(DSL.field("moneda"), activo.getMoneda())
-            .set(DSL.field("responsableID"), responsableID)
-            .set(DSL.field("tipoID"), tipoID)
+            .set(DSL.field("responsableId"), responsableID)
+            .set(DSL.field("tipoId"), tipoID)
             .set(DSL.field("grupoId"), grupoID)
-            .set(DSL.field("articuloID"), articuloID)
-            .set(DSL.field("proveedorID"), proveedorID)
+            .set(DSL.field("articuloId"), articuloID)
+            .set(DSL.field("proveedorId"), proveedorID)
             .execute();
   }
 }
