@@ -58,6 +58,7 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
       proveedor.setId(record.getValue("id", Long.class));
       proveedor.setRuc(record.getValue("ruc", String.class));
       proveedor.setRazonsocial(record.getValue("razonsocial", String.class));
+      proveedor.setContacto(record.getValue("contacto", String.class));
       listaProveedores.add(proveedor);
     }
     return listaProveedores;

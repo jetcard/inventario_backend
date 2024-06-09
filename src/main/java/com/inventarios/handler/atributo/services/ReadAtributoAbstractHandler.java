@@ -25,8 +25,6 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
   protected final static Field<Long> ATRIBUTOS_ATRIBUTOID = field(name("atributos", "atributoid"), Long.class);
   protected final static Field<String> ATRIBUTOS_NOMBREATRIBUTO = field(name("atributos", "nombreatributo"), String.class);
 
-
-
   protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
   protected static final Field<String> RESPONSABLE_TABLE_COLUMNA = DSL.field("arearesponsable", String.class);
   protected final static Table<Record> ARTICULO_TABLE = table("articulo");
@@ -49,7 +47,7 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
     headers.put("Access-Control-Allow-Methods", "GET");
   }
 
-  protected abstract Result<Record6<Long, Long, Long, Long, Long, String>> read() throws SQLException;
+  protected abstract Result<Record8<Long, Long, Long, Long, Long, Long, Long, String>> read() throws SQLException;
   protected abstract String mostrarResponsable(Long id) throws SQLException;
   protected abstract String mostrarArticulo(Long id) throws SQLException;
   protected abstract String mostrarTipoBien(Long id) throws SQLException;
@@ -64,7 +62,7 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
             .withHeaders(headers);
     String output ="";
     try {
-      Result<Record6<Long, Long, Long, Long, Long, String>> result = read();
+      Result<Record8<Long, Long, Long, Long, Long, Long, Long, String>> result = read();
       responseRest.getAtributoResponse().setListaatributos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Atributos encontrados");
       output = new Gson().toJson(responseRest);
@@ -77,10 +75,10 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
     }
   }
 
-  protected List<Atributo> convertResultToList(Result<Record6<Long, Long, Long, Long, Long, String>> result) throws SQLException {
+  protected List<Atributo> convertResultToList(Result<Record8<Long, Long, Long, Long, Long, Long, Long, String>> result) throws SQLException {
       Map<Long, Atributo> atributoMap = new HashMap<>();
 
-      for (Record6<Long, Long, Long, Long, Long, String> record : result) {
+      for (Record8<Long, Long, Long, Long, Long, Long, Long, String> record : result) {
         Long atributoId = record.get(ATRIBUTO_ID);
         Atributo atributo = atributoMap.get(atributoId);
         if (atributo == null) {

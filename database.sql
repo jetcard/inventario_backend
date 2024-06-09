@@ -1,7 +1,8 @@
 CREATE TABLE proveedor (
     id SERIAL PRIMARY KEY,
     razonsocial VARCHAR(255) NOT NULL,
-    ruc VARCHAR(18) NOT NULL
+    ruc VARCHAR(18) NOT NULL,
+    contacto VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE grupo (

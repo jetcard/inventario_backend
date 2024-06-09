@@ -4,15 +4,16 @@ import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.atributo.services.ReadAtributoAbstractHandler;
 import java.sql.SQLException;
 import org.jooq.Record;
-import org.jooq.Record6;
+import org.jooq.Record8;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 
 public class ReadAtributoHandler extends ReadAtributoAbstractHandler {
-  protected Result<Record6<Long, Long, Long, Long, Long, String>> read() throws SQLException {
+  protected Result<Record8<Long, Long, Long, Long, Long, Long, Long, String>> read() throws SQLException {
     var dsl = RDSConexion.getDSL();
     return dsl.select(
                     ATRIBUTO_ID, ATRIBUTO_RESPONSABLE_ID, ATRIBUTO_ARTICULO_ID,
+                    ATRIBUTO_TIPO_ID, ATRIBUTO_GRUPO_ID,
                     ATRIBUTOS_ID, ATRIBUTOS_ATRIBUTOID, ATRIBUTOS_NOMBREATRIBUTO
             )
             .from(ATRIBUTO_TABLE)
