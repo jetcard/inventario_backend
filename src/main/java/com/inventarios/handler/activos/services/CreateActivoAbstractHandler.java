@@ -56,6 +56,7 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
             String body = input.getBody();
             //String body ="{\"modelo\":\"sygfd\",\"marca\":\"fdsfdsa\",\"nroserie\":\"fas4343432\",\"fechacompra\":\"2024-10-05\",\"importe\":24,\"account\":2,\"responsableId\":1, \"grupoId\": 1, \"tipoId\": 1, \"articuloId\": 2 }";
             //String body = "{\"modelo\":\"AS\",\"marca\":\"AS\",\"nroserie\":\"1\",\"fechacompra\":\"1\",\"importe\":777,\"grupoId\":1,\"account\":55555}";
+            //String body = "{\"codinventario\": \"XQXQ\", \"modelo\": \"CWW\", \"marca\": \"ZWXW\", \"nroserie\": \"IZZII\", \"fechaingreso\": \"2024-12-26\", \"importe\": \"5555\", \"moneda\": \"S/\", \"responsableId\": 2, \"grupoId\": 2, \"tipoId\": 2, \"articuloId\": 2, \"proveedorId\": 2}";
             logger.log("######################################### BODY ################################################");
             logger.log(body);
             logger.log("###############################################################################################");

@@ -2,9 +2,10 @@ package com.inventarios.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -35,11 +36,11 @@ public class Activo implements Serializable {
   /*Las fecha es consistente en el frontend
    sin necesidad de lógica adicional para el formateo.
    */
-  private String fechaingreso;
+  //private String fechaingreso;
   //private LocalDate fechaingreso;
-
-  //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  //private Date fechaingreso;
+  //Postgres inserta como yyyy-MM-dd, (aunque sea dd/MM/yyyy)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  private Date fechaingreso;
   //private Date fechaLeasing;//alquiladas
   //private Date finLeasing;//de laptop
   private String moneda;
@@ -141,11 +142,11 @@ public class Activo implements Serializable {
     this.nroserie = nroserie;
   }
 
-  public String getFechaingreso() {
+  public Date getFechaingreso() {
     return fechaingreso;
   }
 
-  public void setFechaingreso(String fechaingreso) {
+  public void setFechaingreso(Date fechaingreso) {
     this.fechaingreso = fechaingreso;
   }
 

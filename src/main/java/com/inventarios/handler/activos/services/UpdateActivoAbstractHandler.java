@@ -7,7 +7,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import com.inventarios.model.Activo;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,8 +30,11 @@ public abstract class UpdateActivoAbstractHandler implements RequestHandler<APIG
   }
 
   protected abstract void update(Long id, String codinventario, String modelo, String marca, String nroSerie,
-                                 String fechaCompra,
-                                 BigDecimal importe, String moneda
+                                 Date fechaCompra,
+                                 BigDecimal importe, String moneda,
+                                 Long responsableID, Long tipoID, Long grupoID,
+                                 Long articuloID,
+                                 Long proveedorID
                                  //String categoryId,
                                  //String picture
                                  ) throws SQLException;
@@ -42,7 +45,7 @@ public abstract class UpdateActivoAbstractHandler implements RequestHandler<APIG
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
             .withHeaders(headers);
     Map<String, String> pathParameters = input.getPathParameters();
-    String idString = pathParameters.get("id");
+    String idString = "1";// pathParameters.get("id");
     context.getLogger().log("id from path: " + idString);
     Long id = null;
     try {
@@ -52,7 +55,8 @@ public abstract class UpdateActivoAbstractHandler implements RequestHandler<APIG
               .withBody("Invalid id in path")
               .withStatusCode(400);
     }
-    String body = input.getBody();
+    //String body = input.getBody();
+    String body = "{\"codinventario\": \"XQXQ\", \"modelo\": \"CWW\", \"marca\": \"ZWXW\", \"nroserie\": \"IZZII\", \"fechaingreso\": \"2024-01-30\", \"importe\": \"5555\", \"moneda\": \"S/\", \"responsableId\": 2, \"grupoId\": 2, \"tipoId\": 2, \"articuloId\": 2, \"proveedorId\": 2}";
     context.getLogger().log("body " + body);
     String output ="";
     try {
@@ -63,7 +67,12 @@ public abstract class UpdateActivoAbstractHandler implements RequestHandler<APIG
           if (id.equals(activo.getId())) {
             update(activo.getId(), activo.getCodinventario(), activo.getModelo(), activo.getMarca(), activo.getNroserie(),
                     activo.getFechaingreso(),
-                    activo.getImporte(), activo.getMoneda());
+                    activo.getImporte(), activo.getMoneda(),
+                    activo.getResponsable().getId(),
+                    activo.getTipo().getId(),
+                    activo.getGrupo().getId(),
+                    activo.getArticulo().getId(),
+                    activo.getProveedor().getId());
           } else {
             return response
                     .withBody("Id in path does not match id in body")

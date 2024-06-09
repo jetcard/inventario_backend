@@ -18,10 +18,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class BusquedaActivoAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
@@ -167,10 +164,10 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
       LocalDate fechaIngreso = record.getValue("fechaingreso", LocalDate.class);
       if (fechaIngreso != null) {
         String formattedDate = fechaIngreso.format(formatter);
-        activo.setFechaingreso(formattedDate);
+        //activo.setFechaingreso(formattedDate);
         // Asegúrate de que fechaingreso sea un String en la clase Activo
       }
-      ///activo.setFechaingreso(record.getValue("fechaingreso", String.class));
+      activo.setFechaingreso(record.getValue("fechaingreso", Date.class));
 
       activo.setMoneda(record.getValue( "nroserie", String.class));
       activo.setImporte(record.getValue("importe", BigDecimal.class));

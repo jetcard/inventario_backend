@@ -84,11 +84,11 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
       activo.setMarca(record.getValue("marca", String.class));
       activo.setNroserie(record.getValue("nroserie", String.class));
       LocalDate fechaIngreso = record.getValue("fechaingreso", LocalDate.class);
-      if (fechaIngreso != null) {
+      /*if (fechaIngreso != null) {
         String formattedDate = fechaIngreso.format(formatter);
         activo.setFechaingreso(formattedDate);
         // Asegúrate de que fechaingreso sea un String en la clase Activo
-      }
+      }*/
       //activo.setFechaingreso(activo.getFechaingreso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
       /*
       Date fechaIngreso = record.getValue("fechaingreso", Date.class);
