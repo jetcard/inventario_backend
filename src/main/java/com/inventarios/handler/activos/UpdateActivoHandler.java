@@ -2,27 +2,24 @@ package com.inventarios.handler.activos;
 
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.activos.services.UpdateActivoAbstractHandler;
+import com.inventarios.model.Activo;
 import org.jooq.impl.DSL;
-import java.math.BigDecimal;
-import java.util.Date;
 import java.sql.SQLException;
 
 public class UpdateActivoHandler extends UpdateActivoAbstractHandler {
-  protected void update(Long id, String codinventario, String modelo, String marca, String nroSerie,
-                        Date fechaingreso, BigDecimal importe,
-                        String moneda, Long responsableID, Long tipoID, Long grupoID,
+  protected void update(Long id, Activo activo, Long responsableID, Long tipoID, Long grupoID,
                         Long articuloID,
                         Long proveedorID) throws SQLException {
     var dsl = RDSConexion.getDSL();
     //DSLContext dsl = DependencyFactory.getDSL();
     dsl.update(ACTIVO_TABLE)
-      .set(DSL.field("codinventario"), codinventario)
-      .set(DSL.field("modelo"), modelo)
-      .set(DSL.field("marca"), marca)
-      .set(DSL.field("nroSerie"), nroSerie)
-      .set(DSL.field("fechaingreso"), fechaingreso)
-      .set(DSL.field("importe"), importe)
-      .set(DSL.field("moneda"), moneda)
+      .set(DSL.field("codinventario"), activo.getCodinventario().toUpperCase())
+      .set(DSL.field("modelo"), activo.getModelo().toUpperCase())
+      .set(DSL.field("marca"), activo.getMarca().toUpperCase())
+      .set(DSL.field("nroserie"), activo.getNroserie().toUpperCase())
+      .set(DSL.field("fechaingreso"), activo.getFechaingreso())
+      .set(DSL.field("importe"), activo.getImporte())
+      .set(DSL.field("moneda"), activo.getMoneda())
       .set(DSL.field("responsableId"), responsableID)
       .set(DSL.field("tipoId"), tipoID)
       .set(DSL.field("grupoId"), grupoID)
@@ -31,5 +28,4 @@ public class UpdateActivoHandler extends UpdateActivoAbstractHandler {
       .where(DSL.field("id", Long.class).eq(id))
       .execute();
   }
-
 }

@@ -71,24 +71,6 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
                         .withBody("El cuerpo de la solicitud no contiene datos válidos para un activo")
                         .withStatusCode(400);
             }
-            logger.log("Activo: ");
-            //if (activo != null) {
-            logger.log("Activo.getId() = " + activo.getId());
-            logger.log("Activo.getCodinventario() = " + activo.getCodinventario());
-            logger.log("Activo.getModelo() = " + activo.getModelo());
-            logger.log("Activo.getMarca() = " + activo.getMarca());
-            logger.log("Activo.getNroserie() = " + activo.getNroserie());
-            //logger.log("Activo = " + activo.getGrupo().getId());
-            //logger.log("Activo = " + activo.getGrupo().getNombregrupo());
-            //logger.log("Activo = " + activo.getGrupo().getDescripgrupo());
-            logger.log("Activo.getFechaIngreso() = " + activo.getFechaingreso());
-            logger.log("Activo.getMoneda() = " + activo.getMoneda());
-            logger.log("Activo.getImporte() = " + activo.getImporte());
-            logger.log("Activo.getResponsable() = " + activo.getResponsable());
-            logger.log("Activo.getGrupo() = " + activo.getGrupo());
-            logger.log("Activo.getTipo() = " + activo.getTipo());
-            logger.log("Activo.getArticulo() = " + activo.getArticulo());
-            logger.log("Activo.getProveedor() = " + activo.getProveedor());
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(body);

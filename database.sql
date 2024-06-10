@@ -52,8 +52,12 @@ CREATE TABLE atributo (
     id SERIAL PRIMARY KEY,
     responsableId INTEGER NOT NULL,
     articuloId INTEGER NOT NULL,
+    tipoId INTEGER NOT NULL,
+    grupoId INTEGER NOT NULL,
     FOREIGN KEY (responsableId) REFERENCES responsable(id),
-    FOREIGN KEY (articuloId) REFERENCES articulo(id)
+    FOREIGN KEY (articuloId) REFERENCES articulo(id),
+    FOREIGN KEY (tipoId) REFERENCES tipo(id),
+    FOREIGN KEY (grupoId) REFERENCES grupo(id)
 );
 
 CREATE TABLE atributos (
@@ -61,6 +65,25 @@ CREATE TABLE atributos (
     atributoid INTEGER NULL,
     nombreatributo VARCHAR(255) NOT NULL,
     FOREIGN KEY (atributoid) REFERENCES atributo(id)
+);
+
+CREATE TABLE especifico (
+    id SERIAL PRIMARY KEY,
+    responsableId INTEGER NOT NULL,
+    articuloId INTEGER NOT NULL,
+    tipoId INTEGER NOT NULL,
+    grupoId INTEGER NOT NULL,
+    FOREIGN KEY (responsableId) REFERENCES responsable(id),
+    FOREIGN KEY (articuloId) REFERENCES articulo(id),
+    FOREIGN KEY (tipoId) REFERENCES tipo(id),
+    FOREIGN KEY (grupoId) REFERENCES grupo(id)
+);
+
+CREATE TABLE especificos (
+    id SERIAL PRIMARY KEY,
+    especificoid INTEGER NULL,
+    nombreespecifico VARCHAR(255) NOT NULL,
+    FOREIGN KEY (especificoid) REFERENCES especifico(id)
 );
 
 CREATE TABLE activo (

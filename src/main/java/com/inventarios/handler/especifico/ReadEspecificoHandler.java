@@ -1,23 +1,25 @@
-package com.inventarios.handler.activos;
+package com.inventarios.handler.especifico;
 
 import com.inventarios.core.RDSConexion;
-import com.inventarios.handler.activos.services.ReadActivoAbstractHandler;
+import com.inventarios.handler.especifico.services.ReadEspecificoAbstractHandler;
 import java.sql.SQLException;
 import org.jooq.Record;
+import org.jooq.Record8;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 
-public class ReadActivoHandler extends ReadActivoAbstractHandler {
-
-  @Override
-  protected Result<Record> read() throws SQLException {
+public class ReadEspecificoHandler extends ReadEspecificoAbstractHandler {
+  protected Result<Record8<Long, Long, Long, Long, Long, Long, Long, String>> read() throws SQLException {
     var dsl = RDSConexion.getDSL();
-    return dsl.select().from(ACTIVO_TABLE).fetch();
-    /*return dsl.select()
-            .from(ACTIVO_TABLE)
-            .orderBy(ACTIVO_TABLE.field("id").cast(Long.class).asc())
-            ///.orderBy(ACTIVO_TABLE.ID.asc())
-            .fetch();*/
+    return dsl.select(
+                    ESPECIFICO_ID, ESPECIFICO_RESPONSABLE_ID, ESPECIFICO_ARTICULO_ID,
+                    ESPECIFICO_TIPO_ID, ESPECIFICO_GRUPO_ID,
+                    ESPECIFICOS_ID, ESPECIFICOS_ESPECIFICOID, ESPECIFICOS_NOMBREESPECIFICO
+            )
+            .from(ESPECIFICO_TABLE)
+            .leftJoin(ESPECIFICOS_TABLE)
+            .on(ESPECIFICO_ID.eq(ESPECIFICOS_ESPECIFICOID))
+            .fetch();
   }
 
   @Override
@@ -31,13 +33,13 @@ public class ReadActivoHandler extends ReadActivoAbstractHandler {
   }
 
   @Override
-  protected String mostrarProveedor(Long id) throws SQLException {
+  protected String mostrarArticulo(Long id) throws SQLException {
     var dsl = RDSConexion.getDSL();
-    Record record = dsl.select(PROVEEDOR_TABLE_COLUMNA)
-            .from(PROVEEDOR_TABLE)
+    Record record = dsl.select(ARTICULO_TABLE_COLUMNA)
+            .from(ARTICULO_TABLE)
             .where(DSL.field("id", Long.class).eq(id))
             .fetchOne();
-    return record != null ? record.getValue(PROVEEDOR_TABLE_COLUMNA) : null;
+    return record != null ? record.getValue(ARTICULO_TABLE_COLUMNA) : null;
   }
 
   @Override
@@ -58,16 +60,6 @@ public class ReadActivoHandler extends ReadActivoAbstractHandler {
             .where(DSL.field("id", Long.class).eq(id))
             .fetchOne();
     return record != null ? record.getValue(GRUPO_TABLE_COLUMNA) : null;
-  }
-
-  @Override
-  protected String mostrarArticulo(Long id) throws SQLException {
-    var dsl = RDSConexion.getDSL();
-    Record record = dsl.select(ARTICULO_TABLE_COLUMNA)
-            .from(ARTICULO_TABLE)
-            .where(DSL.field("id", Long.class).eq(id))
-            .fetchOne();
-    return record != null ? record.getValue(ARTICULO_TABLE_COLUMNA) : null;
   }
 
 }
