@@ -167,7 +167,7 @@ public abstract class BusquedaActivoAbstractHandler implements RequestHandler<AP
         //activo.setFechaingreso(formattedDate);
         // Asegúrate de que fechaingreso sea un String en la clase Activo
       }
-      activo.setFechaingreso(record.getValue("fechaingreso", Date.class));
+      activo.setFechaingreso(record.getValue("fechaingreso", LocalDate.class));
 
       activo.setMoneda(record.getValue( "nroserie", String.class));
       activo.setImporte(record.getValue("importe", BigDecimal.class));

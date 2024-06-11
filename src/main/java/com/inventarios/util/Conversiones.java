@@ -19,4 +19,11 @@ public class Conversiones {
         }
     }
 
+    public String convertirAString(LocalDate fecha) {
+        if (fecha == null) {
+            return null; // Devuelve null si la fecha es nula
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return fecha.format(formatter);
+    }
 }
