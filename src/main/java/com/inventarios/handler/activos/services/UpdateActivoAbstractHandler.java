@@ -14,6 +14,8 @@ import com.inventarios.handler.activos.response.ActivoResponseRest;
 import com.inventarios.model.*;
 import java.util.*;
 import java.sql.SQLException;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -68,7 +70,8 @@ public abstract class UpdateActivoAbstractHandler implements RequestHandler<APIG
     try {
       context.getLogger().log("body " + body);
       //PostgreSQL utiliza el formato yyyy-MM-dd
-      Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+      //Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+      Gson gson = GsonFactory.createGson();
       Activo activo = gson.fromJson(body, Activo.class);
       //Activo activo = new Gson().fromJson(body, Activo.class);
       if (activo != null) {
