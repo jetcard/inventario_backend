@@ -4,17 +4,36 @@ import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.especifico.services.ReadEspecificoAbstractHandler;
 import java.sql.SQLException;
 import org.jooq.Record;
+import org.jooq.Record15;
 import org.jooq.Record8;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 
 public class ReadEspecificoHandler extends ReadEspecificoAbstractHandler {
-  protected Result<Record8<Long, Long, Long, Long, Long, Long, Long, String>> read() throws SQLException {
+  protected Result<Record15<Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, String, String>> read() throws SQLException {
     var dsl = RDSConexion.getDSL();
+    /*
+    *   "especifico"."id",
+        "especifico"."responsableid",
+        "especifico"."articuloid",
+        "especifico"."tipoid",
+        "especifico"."grupoid",
+        "especificos"."id",
+        "especificos"."especificoid",
+        "especificos"."nombreespecifico"
+        * */
     return dsl.select(
                     ESPECIFICO_ID, ESPECIFICO_RESPONSABLE_ID, ESPECIFICO_ARTICULO_ID,
                     ESPECIFICO_TIPO_ID, ESPECIFICO_GRUPO_ID,
-                    ESPECIFICOS_ID, ESPECIFICOS_ESPECIFICOID, ESPECIFICOS_NOMBREESPECIFICO
+                    ESPECIFICOS_ID, ESPECIFICOS_ESPECIFICOID,
+                    ESPECIFICOS_NOMBREESPECIFICO,
+                    ESPECIFICO_CODINVENTARIO,
+                    ESPECIFICO_MODELO,
+                    ESPECIFICO_MARCA,
+                    ESPECIFICO_NROSERIE,
+                    ESPECIFICO_FECHAINGRESOSTR,
+                    ESPECIFICO_MONEDA,
+                    ESPECIFICOS_IMPORTE
             )
             .from(ESPECIFICO_TABLE)
             .leftJoin(ESPECIFICOS_TABLE)

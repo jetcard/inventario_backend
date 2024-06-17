@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -29,6 +31,21 @@ public class Especifico implements Serializable {
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties ( {"hibernateLazyInitializer", "handler"})
     private Grupo grupo;
+
+    private String codinventario;//cód. Administración
+    private String modelo;
+    private String marca;
+    private String nroserie;
+    //formato default
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate fechaingreso;
+    private String fechaingresostr;
+    private String moneda;
+    private BigDecimal importe;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Proveedor proveedor;
 
     @OneToMany(mappedBy = "especifico", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -72,6 +89,78 @@ public class Especifico implements Serializable {
 
     public void setGrupo(Grupo grupo) {
         this.grupo = grupo;
+    }
+
+    public String getCodinventario() {
+        return codinventario;
+    }
+
+    public void setCodinventario(String codinventario) {
+        this.codinventario = codinventario;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getNroserie() {
+        return nroserie;
+    }
+
+    public void setNroserie(String nroserie) {
+        this.nroserie = nroserie;
+    }
+
+    public LocalDate getFechaingreso() {
+        return fechaingreso;
+    }
+
+    public void setFechaingreso(LocalDate fechaingreso) {
+        this.fechaingreso = fechaingreso;
+    }
+
+    public String getFechaingresostr() {
+        return fechaingresostr;
+    }
+
+    public void setFechaingresostr(String fechaingresostr) {
+        this.fechaingresostr = fechaingresostr;
+    }
+
+    public String getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
+    }
+
+    public BigDecimal getImporte() {
+        return importe;
+    }
+
+    public void setImporte(BigDecimal importe) {
+        this.importe = importe;
+    }
+
+    public Proveedor getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
     }
 
     public List<Especificos> getEspecificos() {

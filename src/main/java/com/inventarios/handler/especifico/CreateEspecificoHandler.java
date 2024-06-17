@@ -26,30 +26,6 @@ public class CreateEspecificoHandler extends CreateEspecificoAbstractHandler {
     }
   }
 
-
-  /*
-  public void save(Especifico especifico, List<Especificos> especificosList) throws SQLException {
-    DSLContext dsl = RDSConexion.getDSL();
-    try {
-      dsl.transaction(configuration -> {
-        DSLContext transactionalDsl = DSL.using(configuration);
-
-        long especificoid = especifico.getId();
-        especifico.setId(especificoid);
-
-        for (Especificos especificos : especificosList) {
-          especificos.setEspecificoid(especifico.getId());
-          //especificos.setEspecifico(especifico);
-          ///especificos.setEspecifico(null); // Rompe la referencia cíclica
-          insertEspecificos(transactionalDsl, especificos);
-        }
-      });
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw new SQLException("Error saving especifico and especificos", e);
-    }
-  }*/
-
   @Override
   public void save(Especifico especifico, List<Especificos> especificosList) throws SQLException{
     DSLContext dsl = RDSConexion.getDSL();
@@ -82,6 +58,53 @@ public class CreateEspecificoHandler extends CreateEspecificoAbstractHandler {
     }
   }
 
+
+
+  private int insertEspecifico(DSLContext dsl, Especifico especifico) {
+    return dsl.insertInto(ESPECIFICO_TABLE)
+            .set(DSL.field("responsableid"), especifico.getResponsable().getId())
+            .set(DSL.field("articuloid"), especifico.getArticulo().getId())
+            .set(DSL.field("grupoid"), especifico.getGrupo().getId())
+            .set(DSL.field("tipoid"), especifico.getTipo().getId())
+            .set(DSL.field("codinventario"), especifico.getCodinventario().toUpperCase())
+            .set(DSL.field("modelo"), especifico.getModelo().toUpperCase())
+            .set(DSL.field("marca"), especifico.getMarca().toUpperCase())
+            .set(DSL.field("nroserie"), especifico.getNroserie().toUpperCase())
+            .set(DSL.field("fechaingreso"), especifico.getFechaingreso())
+            .set(DSL.field("fechaingresostr"), especifico.getFechaingresostr())
+            .set(DSL.field("importe"), especifico.getImporte())
+            .set(DSL.field("moneda"), especifico.getMoneda())
+            .set(DSL.field("proveedorId"), especifico.getProveedor().getId())
+            .returningResult(DSL.field("id"))
+            .fetchOne()
+            .getValue(DSL.field("id", Integer.class));
+  }
+
+  private int updateEspecifico(DSLContext dsl, Especifico especifico) {
+    return dsl.update(ESPECIFICO_TABLE)
+          .set(DSL.field("responsableid"), especifico.getResponsable().getId())
+          .set(DSL.field("articuloid"), especifico.getArticulo().getId())
+          .set(DSL.field("grupoid"), especifico.getGrupo().getId())
+          .set(DSL.field("tipoid"), especifico.getTipo().getId())
+          .where(DSL.field("id").eq(especifico.getId())) // Especificar la condición de actualización
+          .execute(); // Ejecutar la actualización y devolver el número de filas afectadas
+}
+
+  private void insertEspecificos(DSLContext dsl, Especificos especificos) {
+    dsl.insertInto(ESPECIFICOS_TABLE)
+            //.set(DSL.field("especificoid"), especificos.getEspecifico().getId())
+            .set(DSL.field("especificoid"), especificos.getEspecificoid())
+            .set(DSL.field("nombreespecifico"), especificos.getNombreespecifico().toUpperCase())
+            .execute();
+  }
+
+    /*private void insertEspecificox(DSLContext dsl, Especifico especifico) {
+    dsl.insertInto(ESPECIFICO_TABLE)
+            .set(DSL.field("responsableId"), especifico.getResponsable().getId())
+            .set(DSL.field("articuloId"), especifico.getArticulo().getId())
+            .execute();
+  }*/
+
   ///@Override
   /*public void save1xx(Especifico especifico, List<Especificos> especificosList) {
     DSLContext dsl = RDSConexion.getDSL();
@@ -108,41 +131,28 @@ public class CreateEspecificoHandler extends CreateEspecificoAbstractHandler {
     }
   }*/
 
-  private int insertEspecifico(DSLContext dsl, Especifico especifico) {
-    return dsl.insertInto(ESPECIFICO_TABLE)
-            .set(DSL.field("responsableid"), especifico.getResponsable().getId())
-            .set(DSL.field("articuloid"), especifico.getArticulo().getId())
-            .set(DSL.field("grupoid"), especifico.getGrupo().getId())
-            .set(DSL.field("tipoid"), especifico.getTipo().getId())
-            .returningResult(DSL.field("id"))
-            .fetchOne()
-            .getValue(DSL.field("id", Integer.class));
-  }
+  /*
+  public void save(Especifico especifico, List<Especificos> especificosList) throws SQLException {
+    DSLContext dsl = RDSConexion.getDSL();
+    try {
+      dsl.transaction(configuration -> {
+        DSLContext transactionalDsl = DSL.using(configuration);
 
-  private int updateEspecifico(DSLContext dsl, Especifico especifico) {
-    return dsl.update(ESPECIFICO_TABLE)
-          .set(DSL.field("responsableid"), especifico.getResponsable().getId())
-          .set(DSL.field("articuloid"), especifico.getArticulo().getId())
-          .set(DSL.field("grupoid"), especifico.getGrupo().getId())
-          .set(DSL.field("tipoid"), especifico.getTipo().getId())
-          .where(DSL.field("id").eq(especifico.getId())) // Especificar la condición de actualización
-          .execute(); // Ejecutar la actualización y devolver el número de filas afectadas
-}
+        long especificoid = especifico.getId();
+        especifico.setId(especificoid);
 
-  /*private void insertEspecificox(DSLContext dsl, Especifico especifico) {
-    dsl.insertInto(ESPECIFICO_TABLE)
-            .set(DSL.field("responsableId"), especifico.getResponsable().getId())
-            .set(DSL.field("articuloId"), especifico.getArticulo().getId())
-            .execute();
+        for (Especificos especificos : especificosList) {
+          especificos.setEspecificoid(especifico.getId());
+          //especificos.setEspecifico(especifico);
+          ///especificos.setEspecifico(null); // Rompe la referencia cíclica
+          insertEspecificos(transactionalDsl, especificos);
+        }
+      });
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new SQLException("Error saving especifico and especificos", e);
+    }
   }*/
-
-  private void insertEspecificos(DSLContext dsl, Especificos especificos) {
-    dsl.insertInto(ESPECIFICOS_TABLE)
-            //.set(DSL.field("especificoid"), especificos.getEspecifico().getId())
-            .set(DSL.field("especificoid"), especificos.getEspecificoid())
-            .set(DSL.field("nombreespecifico"), especificos.getNombreespecifico().toUpperCase())
-            .execute();
-  }
 
   /*public void save(Especifico especifico, List<Especificos> especificosList) {
     DSLContext dsl = RDSConexion.getDSL();

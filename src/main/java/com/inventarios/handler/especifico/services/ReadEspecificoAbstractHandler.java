@@ -5,11 +5,16 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
+
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import com.inventarios.handler.especifico.response.EspecificoResponseRest;
 import com.inventarios.model.*;
+import com.inventarios.util.GsonFactory;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
@@ -24,7 +29,13 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
   protected final static Field<Long> ESPECIFICOS_ID = field(name("especificos", "id"), Long.class);
   protected final static Field<Long> ESPECIFICOS_ESPECIFICOID = field(name("especificos", "especificoid"), Long.class);
   protected final static Field<String> ESPECIFICOS_NOMBREESPECIFICO = field(name("especificos", "nombreespecifico"), String.class);
-
+  protected final static Field<String> ESPECIFICO_CODINVENTARIO = field(name("especifico", "codinventario"), String.class);
+  protected final static Field<String> ESPECIFICO_MODELO = field(name("especifico", "modelo"), String.class);
+  protected final static Field<String> ESPECIFICO_MARCA = field(name("especifico", "marca"), String.class);
+  protected final static Field<String> ESPECIFICO_NROSERIE = field(name("especifico", "nroserie"), String.class);
+  protected final static Field<String> ESPECIFICO_FECHAINGRESOSTR = field(name("especifico", "fechaingresostr"), String.class);
+  protected final static Field<String> ESPECIFICO_MONEDA = field(name("especifico", "moneda"), String.class);
+  protected final static Field<String> ESPECIFICOS_IMPORTE = field(name("especifico", "importe"), String.class);
   protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
   protected static final Field<String> RESPONSABLE_TABLE_COLUMNA = DSL.field("arearesponsable", String.class);
   protected final static Table<Record> ARTICULO_TABLE = table("articulo");
@@ -47,7 +58,7 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
     headers.put("Access-Control-Allow-Methods", "GET");
   }
 
-  protected abstract Result<Record8<Long, Long, Long, Long, Long, Long, Long, String>> read() throws SQLException;
+  protected abstract Result<Record15<Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, String, String>> read() throws SQLException;
   protected abstract String mostrarResponsable(Long id) throws SQLException;
   protected abstract String mostrarArticulo(Long id) throws SQLException;
   protected abstract String mostrarTipoBien(Long id) throws SQLException;
@@ -62,10 +73,11 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
             .withHeaders(headers);
     String output ="";
     try {
-      Result<Record8<Long, Long, Long, Long, Long, Long, Long, String>> result = read();
+      Result<Record15<Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, String, String>> result = read();
       responseRest.getEspecificoResponse().setListaespecificos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Especificos encontrados");
-      output = new Gson().toJson(responseRest);
+      Gson gson = GsonFactory.createGson();
+      output = gson.toJson(responseRest);
       return response.withStatusCode(200).withBody(output);
     } catch (Exception e) {
       responseRest.setMetadata("Respuesta nok", "-1", "Error al consultar");
@@ -75,10 +87,10 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
     }
   }
 
-  protected List<Especifico> convertResultToList(Result<Record8<Long, Long, Long, Long, Long, Long, Long, String>> result) throws SQLException {
+  protected List<Especifico> convertResultToList(Result<Record15<Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, String, String>> result) throws SQLException {
       Map<Long, Especifico> especificoMap = new HashMap<>();
-
-      for (Record8<Long, Long, Long, Long, Long, Long, Long, String> record : result) {
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+      for (Record15<Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, String, String> record : result) {
         Long especificoId = record.get(ESPECIFICO_ID);
         Especifico especifico = especificoMap.get(especificoId);
         if (especifico == null) {
@@ -106,6 +118,22 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
           grupo.setId(record.get(ESPECIFICO_GRUPO_ID));
           grupo.setNombregrupo(mostrarGrupo(grupo.getId()));
           especifico.setGrupo(grupo);
+
+          //Proveedor proveedor=new Proveedor();
+          //proveedor.setId(record.get);
+
+          especifico.setCodinventario(record.getValue("codinventario", String.class));
+          especifico.setModelo(record.getValue("modelo", String.class));
+          especifico.setMarca(record.getValue("marca", String.class));
+          especifico.setNroserie(record.getValue("nroserie", String.class));
+          LocalDate fechaIngreso = record.getValue("fechaingreso", LocalDate.class);
+          especifico.setFechaingreso(fechaIngreso);
+          if (fechaIngreso != null) {
+            String formattedDate = fechaIngreso.format(formatter);
+            especifico.setFechaingresostr(formattedDate);
+          }
+          especifico.setMoneda(record.getValue("moneda", String.class));
+          especifico.setImporte(record.getValue("importe", BigDecimal.class));
 
           especifico.setEspecificos(new ArrayList<>());
           especificoMap.put(especificoId, especifico);

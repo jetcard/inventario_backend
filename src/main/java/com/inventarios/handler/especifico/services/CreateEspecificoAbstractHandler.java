@@ -11,6 +11,8 @@ import com.inventarios.handler.especifico.response.EspecificoResponseRest;
 import com.inventarios.model.*;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -46,8 +48,15 @@ public abstract class CreateEspecificoAbstractHandler implements RequestHandler<
             String body = input.getBody();
             if (body != null && !body.isEmpty()) {
                 logger.log(body);
-                Especifico especifico = new Gson().fromJson(body, Especifico.class);
+
+                Gson gson = GsonFactory.createGson();
+                Especifico especifico = gson.fromJson(body, Especifico.class);
                 ///Especifico especifico = mapper.readValue(body, Especifico.class);
+                if (especifico == null) {
+                    return response
+                            .withBody("El cuerpo de la solicitud no contiene datos válidos para un activo")
+                            .withStatusCode(400);
+                }
                 if (especifico != null) {
                     List<Especificos> especificosListaInicial = new ArrayList<>();
 
@@ -55,12 +64,12 @@ public abstract class CreateEspecificoAbstractHandler implements RequestHandler<
                     Long defaultEspecificoId = 0L;
 
                     // Create a default Especificos object
-                    Especificos defaultEspecifico = new Especificos();
-                    defaultEspecifico.setEspecificoid(defaultEspecificoId);
-                    defaultEspecifico.setNombreespecifico(""); // You can set other properties if necessary
+                    Especificos defaultEspecificos = new Especificos();
+                    defaultEspecificos.setEspecificoid(defaultEspecificoId);
+                    defaultEspecificos.setNombreespecifico(""); // You can set other properties if necessary
 
                     // Add the default Especificos object to especificosList
-                    especificosListaInicial.add(defaultEspecifico);
+                    especificosListaInicial.add(defaultEspecificos);
 
                     // Set the especificosList to the especificos property of especifico
                     especifico.setEspecificos(especificosListaInicial);
@@ -76,6 +85,9 @@ public abstract class CreateEspecificoAbstractHandler implements RequestHandler<
                     Long grupoId = jsonNode.get("grupoId").asLong();
                     logger.log("grupoId = "+grupoId);
 
+                    Long proveedorId = jsonNode.get("proveedorId").asLong();
+                    logger.log("proveedorId = "+proveedorId);
+
                     Responsable responsable=new Responsable();
                     responsable.setId(responsableId);
 
@@ -88,15 +100,20 @@ public abstract class CreateEspecificoAbstractHandler implements RequestHandler<
                     Grupo grupo=new Grupo();
                     grupo.setId(grupoId);
 
+                    Proveedor proveedor=new Proveedor();
+                    proveedor.setId(proveedorId);
+
                     especifico.setResponsable(responsable);
                     especifico.setArticulo(articulo);
                     especifico.setTipo(tipo);
                     especifico.setGrupo(grupo);
+                    especifico.setProveedor(proveedor);
 
                     especifico.getResponsable().setId(responsableId);
                     especifico.getArticulo().setId(articuloId);
                     especifico.getTipo().setId(tipoId);
                     especifico.getGrupo().setId(grupoId);
+                    especifico.getProveedor().setId(proveedorId);
 
                     long especificoID = getEspecificoID(especifico);
                     especifico.setId(especificoID);
@@ -122,8 +139,8 @@ public abstract class CreateEspecificoAbstractHandler implements RequestHandler<
                     responseRest.getEspecificoResponse().setListaespecificos(list);
                     responseRest.setMetadata("Respuesta ok", "00", "Especifico guardado");
                 }
-                //output = mapper.writeValueAsString(responseRest);
-                output = new Gson().toJson(responseRest);
+                output = GsonFactory.createGson().toJson(responseRest);
+                logger.log(output);
             }
             return response.withStatusCode(200)
                     .withBody(output);

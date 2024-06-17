@@ -73,10 +73,20 @@ CREATE TABLE especifico (
     articuloId INTEGER NOT NULL,
     tipoId INTEGER NOT NULL,
     grupoId INTEGER NOT NULL,
+    proveedorId INTEGER NULL,
+    codinventario VARCHAR(50)  NULL,
+    modelo VARCHAR(255)  NULL,
+    marca VARCHAR(255) NOT NULL,
+    nroserie VARCHAR(255) NOT NULL,
+    fechaingreso DATE NOT NULL,
+    fechaingresostr VARCHAR(20) NULL,
+    moneda VARCHAR(10) NOT NULL,
+    importe NUMERIC NOT NULL,
     FOREIGN KEY (responsableId) REFERENCES responsable(id),
     FOREIGN KEY (articuloId) REFERENCES articulo(id),
     FOREIGN KEY (tipoId) REFERENCES tipo(id),
-    FOREIGN KEY (grupoId) REFERENCES grupo(id)
+    FOREIGN KEY (grupoId) REFERENCES grupo(id),
+    FOREIGN KEY (proveedorId) REFERENCES proveedor(id)
 );
 
 CREATE TABLE especificos (
