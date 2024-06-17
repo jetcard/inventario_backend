@@ -66,10 +66,15 @@ public abstract class CreateEspecificoAbstractHandler implements RequestHandler<
                     especifico.setEspecificos(especificosListaInicial);
 
                     logger.log("especifico = "+especifico);
+
                     Long responsableId = jsonNode.get("responsableId").asLong();
                     logger.log("responsableId = "+responsableId);
                     Long articuloId = jsonNode.get("articuloId").asLong();
                     logger.log("articuloId = "+articuloId);
+                    Long tipoId = jsonNode.get("tipoId").asLong();
+                    logger.log("tipoId = "+tipoId);
+                    Long grupoId = jsonNode.get("grupoId").asLong();
+                    logger.log("grupoId = "+grupoId);
 
                     Responsable responsable=new Responsable();
                     responsable.setId(responsableId);
@@ -77,11 +82,21 @@ public abstract class CreateEspecificoAbstractHandler implements RequestHandler<
                     Articulo articulo=new Articulo();
                     articulo.setId(articuloId);
 
+                    Tipo tipo=new Tipo();
+                    tipo.setId(tipoId);
+
+                    Grupo grupo=new Grupo();
+                    grupo.setId(grupoId);
+
                     especifico.setResponsable(responsable);
                     especifico.setArticulo(articulo);
+                    especifico.setTipo(tipo);
+                    especifico.setGrupo(grupo);
 
                     especifico.getResponsable().setId(responsableId);
                     especifico.getArticulo().setId(articuloId);
+                    especifico.getTipo().setId(tipoId);
+                    especifico.getGrupo().setId(grupoId);
 
                     long especificoID = getEspecificoID(especifico);
                     especifico.setId(especificoID);

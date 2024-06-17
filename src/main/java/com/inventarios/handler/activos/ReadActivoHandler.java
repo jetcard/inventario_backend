@@ -8,7 +8,6 @@ import org.jooq.Result;
 import org.jooq.impl.DSL;
 
 public class ReadActivoHandler extends ReadActivoAbstractHandler {
-
   @Override
   protected Result<Record> read() throws SQLException {
     var dsl = RDSConexion.getDSL();

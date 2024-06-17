@@ -7,14 +7,12 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 import com.inventarios.handler.activos.response.ActivoResponseRest;
 import com.inventarios.model.*;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Field;
 import org.jooq.Table;
 import org.jooq.Record;
@@ -63,7 +61,8 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
       Result<Record> result = read();
       responseRest.getActivoResponse().setListaactivos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");
-      output = new Gson().toJson(responseRest);
+      Gson gson = GsonFactory.createGson();
+      output = gson.toJson(responseRest);
       return response.withStatusCode(200)
               .withBody(output);
     } catch (Exception e) {
@@ -76,6 +75,7 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
 
   protected List<Activo> convertResultToList(Result<Record> result) throws SQLException {
     List<Activo> listaActivos = new ArrayList<>();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     for (Record record : result) {
       Activo activo = new Activo();
       activo.setId(record.getValue("id", Long.class));
@@ -85,10 +85,14 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
       activo.setNroserie(record.getValue("nroserie", String.class));
       LocalDate fechaIngreso = record.getValue("fechaingreso", LocalDate.class);
       activo.setFechaingreso(fechaIngreso);
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+      if (fechaIngreso != null) {
+        String formattedDate = fechaIngreso.format(formatter);
+        activo.setFechaingresostr(formattedDate);
+      }
+      /*DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
       String formattedDate = activo.getFechaingreso().format(formatter);
       System.out.println("formattedDate   --> formattedDate: "+formattedDate);
-      activo.setFechaIngresoStr(formattedDate);
+      activo.setFechaingresostr(formattedDate);*/
       activo.setMoneda(record.getValue("moneda", String.class));
       activo.setImporte(record.getValue("importe", BigDecimal.class));
 

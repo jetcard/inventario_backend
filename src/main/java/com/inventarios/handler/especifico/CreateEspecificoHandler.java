@@ -63,6 +63,8 @@ public class CreateEspecificoHandler extends CreateEspecificoAbstractHandler {
         System.out.println("WHERE especificoid = "+especifico.getId());
         System.out.println("WHERE getResponsable = "+especifico.getResponsable());
         System.out.println("WHERE getArticulo = "+especifico.getArticulo());
+        System.out.println("WHERE getTipo = "+especifico.getTipo());
+        System.out.println("WHERE getGrupo = "+especifico.getGrupo());
         System.out.println("WHERE getEspecificos = "+especifico.getEspecificos().get(0));
         //System.out.println("WHERE especificoid = "+especificoid);
 
@@ -110,6 +112,8 @@ public class CreateEspecificoHandler extends CreateEspecificoAbstractHandler {
     return dsl.insertInto(ESPECIFICO_TABLE)
             .set(DSL.field("responsableid"), especifico.getResponsable().getId())
             .set(DSL.field("articuloid"), especifico.getArticulo().getId())
+            .set(DSL.field("grupoid"), especifico.getGrupo().getId())
+            .set(DSL.field("tipoid"), especifico.getTipo().getId())
             .returningResult(DSL.field("id"))
             .fetchOne()
             .getValue(DSL.field("id", Integer.class));
@@ -119,6 +123,8 @@ public class CreateEspecificoHandler extends CreateEspecificoAbstractHandler {
     return dsl.update(ESPECIFICO_TABLE)
           .set(DSL.field("responsableid"), especifico.getResponsable().getId())
           .set(DSL.field("articuloid"), especifico.getArticulo().getId())
+          .set(DSL.field("grupoid"), especifico.getGrupo().getId())
+          .set(DSL.field("tipoid"), especifico.getTipo().getId())
           .where(DSL.field("id").eq(especifico.getId())) // Especificar la condición de actualización
           .execute(); // Ejecutar la actualización y devolver el número de filas afectadas
 }

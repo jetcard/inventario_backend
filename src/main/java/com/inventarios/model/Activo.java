@@ -3,9 +3,6 @@ package com.inventarios.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -17,7 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.persistence.ManyToOne;
-
 @Entity
 @Table(name="activo")
 public class Activo implements Serializable {
@@ -33,9 +29,9 @@ public class Activo implements Serializable {
   private String memoria;
   private String nroserie;
   //formato default
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private LocalDate fechaingreso;
-  private String fechaIngresoStr;
+  private String fechaingresostr;
   private String moneda;
   private BigDecimal importe;
 
@@ -143,12 +139,12 @@ public class Activo implements Serializable {
     this.fechaingreso = fechaingreso;
   }
 
-  public String getFechaIngresoStr() {
-    return fechaIngresoStr;
+  public String getFechaingresostr() {
+    return fechaingresostr;
   }
 
-  public void setFechaIngresoStr(String fechaIngresoStr) {
-    this.fechaIngresoStr = fechaIngresoStr;
+  public void setFechaingresostr(String fechaingresostr) {
+    this.fechaingresostr = fechaingresostr;
   }
 
   public String getMoneda() {

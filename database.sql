@@ -98,6 +98,7 @@ CREATE TABLE activo (
     marca VARCHAR(255) NOT NULL,
     nroserie VARCHAR(255) NOT NULL,
     fechaingreso DATE NOT NULL,
+    fechaingresostr VARCHAR(20) NULL,
     moneda VARCHAR(10) NOT NULL,
     importe NUMERIC NOT NULL,
     FOREIGN KEY (grupoId) REFERENCES grupo(id),

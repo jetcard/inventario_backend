@@ -5,7 +5,6 @@ import com.inventarios.handler.activos.services.CreateActivoAbstractHandler;
 import com.inventarios.model.Activo;
 import java.sql.SQLException;
 import org.jooq.impl.DSL;
-
 public class CreateActivoHandler extends CreateActivoAbstractHandler {
   @Override
   protected void save(Activo activo, Long responsableID, Long tipoID, Long grupoID,
@@ -18,6 +17,7 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
             .set(DSL.field("marca"), activo.getMarca().toUpperCase())
             .set(DSL.field("nroserie"), activo.getNroserie().toUpperCase())
             .set(DSL.field("fechaingreso"), activo.getFechaingreso())
+            .set(DSL.field("fechaingresostr"), activo.getFechaingresostr())
             .set(DSL.field("importe"), activo.getImporte())
             .set(DSL.field("moneda"), activo.getMoneda())
             .set(DSL.field("responsableId"), responsableID)

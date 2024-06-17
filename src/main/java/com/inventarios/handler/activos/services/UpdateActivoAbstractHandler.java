@@ -179,7 +179,9 @@ public abstract class UpdateActivoAbstractHandler implements RequestHandler<APIG
       list.add(activo);
       responseRest.getActivoResponse().setListaactivos(list);
       responseRest.setMetadata("Respuesta ok", "00", "Activo guardado");
-      output = new Gson().toJson(responseRest);
+      //Gson gson = GsonFactory.createGson();
+      output = gson.toJson(responseRest);
+      //output = new Gson().toJson(responseRest);
       return response.withStatusCode(200)
               .withBody(output);
     } catch (Exception e) {

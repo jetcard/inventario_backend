@@ -1,14 +1,15 @@
 package com.inventarios.handler.activos.services;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.google.gson.Gson;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import com.inventarios.handler.activos.response.ActivoResponseRest;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -37,8 +38,8 @@ public abstract class DeleteActivoAbstractHandler implements RequestHandler<APIG
             .withHeaders(headers);
     Map<String, String> pathParameters = input.getPathParameters();
     String idString = pathParameters.get("id");
-    context.getLogger().log("Eliminando: " + idString);
-
+    LambdaLogger logger = context.getLogger();
+    logger.log("Eliminando: " + idString);
     Long id = null;
     String output ="";
     try {
@@ -51,7 +52,9 @@ public abstract class DeleteActivoAbstractHandler implements RequestHandler<APIG
     try {
       delete(id);
       responseRest.setMetadata("Respuesta ok", "00", "Articulo eliminado");
-      output = new Gson().toJson(responseRest);
+      //output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
+      logger.log(output);
       return response
               .withBody(output)
               .withStatusCode(200);

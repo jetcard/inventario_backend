@@ -18,6 +18,7 @@ public class UpdateActivoHandler extends UpdateActivoAbstractHandler {
       .set(DSL.field("marca"), activo.getMarca().toUpperCase())
       .set(DSL.field("nroserie"), activo.getNroserie().toUpperCase())
       .set(DSL.field("fechaingreso"), activo.getFechaingreso())
+      .set(DSL.field("fechaingresostr"), activo.getFechaingresostr())
       .set(DSL.field("importe"), activo.getImporte())
       .set(DSL.field("moneda"), activo.getMoneda())
       .set(DSL.field("responsableId"), responsableID)

@@ -4,7 +4,6 @@ import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.activos.services.DeleteActivoAbstractHandler;
 import java.sql.SQLException;
 import org.jooq.impl.DSL;
-
 public class DeleteActivoHandler extends DeleteActivoAbstractHandler {
   protected void delete(long id) throws SQLException {
     var dsl = RDSConexion.getDSL();
