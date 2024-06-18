@@ -10,6 +10,7 @@ import java.util.*;
 
 import com.inventarios.handler.atributo.response.AtributoResponseRest;
 import com.inventarios.model.*;
+import com.inventarios.util.GsonFactory;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
@@ -53,7 +54,6 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
   protected abstract String mostrarTipoBien(Long id) throws SQLException;
   protected abstract String mostrarGrupo(Long id) throws SQLException;
 
-
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
     input.setHeaders(headers);
@@ -65,7 +65,9 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
       Result<Record8<Long, Long, Long, Long, Long, Long, Long, String>> result = read();
       responseRest.getAtributoResponse().setListaatributos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Atributos encontrados");
-      output = new Gson().toJson(responseRest);
+      //output = new Gson().toJson(responseRest);
+      Gson gson = GsonFactory.createGson();
+      output = gson.toJson(responseRest);
       return response.withStatusCode(200).withBody(output);
     } catch (Exception e) {
       responseRest.setMetadata("Respuesta nok", "-1", "Error al consultar");

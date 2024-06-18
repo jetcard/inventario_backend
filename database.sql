@@ -82,6 +82,7 @@ CREATE TABLE especifico (
     fechaingresostr VARCHAR(20) NULL,
     moneda VARCHAR(10) NOT NULL,
     importe NUMERIC NOT NULL,
+    descripcion VARCHAR(255) NOT NULL,
     FOREIGN KEY (responsableId) REFERENCES responsable(id),
     FOREIGN KEY (articuloId) REFERENCES articulo(id),
     FOREIGN KEY (tipoId) REFERENCES tipo(id),

@@ -51,6 +51,8 @@ public class Especifico implements Serializable {
     @JsonManagedReference
     private List<Especificos> especificos;
 
+    private String descripcion;
+
     public Long getId() {
         return id;
     }
@@ -169,5 +171,13 @@ public class Especifico implements Serializable {
 
     public void setEspecificos(List<Especificos> especificos) {
         this.especificos = especificos;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

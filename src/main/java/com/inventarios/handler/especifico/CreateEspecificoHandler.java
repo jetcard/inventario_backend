@@ -25,31 +25,41 @@ public class CreateEspecificoHandler extends CreateEspecificoAbstractHandler {
       return -1;
     }
   }
+/*
+  @RestController
+  @RequestMapping("/api")
+  public class AtributoController {
 
+    @GetMapping("/getAtributos")
+    public ResponseEntity<List<String>> getAtributos(
+            @RequestParam int responsableId,
+            @RequestParam int articuloId,
+            @RequestParam int tipoId,
+            @RequestParam int grupoId) {
+
+      List<String> atributos = new ArrayList<>();
+
+      if (responsableId == 5 && articuloId == 5 && tipoId == 1 && grupoId == 3) {
+        atributos = Arrays.asList("ALTO", "ANCHO", "LARGO");
+      } else {
+        atributos = Arrays.asList("1", "2");
+      }
+
+      return ResponseEntity.ok(atributos);
+    }
+  }
+*/
   @Override
   public void save(Especifico especifico, List<Especificos> especificosList) throws SQLException{
     DSLContext dsl = RDSConexion.getDSL();
     try {
       dsl.transaction(configuration -> {
         DSLContext transactionalDsl = DSL.using(configuration);
-
         long especificoid = especifico.getId();//updateEspecifico(transactionalDsl, especifico);
         System.out.println("especificoid = "+especifico.getId());
         especifico.setId(especificoid);
-        System.out.println("WHERE especificoid = "+especifico.getId());
-        System.out.println("WHERE getResponsable = "+especifico.getResponsable());
-        System.out.println("WHERE getArticulo = "+especifico.getArticulo());
-        System.out.println("WHERE getTipo = "+especifico.getTipo());
-        System.out.println("WHERE getGrupo = "+especifico.getGrupo());
-        System.out.println("WHERE getEspecificos = "+especifico.getEspecificos().get(0));
-        //System.out.println("WHERE especificoid = "+especificoid);
-
         for (Especificos especificos : especificosList) {
           especificos.setEspecificoid(especifico.getId());
-          //especificos.setEspecifico(especifico);
-          //especificos.setEspecifico(new Especifico(especifico.getId(), especifico.getResponsable(), especifico.getArticulo()));
-          //especificos.setEspecifico(especifico); // Establecer la relación con el Especifico padre
-          System.out.println("especificos.getEspecificoid() para insertEspecificos = "+especificos.getEspecificoid());
           insertEspecificos(transactionalDsl, especificos);
         }
       });
@@ -57,8 +67,6 @@ public class CreateEspecificoHandler extends CreateEspecificoAbstractHandler {
       // Manejar el error de la transacción
     }
   }
-
-
 
   private int insertEspecifico(DSLContext dsl, Especifico especifico) {
     return dsl.insertInto(ESPECIFICO_TABLE)
@@ -74,6 +82,7 @@ public class CreateEspecificoHandler extends CreateEspecificoAbstractHandler {
             .set(DSL.field("fechaingresostr"), especifico.getFechaingresostr())
             .set(DSL.field("importe"), especifico.getImporte())
             .set(DSL.field("moneda"), especifico.getMoneda())
+            .set(DSL.field("descripcion"), especifico.getDescripcion().toUpperCase())
             .set(DSL.field("proveedorId"), especifico.getProveedor().getId())
             .returningResult(DSL.field("id"))
             .fetchOne()

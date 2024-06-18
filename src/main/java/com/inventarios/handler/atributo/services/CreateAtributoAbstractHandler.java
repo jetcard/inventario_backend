@@ -11,6 +11,8 @@ import com.inventarios.handler.atributo.response.AtributoResponseRest;
 import com.inventarios.model.*;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -70,6 +72,10 @@ public abstract class CreateAtributoAbstractHandler implements RequestHandler<AP
                     logger.log("responsableId = "+responsableId);
                     Long articuloId = jsonNode.get("articuloId").asLong();
                     logger.log("articuloId = "+articuloId);
+                    Long tipoId = jsonNode.get("tipoId").asLong();
+                    logger.log("tipoId = "+tipoId);
+                    Long grupoId = jsonNode.get("grupoId").asLong();
+                    logger.log("grupoId = "+grupoId);
 
                     Responsable responsable=new Responsable();
                     responsable.setId(responsableId);
@@ -77,11 +83,21 @@ public abstract class CreateAtributoAbstractHandler implements RequestHandler<AP
                     Articulo articulo=new Articulo();
                     articulo.setId(articuloId);
 
+                    Tipo tipo=new Tipo();
+                    tipo.setId(tipoId);
+
+                    Grupo grupo=new Grupo();
+                    grupo.setId(grupoId);
+
                     atributo.setResponsable(responsable);
                     atributo.setArticulo(articulo);
+                    atributo.setTipo(tipo);
+                    atributo.setGrupo(grupo);
 
                     atributo.getResponsable().setId(responsableId);
                     atributo.getArticulo().setId(articuloId);
+                    atributo.getTipo().setId(tipoId);
+                    atributo.getGrupo().setId(grupoId);
 
                     long atributoID = getAtributoID(atributo);
                     atributo.setId(atributoID);
@@ -108,7 +124,9 @@ public abstract class CreateAtributoAbstractHandler implements RequestHandler<AP
                     responseRest.setMetadata("Respuesta ok", "00", "Atributo guardado");
                 }
                 //output = mapper.writeValueAsString(responseRest);
-                output = new Gson().toJson(responseRest);
+                //output = new Gson().toJson(responseRest);
+                output = GsonFactory.createGson().toJson(responseRest);
+                logger.log(output);
             }
             return response.withStatusCode(200)
                     .withBody(output);

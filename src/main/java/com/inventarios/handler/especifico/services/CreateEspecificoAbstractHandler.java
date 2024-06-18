@@ -84,7 +84,6 @@ public abstract class CreateEspecificoAbstractHandler implements RequestHandler<
                     logger.log("tipoId = "+tipoId);
                     Long grupoId = jsonNode.get("grupoId").asLong();
                     logger.log("grupoId = "+grupoId);
-
                     Long proveedorId = jsonNode.get("proveedorId").asLong();
                     logger.log("proveedorId = "+proveedorId);
 

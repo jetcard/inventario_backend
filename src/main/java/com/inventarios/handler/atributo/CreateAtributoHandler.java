@@ -110,6 +110,8 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
     return dsl.insertInto(ATRIBUTO_TABLE)
             .set(DSL.field("responsableid"), atributo.getResponsable().getId())
             .set(DSL.field("articuloid"), atributo.getArticulo().getId())
+            .set(DSL.field("grupoid"), atributo.getGrupo().getId())
+            .set(DSL.field("tipoid"), atributo.getTipo().getId())
             .returningResult(DSL.field("id"))
             .fetchOne()
             .getValue(DSL.field("id", Integer.class));
@@ -119,6 +121,8 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
     return dsl.update(ATRIBUTO_TABLE)
           .set(DSL.field("responsableid"), atributo.getResponsable().getId())
           .set(DSL.field("articuloid"), atributo.getArticulo().getId())
+            .set(DSL.field("grupoid"), atributo.getGrupo().getId())
+            .set(DSL.field("tipoid"), atributo.getTipo().getId())
           .where(DSL.field("id").eq(atributo.getId())) // Especificar la condición de actualización
           .execute(); // Ejecutar la actualización y devolver el número de filas afectadas
 }
@@ -130,6 +134,8 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
             .execute();
   }*/
 
+
+  //desde el activo el combo puede buscar por id de atributos para que me de el nombre del atributo
   private void insertAtributos(DSLContext dsl, Atributos atributos) {
     dsl.insertInto(ATRIBUTOS_TABLE)
             //.set(DSL.field("atributoid"), atributos.getAtributo().getId())

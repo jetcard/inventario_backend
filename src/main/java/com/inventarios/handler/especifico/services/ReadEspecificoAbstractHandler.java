@@ -26,6 +26,9 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
   protected final static Field<Long> ESPECIFICO_ID = field(name("especifico", "id"), Long.class);
   protected final static Field<Long> ESPECIFICO_RESPONSABLE_ID = field(name("especifico", "responsableid"), Long.class);
   protected final static Field<Long> ESPECIFICO_ARTICULO_ID = field(name("especifico", "articuloid"), Long.class);
+  protected final static Field<Long> ESPECIFICO_GRUPO_ID = field(name("especifico", "grupoid"), Long.class);
+  protected final static Field<Long> ESPECIFICO_PROVEEDOR_ID = field(name("proveedor", "proveedorid"), Long.class);
+
   protected final static Field<Long> ESPECIFICOS_ID = field(name("especificos", "id"), Long.class);
   protected final static Field<Long> ESPECIFICOS_ESPECIFICOID = field(name("especificos", "especificoid"), Long.class);
   protected final static Field<String> ESPECIFICOS_NOMBREESPECIFICO = field(name("especificos", "nombreespecifico"), String.class);
@@ -33,9 +36,11 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
   protected final static Field<String> ESPECIFICO_MODELO = field(name("especifico", "modelo"), String.class);
   protected final static Field<String> ESPECIFICO_MARCA = field(name("especifico", "marca"), String.class);
   protected final static Field<String> ESPECIFICO_NROSERIE = field(name("especifico", "nroserie"), String.class);
+  protected final static Field<LocalDate> ESPECIFICO_FECHAINGRESO = field(name("especifico", "fechaingreso"), LocalDate.class);
   protected final static Field<String> ESPECIFICO_FECHAINGRESOSTR = field(name("especifico", "fechaingresostr"), String.class);
   protected final static Field<String> ESPECIFICO_MONEDA = field(name("especifico", "moneda"), String.class);
-  protected final static Field<String> ESPECIFICOS_IMPORTE = field(name("especifico", "importe"), String.class);
+  protected final static Field<String> ESPECIFICO_IMPORTE = field(name("especifico", "importe"), String.class);
+  protected final static Field<String> ESPECIFICO_DESCRIPCION = field(name("especifico", "descripcion"), String.class);
   protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
   protected static final Field<String> RESPONSABLE_TABLE_COLUMNA = DSL.field("arearesponsable", String.class);
   protected final static Table<Record> ARTICULO_TABLE = table("articulo");
@@ -44,9 +49,11 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
   protected static final Field<String> TIPO_TABLE_COLUMNA = DSL.field("nombretipo", String.class);
   protected final static Table<Record> GRUPO_TABLE = DSL.table("grupo");
   protected static final Field<String> GRUPO_TABLE_COLUMNA = DSL.field("nombregrupo", String.class);
+  protected final static Table<Record> PROVEEDOR_TABLE = DSL.table("proveedor");
+  protected static final Field<String> PROVEEDOR_TABLE_COLUMNA = DSL.field("razonsocial", String.class);
 
   protected final static Field<Long> ESPECIFICO_TIPO_ID = field(name("especifico", "tipoid"), Long.class);
-  protected final static Field<Long> ESPECIFICO_GRUPO_ID = field(name("especifico", "grupoid"), Long.class);
+
 
   final static Map<String, String> headers = new HashMap<>();
 
@@ -58,12 +65,12 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
     headers.put("Access-Control-Allow-Methods", "GET");
   }
 
-  protected abstract Result<Record15<Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, String, String>> read() throws SQLException;
+  protected abstract Result<Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String>> read() throws SQLException;
   protected abstract String mostrarResponsable(Long id) throws SQLException;
   protected abstract String mostrarArticulo(Long id) throws SQLException;
   protected abstract String mostrarTipoBien(Long id) throws SQLException;
   protected abstract String mostrarGrupo(Long id) throws SQLException;
-
+  protected abstract String mostrarProveedor(Long id) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -73,7 +80,7 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
             .withHeaders(headers);
     String output ="";
     try {
-      Result<Record15<Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, String, String>> result = read();
+      Result<Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String>> result = read();
       responseRest.getEspecificoResponse().setListaespecificos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Especificos encontrados");
       Gson gson = GsonFactory.createGson();
@@ -87,10 +94,10 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
     }
   }
 
-  protected List<Especifico> convertResultToList(Result<Record15<Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, String, String>> result) throws SQLException {
+  protected List<Especifico> convertResultToList(Result<Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String>> result) throws SQLException {
       Map<Long, Especifico> especificoMap = new HashMap<>();
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-      for (Record15<Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, String, String> record : result) {
+      for (Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String> record : result) {
         Long especificoId = record.get(ESPECIFICO_ID);
         Especifico especifico = especificoMap.get(especificoId);
         if (especifico == null) {
@@ -119,8 +126,11 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
           grupo.setNombregrupo(mostrarGrupo(grupo.getId()));
           especifico.setGrupo(grupo);
 
-          //Proveedor proveedor=new Proveedor();
-          //proveedor.setId(record.get);
+          //
+          Proveedor proveedor=new Proveedor();
+          proveedor.setId(record.get(ESPECIFICO_PROVEEDOR_ID));
+          proveedor.setRazonsocial(mostrarProveedor(proveedor.getId()));
+          especifico.setProveedor(proveedor);
 
           especifico.setCodinventario(record.getValue("codinventario", String.class));
           especifico.setModelo(record.getValue("modelo", String.class));
@@ -134,6 +144,7 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
           }
           especifico.setMoneda(record.getValue("moneda", String.class));
           especifico.setImporte(record.getValue("importe", BigDecimal.class));
+          especifico.setDescripcion(record.getValue("descripcion", String.class));
 
           especifico.setEspecificos(new ArrayList<>());
           especificoMap.put(especificoId, especifico);
