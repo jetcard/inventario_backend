@@ -17,35 +17,35 @@ public class BusquedaActivoHandler extends BusquedaActivoAbstractHandler {
                                           String modelo, String marca, String nroSerie,
                                           LocalDate fechaCompraDesde,
                                           LocalDate fechaCompraHasta) throws SQLException {
-    DSLContext dsl = RDSConexion.getDSL();
-    Condition condition = DSL.trueCondition();
-    if (responsable != null && !responsable.isEmpty()) {
-      condition = condition.and(RESPONSABLE_TABLE.field("arearesponsable").likeIgnoreCase("%" + responsable + "%"));
-    }
-    if (proveedor != null && !proveedor.isEmpty()) {
-      condition = condition.and(PROVEEDOR_TABLE.field("razonsocial").likeIgnoreCase("%" + proveedor + "%"));
-    }
-    if (codinventario != null && !codinventario.isEmpty()) {
-      condition = condition.and(field("codinventario").likeIgnoreCase("%" + codinventario + "%"));
-    }
-    if (modelo != null && !modelo.isEmpty()) {
-      condition = condition.and(field("modelo").likeIgnoreCase("%" + modelo + "%"));
-    }
-    if (marca != null && !marca.isEmpty()) {
-      condition = condition.and(field("marca").likeIgnoreCase("%" + marca + "%"));
-    }
-    if (nroSerie != null && !nroSerie.isEmpty()) {
-      condition = condition.and(field("nroserie").likeIgnoreCase("%" + nroSerie + "%"));
-    }
-    if (fechaCompraDesde != null && fechaCompraHasta != null) {
-      condition = condition.and(field("fechaingreso").between(fechaCompraDesde).and(fechaCompraHasta));
-    }
-    return dsl.select()
-            .from(ACTIVO_TABLE)
-            .join(RESPONSABLE_TABLE).on(field("responsableId").eq(RESPONSABLE_TABLE.field("id")))
-            .join(PROVEEDOR_TABLE).on(field("proveedorId").eq(PROVEEDOR_TABLE.field("id")))
-            .where(condition)
-            .fetch();
+      DSLContext dsl = RDSConexion.getDSL();
+      Condition condition = DSL.trueCondition();
+      if (responsable != null && !responsable.isEmpty()) {
+        condition = condition.and(RESPONSABLE_TABLE.field("arearesponsable").likeIgnoreCase("%" + responsable + "%"));
+      }
+      if (proveedor != null && !proveedor.isEmpty()) {
+        condition = condition.and(PROVEEDOR_TABLE.field("razonsocial").likeIgnoreCase("%" + proveedor + "%"));
+      }
+      if (codinventario != null && !codinventario.isEmpty()) {
+        condition = condition.and(field("codinventario").likeIgnoreCase("%" + codinventario + "%"));
+      }
+      if (modelo != null && !modelo.isEmpty()) {
+        condition = condition.and(field("modelo").likeIgnoreCase("%" + modelo + "%"));
+      }
+      if (marca != null && !marca.isEmpty()) {
+        condition = condition.and(field("marca").likeIgnoreCase("%" + marca + "%"));
+      }
+      if (nroSerie != null && !nroSerie.isEmpty()) {
+        condition = condition.and(field("nroserie").likeIgnoreCase("%" + nroSerie + "%"));
+      }
+      if (fechaCompraDesde != null && fechaCompraHasta != null) {
+        condition = condition.and(field("fechaingreso").between(fechaCompraDesde).and(fechaCompraHasta));
+      }
+      return dsl.select()
+              .from(ACTIVO_TABLE)
+              .join(RESPONSABLE_TABLE).on(field("responsableId").eq(RESPONSABLE_TABLE.field("id")))
+              .join(PROVEEDOR_TABLE).on(field("proveedorId").eq(PROVEEDOR_TABLE.field("id")))
+              .where(condition)
+              .fetch();
   }
 
   @Override

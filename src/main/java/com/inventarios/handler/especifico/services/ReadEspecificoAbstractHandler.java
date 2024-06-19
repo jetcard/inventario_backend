@@ -162,32 +162,6 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
       return new ArrayList<>(especificoMap.values());
     }
 /*
-    List<Especifico> listaEspecificos = new ArrayList<>();
-
-    for (Record record : result) {
-      Especifico especifico = new Especifico();
-      especifico.setId(record.getValue("id", Long.class));
-
-      / *Responsable responsable=new Responsable();
-      responsable.setId(record.getValue("responsableid", Long.class));
-      Articulo articulo=new Articulo();
-      articulo.setId(record.getValue("articuloid", Long.class));
-      especifico.setResponsable(responsable);
-      especifico.setArticulo(articulo);* /
-
-      Responsable responsable = new Responsable();
-      responsable.setId(record.getValue("responsableid", Long.class));
-      responsable.setArearesponsable(mostrarResponsable(responsable.getId()));
-      especifico.setResponsable(responsable);
-
-      Articulo articulo = new Articulo();
-      articulo.setId(record.getValue("articuloid", Long.class));
-      articulo.setNombrearticulo(mostrarArticulo(articulo.getId()));
-      especifico.setArticulo(articulo);
-
-      listaEspecificos.add(especifico);
-    }
-    return listaEspecificos;
-  }*/
+*/
 
 }

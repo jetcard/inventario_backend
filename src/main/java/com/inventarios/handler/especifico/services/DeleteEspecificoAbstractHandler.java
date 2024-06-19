@@ -24,6 +24,7 @@ public abstract class DeleteEspecificoAbstractHandler implements RequestHandler<
     headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     headers.put("Access-Control-Allow-Methods", "DELETE");
   }
+
   protected abstract void delete(long id) throws SQLException;
 
   @Override
