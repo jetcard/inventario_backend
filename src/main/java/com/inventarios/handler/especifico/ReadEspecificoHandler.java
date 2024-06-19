@@ -12,17 +12,31 @@ import org.jooq.impl.DSL;
 public class ReadEspecificoHandler extends ReadEspecificoAbstractHandler {
   protected Result<Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String>> read() throws SQLException {
     var dsl = RDSConexion.getDSL();
-    /*
-    *   "especifico"."id",
-        "especifico"."responsableid",
-        "especifico"."articuloid",
-        "especifico"."tipoid",
-        "especifico"."grupoid",
-        "especificos"."id",
-        "especificos"."especificoid",
-        "especificos"."nombreespecifico"
-        * */
     return dsl.select(
+                    ESPECIFICO_ID,
+                    ESPECIFICO_RESPONSABLE_ID,
+                    ESPECIFICO_ARTICULO_ID,
+                    ESPECIFICO_TIPO_ID,
+                    ESPECIFICO_GRUPO_ID,
+                    ESPECIFICO_PROVEEDOR_ID,
+                    ESPECIFICOS_ID,
+                    ESPECIFICOS_ESPECIFICOID,
+                    ESPECIFICOS_NOMBREESPECIFICO,
+                    ESPECIFICO_CODINVENTARIO,
+                    ESPECIFICO_MODELO,
+                    ESPECIFICO_MARCA,
+                    ESPECIFICO_NROSERIE,
+                    ESPECIFICO_FECHAINGRESO,
+                    ESPECIFICO_FECHAINGRESOSTR,
+                    ESPECIFICO_MONEDA,
+                    ESPECIFICO_IMPORTE,
+                    ESPECIFICO_DESCRIPCION
+            )
+            .from(ESPECIFICO_TABLE)
+            .leftJoin(ESPECIFICOS_TABLE).on(ESPECIFICO_ID.eq(ESPECIFICOS_ESPECIFICOID))
+            .leftJoin(PROVEEDOR_TABLE).on(ESPECIFICO_PROVEEDOR_ID.eq(PROVEEDOR_ID))
+            .fetch();
+    /*return dsl.select(
                     ESPECIFICO_ID,
                     ESPECIFICO_RESPONSABLE_ID,
                     ESPECIFICO_ARTICULO_ID,
@@ -45,7 +59,7 @@ public class ReadEspecificoHandler extends ReadEspecificoAbstractHandler {
             .from(ESPECIFICO_TABLE)
             .leftJoin(ESPECIFICOS_TABLE)
             .on(ESPECIFICO_ID.eq(ESPECIFICOS_ESPECIFICOID))
-            .fetch();
+            .fetch();*/
   }
 
   @Override

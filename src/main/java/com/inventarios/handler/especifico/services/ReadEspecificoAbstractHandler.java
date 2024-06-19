@@ -27,7 +27,8 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
   protected final static Field<Long> ESPECIFICO_RESPONSABLE_ID = field(name("especifico", "responsableid"), Long.class);
   protected final static Field<Long> ESPECIFICO_ARTICULO_ID = field(name("especifico", "articuloid"), Long.class);
   protected final static Field<Long> ESPECIFICO_GRUPO_ID = field(name("especifico", "grupoid"), Long.class);
-  protected final static Field<Long> ESPECIFICO_PROVEEDOR_ID = field(name("proveedor", "proveedorid"), Long.class);
+
+  protected final static Field<Long> ESPECIFICO_PROVEEDOR_ID = field(name("especifico?proveedor", "proveedorid"), Long.class);
 
   protected final static Field<Long> ESPECIFICOS_ID = field(name("especificos", "id"), Long.class);
   protected final static Field<Long> ESPECIFICOS_ESPECIFICOID = field(name("especificos", "especificoid"), Long.class);
