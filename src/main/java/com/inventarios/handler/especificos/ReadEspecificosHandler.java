@@ -2,10 +2,8 @@ package com.inventarios.handler.especificos;
 
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.especificos.services.ReadEspecificosAbstractHandler;
-import org.jooq.Condition;
-import org.jooq.DSLContext;
+import org.jooq.*;
 import org.jooq.Record;
-import org.jooq.Result;
 import org.jooq.impl.DSL;
 
 import java.sql.SQLException;
@@ -13,7 +11,36 @@ import java.sql.SQLException;
 import static org.jooq.impl.DSL.field;
 
 public class ReadEspecificosHandler extends ReadEspecificosAbstractHandler {
+  protected Result<Record3<Object, Object, Object> read(long responsableId, long articuloId, long tipoId, long grupoId) throws SQLException {
 
+    DSLContext dsl = RDSConexion.getDSL();
+    Condition condition = DSL.trueCondition();
+
+    if (responsableId > 0) {
+      condition = condition.and(field("atributo.responsableid").eq(responsableId));
+    }
+    if (articuloId > 0) {
+      condition = condition.and(field("atributo.articuloid").eq(articuloId));
+    }
+    if (tipoId > 0) {
+      condition = condition.and(field("atributo.tipoid").eq(tipoId));
+    }
+    if (grupoId > 0) {
+      condition = condition.and(field("atributo.grupoid").eq(grupoId));
+    }
+
+    return dsl.select(
+                    field("atributos.id"), // reemplaza "campo1" con el nombre real del campo
+                    field("atributos.atributoid"), // reemplaza "campo2" con el nombre real del campo
+                    field("atributos.nombreatributo")  // reemplaza "campo3" con el nombre real del campo
+                    // Añade más campos según sea necesario
+            )
+            .from(ATRIBUTOS_TABLE)
+            .join(ATRIBUTO_TABLE).on(field("atributo.id").eq(field("atributos.atributoid")))
+            .where(condition)
+            .fetch();
+  }
+  /*
   protected Result<Record> read(String responsableId, String articuloId, String tipoId, String grupoId) throws SQLException {
 
     DSLContext dsl = RDSConexion.getDSL();
@@ -36,7 +63,7 @@ public class ReadEspecificosHandler extends ReadEspecificosAbstractHandler {
             .from(ESPECIFICO_TABLE)
             .join(ESPECIFICOS_TABLE).on(field("especificos.especificoid").eq(field("especifico.id")))
             .where(condition)
-            .fetch();
+            .fetch();*/
   }
 /*
   @Override
@@ -78,4 +105,3 @@ public class ReadEspecificosHandler extends ReadEspecificosAbstractHandler {
             .fetchOne();
     return record != null ? record.getValue(ARTICULO_TABLE_COLUMNA) : null;
   }  */
-}
