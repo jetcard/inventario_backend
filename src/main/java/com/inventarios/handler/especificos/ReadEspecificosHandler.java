@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import static org.jooq.impl.DSL.field;
 
 public class ReadEspecificosHandler extends ReadEspecificosAbstractHandler {
-  protected Result<Record3<Object, Object, Object> read(long responsableId, long articuloId, long tipoId, long grupoId) throws SQLException {
+  protected Result<Record3<Long, Long, String>> read(long responsableId, long articuloId, long tipoId, long grupoId) throws SQLException {
 
     DSLContext dsl = RDSConexion.getDSL();
     Condition condition = DSL.trueCondition();
@@ -30,13 +30,14 @@ public class ReadEspecificosHandler extends ReadEspecificosAbstractHandler {
     }
 
     return dsl.select(
-                    field("atributos.id"), // reemplaza "campo1" con el nombre real del campo
-                    field("atributos.atributoid"), // reemplaza "campo2" con el nombre real del campo
-                    field("atributos.nombreatributo")  // reemplaza "campo3" con el nombre real del campo
-                    // Añade más campos según sea necesario
+                    ATRIBUTOS_ID,
+                    ATRIBUTOS_ATRIBUTOID,
+                    ATRIBUTOS_NOMBREATRIBUTO
             )
             .from(ATRIBUTOS_TABLE)
-            .join(ATRIBUTO_TABLE).on(field("atributo.id").eq(field("atributos.atributoid")))
+            .join(ATRIBUTO_TABLE)
+            .on(ATRIBUTO_ID.eq(ATRIBUTOS_ATRIBUTOID))
+            //.on(field("atributo.id").eq(field("atributos.atributoid")))
             .where(condition)
             .fetch();
   }
