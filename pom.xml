@@ -136,6 +136,29 @@
       <artifactId>quarkus-jdbc-postgresql</artifactId>
     </dependency>
     <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>secretsmanager</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-agroal</artifactId>
+    </dependency>
+    <!--dependency>
+      <groupId>com.amazonaws.secretsmanager</groupId>
+      <artifactId>secrets-manager-jdbc</artifactId>
+      <version>1.0.0</version>
+    </dependency-->
+    <!--dependency>
+      <groupId>com.amazonaws.secretsmanager</groupId>
+      <artifactId>secrets-manager-jdbc</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.3.1</version>
+    </dependency-->
+    <dependency>
       <groupId>org.jooq</groupId>
       <artifactId>jooq</artifactId>
       <version>3.19.9</version>

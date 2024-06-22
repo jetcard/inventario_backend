@@ -1,3 +1,42 @@
+-- Tabla 'parametros'
+DELETE FROM parametros;
+
+-- Tabla 'activo'
+DELETE FROM activo;
+
+-- Tabla 'especificos'
+DELETE FROM especificos;
+
+-- Tabla 'especifico'
+DELETE FROM especifico;
+
+-- Tabla 'atributos'
+DELETE FROM atributos;
+
+-- Tabla 'atributo'
+DELETE FROM atributo;
+
+-- Tabla 'comun'
+DELETE FROM comun;
+
+-- Tabla 'dependencia'
+DELETE FROM dependencia;
+
+-- Tabla 'tipo'
+DELETE FROM tipo;
+
+-- Tabla 'responsable'
+DELETE FROM responsable;
+
+-- Tabla 'articulo'
+DELETE FROM articulo;
+
+-- Tabla 'grupo'
+DELETE FROM grupo;
+
+-- Tabla 'proveedor'
+DELETE FROM proveedor;
+
 CREATE TABLE proveedor (
     id SERIAL PRIMARY KEY,
     razonsocial VARCHAR(255) NOT NULL,
@@ -124,3 +163,14 @@ CREATE TABLE parametros (
     nombre VARCHAR(255) NOT NULL,
     descripcion VARCHAR(255) NOT NULL
 );
+
+SELECT pg_terminate_backend(pid)
+FROM pg_stat_activity
+WHERE datname = 'basededatos'
+  AND pid <> pg_backend_pid();
+
+
+SELECT pg_terminate_backend(pid)
+FROM pg_stat_activity
+WHERE datname = 'basededatos'
+  AND pid = <pid_a_terminar>;

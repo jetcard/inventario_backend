@@ -6070,47 +6070,13 @@ Resources:
   apiGatewayDeployment:
     Type: "AWS::ApiGateway::Deployment"
     DependsOn:
-      - ActivoGetMethod
-      - ActivoBuscarMethod
-      - ActivoPostMethod
-      - ActivoUpdateMethod
-      - ActivoDeleteMethod
-      - ArticuloGetMethod
-      - ArticuloGetByIdMethod
-      - ArticuloPostMethod
-      - ArticuloUpdateMethod
-      - ArticuloDeleteMethod
-      - AtributoGetMethod
-      - AtributoGetByIdMethod
-      #      - AtributoGetFiltroMethod
-      - AtributoPostMethod
-      - AtributoUpdateMethod
-      - AtributoDeleteMethod
-      - EspecificoGetMethod
-      - EspecificoGetByIdMethod
-      - EspecificoPostMethod
-      - EspecificoUpdateMethod
-      - EspecificoDeleteMethod
+
       - GrupoGetMethod
       - GrupoGetByIdMethod
       - GrupoPostMethod
       - GrupoUpdateMethod
       - GrupoDeleteMethod
-      - ResponsableGetMethod
-      - ResponsableGetByIdMethod
-      - ResponsablePostMethod
-      - ResponsableUpdateMethod
-      - ResponsableDeleteMethod
-      - TipobienGetMethod
-      - TipobienGetByIdMethod
-      - TipobienPostMethod
-      - TipobienUpdateMethod
-      - TipobienDeleteMethod
-      - ProveedorGetMethod
-      - ProveedorGetByIdMethod
-      - ProveedorPostMethod
-      - ProveedorUpdateMethod
-      - ProveedorDeleteMethod
+
 
     Properties:
       RestApiId: !Ref MyApi
