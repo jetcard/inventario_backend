@@ -7,6 +7,7 @@ import org.jooq.Record;
 import org.jooq.Result;
 
 public class ReadGrupoHandler extends ReadGrupoAbstractHandler {
+  @Override
   protected Result<Record> read() throws SQLException{
     var dsl = RDSConexion.getDSL();
     return dsl.select().from(GRUPO_TABLE).fetch();

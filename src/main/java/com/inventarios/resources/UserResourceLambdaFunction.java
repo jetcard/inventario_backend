@@ -1,4 +1,4 @@
-package com.inventarios.handler;
+package com.inventarios.resources;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;

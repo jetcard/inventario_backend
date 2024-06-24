@@ -14,6 +14,9 @@ import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 
+/*Para implementar mayor seguridad se puede hacer   extends AuthorizerKeycloakAbstractHandler
+* en lugar de implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyRespons.
+* Heredar sus métodos y copiar las implementaciones de sus métodos para leer el token.*/
 public abstract class ReadGrupoAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
   protected final static Table<Record> GRUPO_TABLE = DSL.table("grupo");
   final static Map<String, String> headers = new HashMap<>();

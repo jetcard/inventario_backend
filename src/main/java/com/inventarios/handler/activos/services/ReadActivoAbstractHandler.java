@@ -1,6 +1,7 @@
 package com.inventarios.handler.activos.services;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
@@ -10,7 +11,12 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import com.inventarios.handler.activos.CreateActivoHandler;
+import com.inventarios.handler.activos.UpdateActivoHandler;
 import com.inventarios.handler.activos.response.ActivoResponseRest;
+import com.inventarios.handler.especificos.CreateEspecificosHandler;
+import com.inventarios.handler.keycloak.service.AuthorizerKeycloakAbstractHandler;
 import com.inventarios.model.*;
 import com.inventarios.util.GsonFactory;
 import org.jooq.Field;
@@ -19,7 +25,8 @@ import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 
-public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public abstract class ReadActivoAbstractHandler extends AuthorizerKeycloakAbstractHandler {
+  //implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>
 
   protected final static Table<Record> ACTIVO_TABLE = DSL.table("activo");
   protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
@@ -51,13 +58,42 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
   protected abstract String mostrarProveedor(Long id) throws SQLException;
 
   @Override
-  public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
+  public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent request, final Context context) {
     //input.setHeaders(headers);
+    LambdaLogger logger = context.getLogger();
     ActivoResponseRest responseRest = new ActivoResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
             .withHeaders(headers);
     String output ="";
     try {
+      String authToken = extractAuthToken(request);
+      logger.log("authToken utilizada en Activo = "+authToken);
+      AuthorizationInfo authInfo = validateAuthToken(authToken);
+      //logger.log("authInfo = "+authInfo);
+      addAuthorizationHeaders(authInfo, request);
+      if (authInfo.isAdmin()) {
+        logger.log("ROL ADMIN");
+        // Aquí se maneja la lógica para crear o actualizar activos
+        if (request.getHttpMethod().equalsIgnoreCase("POST")) {
+          CreateActivoHandler createActivoHandler = new CreateActivoHandler();
+          response = createActivoHandler.handleRequest(request, context);
+        } else if (request.getHttpMethod().equalsIgnoreCase("PUT")) {
+          UpdateActivoHandler updateActivoHandler = new UpdateActivoHandler();
+          response = updateActivoHandler.handleRequest(request, context);
+        } else {
+          responseRest.setMetadata("No autorizado", "-1", "No autorizado para crear o actualizar activos.");
+          return response
+                  .withBody(new Gson().toJson(responseRest))
+                  .withStatusCode(405); // Código HTTP 405 - Método no permitido
+        }
+      } else if (authInfo.isUser()) {
+        logger.log("ROL USER");
+        //CreateEspecificosHandler createEspecificosHandler = new CreateEspecificosHandler();
+        //response = createEspecificosHandler.handleRequest(request, context);
+      } else {
+        logger.log("OTRO ROL");
+      }
+      //Se ejecutará siempre que la solicitud HTTP no sea ni un POST ni un PUT
       Result<Record> result = read();
       responseRest.getActivoResponse().setListaactivos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");

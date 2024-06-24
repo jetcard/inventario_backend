@@ -45,6 +45,106 @@ Resources:
         Types:
           - REGIONAL
 
+
+  ########################### AUTHORIZATION ###################################
+  ResourceKeycloak:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt MyApi.RootResourceId
+      PathPart: keycloak
+      RestApiId: !Ref MyApi
+
+  KeycloakOptionsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: OPTIONS
+      Integration:
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: MOCK
+        RequestTemplates:
+          "application/json": "{
+            \"statusCode\": 200
+            }"
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: keycloak
+      ResourceId: !Ref ResourceKeycloak
+      RestApiId: !Ref MyApi
+
+  KeycloakPostMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations"
+          - lambdaArn: !GetAtt AuthorizerKeycloakFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: keycloak
+      ResourceId: !Ref ResourceKeycloak
+      RestApiId: !Ref MyApi
+
+  AuthorizerKeycloakFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: AuthorizerKeycloak
+      Handler: com.inventarios.handler.keycloak.AuthorizerKeycloakHandler
+      Runtime: java21
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - AWSLambdaExecute
+      Events:
+        AuthorizerRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /keycloak
+            Method: post
+
+  AuthorizerKeycloakFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${AuthorizerKeycloakFunction}"
+      RetentionInDays: 1
+
+  KeycloakPostApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - AuthorizerKeycloakFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt AuthorizerKeycloakFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/keycloak
+
   ############################## GRUPOS #######################################
   ResourceGrupo:
     Type: AWS::ApiGateway::Resource
@@ -5676,367 +5776,6 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/especificos/{id}
 
-  ############################## KEYCLOAK #######################################
-#  ResourceKeycloak:
-#    Type: AWS::ApiGateway::Resource
-#    Properties:
-#      ParentId: !GetAtt MyApi.RootResourceId
-#      PathPart: keycloak
-#      RestApiId: !Ref MyApi
-
-#  KeycloakOptionsMethod:
-#    Type: AWS::ApiGateway::Method
-#    Properties:
-#      AuthorizationType: NONE
-#      HttpMethod: OPTIONS
-#      Integration:
-#        IntegrationResponses:
-#          - ResponseParameters:
-#              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-#              method.response.header.Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
-#              method.response.header.Access-Control-Allow-Origin: "'*'"
-#            StatusCode: '200'
-#        Type: MOCK
-#        RequestTemplates:
-#          "application/json": "{
-#            \"statusCode\": 200
-#            }"
-#      MethodResponses:
-#        - ResponseParameters:
-#            method.response.header.Access-Control-Allow-Headers: true
-#            method.response.header.Access-Control-Allow-Methods: true
-#            method.response.header.Access-Control-Allow-Origin: true
-#          StatusCode: '200'
-#      OperationName: keycloak
-#      ResourceId: !Ref ResourceKeycloak
-#      RestApiId: !Ref MyApi
-
-#  KeycloakPostMethod:
-#    Type: AWS::ApiGateway::Method
-#    Properties:
-#      HttpMethod: POST
-#      AuthorizationType: NONE
-#      Integration:
-#        IntegrationHttpMethod: POST
-#        IntegrationResponses:
-#          - ResponseParameters:
-#              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-#              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
-#              method.response.header.Access-Control-Allow-Origin: "'*'"
-#            StatusCode: '200'
-#        Type: AWS_PROXY
-#        Uri: !Sub
-#          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations"
-#          - lambdaArn: !GetAtt CrearKeycloakFunction.Arn
-#      MethodResponses:
-#        - ResponseParameters:
-#            method.response.header.Access-Control-Allow-Headers: true
-#            method.response.header.Access-Control-Allow-Methods: true
-#            method.response.header.Access-Control-Allow-Origin: true
-#          StatusCode: '200'
-#      OperationName: keycloak
-#      ResourceId: !Ref ResourceKeycloak
-#      RestApiId: !Ref MyApi
-
-#  CrearKeycloakFunction:
-#    Type: AWS::Serverless::Function
-#    Properties:
-#      FunctionName: CrearKeycloak
-#      Handler: com.inventarios.handler.AuthorizerKeycloakHandler
-#      Runtime: java21
-        ##Environment:
-        ##Variables:
-        ##DBName: !Ref PostgresDatabaseName
-        ##DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
-        ##user: !Ref PostgresUsername
-      ##pass: !Ref PostgresPassword
-      ##RDSSecretArn: !Ref RDSSecret
-#      Policies:
-#        - AWSLambdaBasicExecutionRole
-#        - AWSLambda_ReadOnlyAccess
-#        - AWSXrayWriteOnlyAccess
-#        - AWSLambdaVPCAccessExecutionRole
-#        # - !Ref SecretsPolicy
-#        - AWSLambdaExecute
-#          # - Version: '2012-10-17'
-#          #Statement:
-#          #- Effect: Allow
-#          #  Action:
-#          #    - rds:DescribeDBClusters
-#          #    - rds:DescribeDBInstances
-#          #    - rds:DescribeDBClusterEndpoints
-#          #    - rds-db:Connect
-#          #  Resource: "*"
-#          #- Effect: Allow
-#          #Action:
-#          # - 'secretsmanager:GetSecretValue'
-#        # - 'secretsmanager:DescribeSecret'
-#        #Resource: !Ref RDSSecret
-#      Events:
-#        CrearRequest:
-#          Type: Api
-#          Properties:
-#            RestApiId: !Ref MyApi
-#            Path: /keycloak
-#            Method: post
-
-#  CrearKeycloakFunctionLogGroup:
-#    Type: AWS::Logs::LogGroup
-#    Properties:
-#      LogGroupName: !Sub "/aws/lambda/${CrearKeycloakFunction}"
-#      RetentionInDays: 1
-
-#  KeycloakPostApiGatewayInvoke:
-#    Type: AWS::Lambda::Permission
-#    DependsOn:
-#      - MyApi
-#      - CrearKeycloakFunction
-#    Properties:
-#      Action: lambda:InvokeFunction
-#      FunctionName: !GetAtt CrearKeycloakFunction.Arn
-#      Principal: apigateway.amazonaws.com
-#      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/keycloak
-#
-#  ResourceAdmin:
-#    Type: AWS::ApiGateway::Resource
-#    Properties:
-#      ParentId: !GetAtt MyApi.RootResourceId
-#      PathPart: admines
-#      RestApiId: !Ref MyApi
-
-#  AdminOptionsMethod:
-#    Type: AWS::ApiGateway::Method
-#    Properties:
-#      AuthorizationType: NONE
-##      HttpMethod: OPTIONS
-#      Integration:
-#        IntegrationResponses:
-#          - ResponseParameters:
-#              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-#              method.response.header.Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
-#              method.response.header.Access-Control-Allow-Origin: "'*'"
-#            StatusCode: '200'
-#        Type: MOCK
-#        RequestTemplates:
-#          "application/json": "{
-#            \"statusCode\": 200
-#            }"
-#      MethodResponses:
-#        - ResponseParameters:
-#            method.response.header.Access-Control-Allow-Headers: true
-#            method.response.header.Access-Control-Allow-Methods: true
-#            method.response.header.Access-Control-Allow-Origin: true
-#          StatusCode: '200'
-#      OperationName: admines
-#      ResourceId: !Ref ResourceAdmin
-#      RestApiId: !Ref MyApi
-
-
-#  AdminPostMethod:
-#    Type: AWS::ApiGateway::Method
-#    Properties:
-#      HttpMethod: POST
-#      AuthorizationType: NONE
-#      Integration:
-#        IntegrationHttpMethod: POST
-#        IntegrationResponses:
-#          - ResponseParameters:
-#              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-#              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
-#              method.response.header.Access-Control-Allow-Origin: "'*'"
-#            StatusCode: '200'
-#        Type: AWS_PROXY
-#        Uri: !Sub
-#          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations"
-#          - lambdaArn: !GetAtt CrearAdminFunction.Arn
-#      MethodResponses:
-#        - ResponseParameters:
-#            method.response.header.Access-Control-Allow-Headers: true
-#            method.response.header.Access-Control-Allow-Methods: true
-#            method.response.header.Access-Control-Allow-Origin: true
-#          StatusCode: '200'
-#      OperationName: admines
-#      ResourceId: !Ref ResourceAdmin
-#      RestApiId: !Ref MyApi
-
-#  CrearAdminFunction:
-#    Type: AWS::Serverless::Function
-#    Properties:
-#      FunctionName: CrearAdmin
-#      Handler: com.inventarios.handler.AdminResourceLambdaFunction
-#      Runtime: java21
-#        #Environment:
-#        #Variables:
-#        #DBName: !Ref PostgresDatabaseName
-#        #DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
-#        #user: !Ref PostgresUsername
-#      #pass: !Ref PostgresPassword
-#      #RDSSecretArn: !Ref RDSSecret
-#      Policies:
-#        - AWSLambdaBasicExecutionRole
-#        - AWSLambda_ReadOnlyAccess
-#        - AWSXrayWriteOnlyAccess
-#        - AWSLambdaVPCAccessExecutionRole
-#        # - !Ref SecretsPolicy
-#        - AWSLambdaExecute
-#          # - Version: '2012-10-17'
-#          #Statement:
-#          #- Effect: Allow
-#          #  Action:
-#          #    - rds:DescribeDBClusters
-#          #    - rds:DescribeDBInstances
-#          #    - rds:DescribeDBClusterEndpoints
-#          #    - rds-db:Connect
-#          #  Resource: "*"
-#          #- Effect: Allow
-#          #Action:
-#          # - 'secretsmanager:GetSecretValue'
-#        # - 'secretsmanager:DescribeSecret'
-#        #Resource: !Ref RDSSecret
-#      Events:
-#        CrearRequest:
-#          Type: Api
-#          Properties:
-#            RestApiId: !Ref MyApi
-#            Path: /admines
-#            Method: post
-
-#  CrearAdminFunctionLogGroup:
-#    Type: AWS::Logs::LogGroup
-#    Properties:
-#      LogGroupName: !Sub "/aws/lambda/${CrearAdminFunction}"
-#      RetentionInDays: 1
-
-#  AdminPostApiGatewayInvoke:
-#    Type: AWS::Lambda::Permission
-#    DependsOn:
-#      - MyApi
-#      - CrearAdminFunction
-#    Properties:
-#      Action: lambda:InvokeFunction
-#      FunctionName: !GetAtt CrearAdminFunction.Arn
-#      Principal: apigateway.amazonaws.com
-#      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/admines
-
-#  ResourceUser:
-#    Type: AWS::ApiGateway::Resource
-#    Properties:
-#      ParentId: !GetAtt MyApi.RootResourceId
-#      PathPart: user
-#      RestApiId: !Ref MyApi
-
-#  UserOptionsMethod:
-#    Type: AWS::ApiGateway::Method
-#    Properties:
-#      AuthorizationType: NONE
-#      HttpMethod: OPTIONS
-#      Integration:
-#        IntegrationResponses:
-#          - ResponseParameters:
-#              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-#              method.response.header.Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
-#              method.response.header.Access-Control-Allow-Origin: "'*'"
-#            StatusCode: '200'
-#        Type: MOCK
-#        RequestTemplates:
-#          "application/json": "{
-#            \"statusCode\": 200
-#            }"
-#      MethodResponses:
-#        - ResponseParameters:
-#            method.response.header.Access-Control-Allow-Headers: true
-#            method.response.header.Access-Control-Allow-Methods: true
-#            method.response.header.Access-Control-Allow-Origin: true
-#          StatusCode: '200'
-#      OperationName: user
-#      ResourceId: !Ref ResourceUser
-#      RestApiId: !Ref MyApi
-
-#  UserPostMethod:
-#    Type: AWS::ApiGateway::Method
-#    Properties:
-#      HttpMethod: POST
-#      AuthorizationType: NONE      Integration:
-#        IntegrationHttpMethod: POST
-#        IntegrationResponses:
-#          - ResponseParameters:
-#              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-#              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
-#              method.response.header.Access-Control-Allow-Origin: "'*'"
-#            StatusCode: '200'
-#        Type: AWS_PROXY
-#        Uri: !Sub
-#          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations"
-#          - lambdaArn: !GetAtt CrearUserFunction.Arn
-#      MethodResponses:
-#        - ResponseParameters:
-#            method.response.header.Access-Control-Allow-Headers: true
-#            method.response.header.Access-Control-Allow-Methods: true
-#            method.response.header.Access-Control-Allow-Origin: true
-#          StatusCode: '200'
-#      OperationName: user
-#      ResourceId: !Ref ResourceUser
-#      RestApiId: !Ref MyApi
-
-#  CrearUserFunction:
-#    Type: AWS::Serverless::Function
-#    Properties:
-#      FunctionName: CrearUser
-#      Handler: com.inventarios.handler.UserResourceLambdaFunction
-#      Runtime: java21
-#        #Environment:
-#        #Variables:
-#        #DBName: !Ref PostgresDatabaseName
-#        #DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
-#        #user: !Ref PostgresUsername
-#      #pass: !Ref PostgresPassword
-#      #RDSSecretArn: !Ref RDSSecret
-#      Policies:
-#        - AWSLambdaBasicExecutionRole
-#        - AWSLambda_ReadOnlyAccess
-#        - AWSXrayWriteOnlyAccess
-#        - AWSLambdaVPCAccessExecutionRole
-#        # - !Ref SecretsPolicy
-#        - AWSLambdaExecute
-#          # - Version: '2012-10-17'
-#          #Statement:
-#          #- Effect: Allow
-#          #  Action:
-#          #    - rds:DescribeDBClusters
-#          #    - rds:DescribeDBInstances
-#          #    - rds:DescribeDBClusterEndpoints
-#          #    - rds-db:Connect
-#          #  Resource: "*"
-#          #- Effect: Allow
-#          #Action:
-#          # - 'secretsmanager:GetSecretValue'
-#        # - 'secretsmanager:DescribeSecret'
-#        #Resource: !Ref RDSSecret
-#      Events:
-#        CrearRequest:
-#          Type: Api
-#          Properties:
-#            RestApiId: !Ref MyApi
-#            Path: /user
-#            Method: post
-
-#  CrearUserFunctionLogGroup:
-#    Type: AWS::Logs::LogGroup
-#    Properties:
-#      LogGroupName: !Sub "/aws/lambda/${CrearUserFunction}"
-#      RetentionInDays: 1
-
-#  UserPostApiGatewayInvoke:
-#    Type: AWS::Lambda::Permission
-#    DependsOn:
-#      - MyApi
-#      - CrearUserFunction
-#    Properties:
-#      Action: lambda:InvokeFunction
-#      FunctionName: !GetAtt CrearUserFunction.Arn
-#      Principal: apigateway.amazonaws.com
-#      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/user
-
   RDSInstance:
     Type: AWS::RDS::DBInstance
     Properties:
@@ -6070,13 +5809,42 @@ Resources:
   apiGatewayDeployment:
     Type: "AWS::ApiGateway::Deployment"
     DependsOn:
-
+      - ActivoGetMethod
+      - ActivoBuscarMethod
+      - ActivoPostMethod
+      - ActivoUpdateMethod
+      - ActivoDeleteMethod
+      - ArticuloGetMethod
+      - ArticuloGetByIdMethod
+      - ArticuloPostMethod
+      - ArticuloUpdateMethod
+      - ArticuloDeleteMethod
+      - AtributoGetMethod
+      - AtributoGetByIdMethod
+      - AtributoPostMethod
+      - AtributoUpdateMethod
+      - AtributoDeleteMethod
       - GrupoGetMethod
       - GrupoGetByIdMethod
       - GrupoPostMethod
       - GrupoUpdateMethod
       - GrupoDeleteMethod
-
+      - KeycloakPostMethod
+      - ResponsableGetMethod
+      - ResponsableGetByIdMethod
+      - ResponsablePostMethod
+      - ResponsableUpdateMethod
+      - ResponsableDeleteMethod
+      - TipobienGetMethod
+      - TipobienGetByIdMethod
+      - TipobienPostMethod
+      - TipobienUpdateMethod
+      - TipobienDeleteMethod
+      - ProveedorGetMethod
+      - ProveedorGetByIdMethod
+      - ProveedorPostMethod
+      - ProveedorUpdateMethod
+      - ProveedorDeleteMethod
 
     Properties:
       RestApiId: !Ref MyApi
