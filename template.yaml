@@ -3435,6 +3435,7 @@ Resources:
   BusquedaPorIdAtributoFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: BusquedaPorIdAtributo
       Handler: com.inventarios.handler.atributo.BusquedaPorIdAtributoHandler
       Runtime: java21
       Environment:
@@ -3982,6 +3983,7 @@ Resources:
   BusquedaPorIdAtributosFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: BusquedaPorIdAtributos
       Handler: com.inventarios.handler.atributos.BusquedaPorIdAtributosHandler
       Runtime: java21
       Environment:
@@ -5824,6 +5826,11 @@ Resources:
       - AtributoPostMethod
       - AtributoUpdateMethod
       - AtributoDeleteMethod
+      - AtributosGetMethod
+      - AtributosGetByIdMethod
+      - AtributosPostMethod
+      - AtributosUpdateMethod
+      - AtributosDeleteMethod
       - GrupoGetMethod
       - GrupoGetByIdMethod
       - GrupoPostMethod

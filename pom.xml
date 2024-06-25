@@ -278,11 +278,11 @@
       <version>5.1.0</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.keycloak/keycloak-admin-client -->
-    <dependency>
+    <!--dependency>
       <groupId>org.keycloak</groupId>
       <artifactId>keycloak-admin-client</artifactId>
       <version>25.0.1</version>
-    </dependency>
+    </dependency-->
     <!--dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-rest-jackson</artifactId>

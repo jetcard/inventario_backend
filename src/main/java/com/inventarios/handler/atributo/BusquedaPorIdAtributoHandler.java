@@ -7,11 +7,14 @@ import org.jooq.Record;
 import org.jooq.Result;
 
 public class BusquedaPorIdAtributoHandler extends BusquedaPorIdAtributoAbstractHandler {
-  protected Result<Record> busquedaPorNombreAtributo(String filter) throws SQLException {
+
+  @Override
+  protected Result<Record> busquedaPorArticuloId(String articuloId) throws SQLException {
     var dsl = RDSConexion.getDSL();
     return dsl.select()
             .from(ATRIBUTO_TABLE)
-            .where(ATRIBUTO_TABLE_COLUMNA.like("%" + filter + "%"))
+            .where(ATRIBUTO_TABLE_COLUMNA.eq(Long.parseLong(articuloId)))
             .fetch();
   }
+
 }
