@@ -1,7 +1,7 @@
 package com.inventarios.handler.especifico.services;
 
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
@@ -12,7 +12,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import com.inventarios.handler.especifico.CreateEspecificoHandler;
+import com.inventarios.handler.especifico.UpdateEspecificoHandler;
 import com.inventarios.handler.especifico.response.EspecificoResponseRest;
+import com.inventarios.handler.keycloak.service.AuthorizerKeycloakAbstractHandler;
 import com.inventarios.model.*;
 import com.inventarios.util.GsonFactory;
 import org.jooq.*;
@@ -20,7 +23,8 @@ import org.jooq.Record;
 import org.jooq.impl.DSL;
 import static org.jooq.impl.DSL.*;
 
-public abstract class ReadEspecificoAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public abstract class ReadEspecificoAbstractHandler extends AuthorizerKeycloakAbstractHandler {
+  //implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
   protected final static Table<Record> ESPECIFICO_TABLE = table("especifico");
   protected final static Table<Record> ESPECIFICOS_TABLE = table("especificos");
   protected final static Field<Long> ESPECIFICO_ID = field(name("especifico", "id"), Long.class);
@@ -74,13 +78,42 @@ public abstract class ReadEspecificoAbstractHandler implements RequestHandler<AP
   protected abstract String mostrarProveedor(Long id) throws SQLException;
 
   @Override
-  public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
-    input.setHeaders(headers);
+  public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent request, final Context context) {
+    //input.setHeaders(headers);
+    LambdaLogger logger = context.getLogger();
     EspecificoResponseRest responseRest = new EspecificoResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
             .withHeaders(headers);
     String output ="";
     try {
+      String authToken = extractAuthToken(request);
+      logger.log("authToken utilizada en Activo : ");
+      logger.log(authToken);
+      AuthorizationInfo authInfo = validateAuthToken(authToken);
+      //logger.log("authInfo = "+authInfo);
+      addAuthorizationHeaders(authInfo, request);
+      if (authInfo.isAdmin()) {
+        logger.log("ROL ADMIN");
+        // Aquí se maneja la lógica para crear o actualizar activos
+        if (request.getHttpMethod().equalsIgnoreCase("POST")) {
+          CreateEspecificoHandler createEspecificoHandler = new CreateEspecificoHandler();
+          response = createEspecificoHandler.handleRequest(request, context);
+        } else if (request.getHttpMethod().equalsIgnoreCase("PUT")) {
+          UpdateEspecificoHandler updateEspecificoHandler = new UpdateEspecificoHandler();
+          response = updateEspecificoHandler.handleRequest(request, context);
+        } else {
+          responseRest.setMetadata("No autorizado", "-1", "No autorizado para crear o actualizar activos.");
+          return response
+                  .withBody(new Gson().toJson(responseRest))
+                  .withStatusCode(405); // Código HTTP 405 - Método no permitido
+        }
+      } else if (authInfo.isUser()) {
+        logger.log("ROL USER");
+        //CreateEspecificosHandler createEspecificosHandler = new CreateEspecificosHandler();
+        //response = createEspecificosHandler.handleRequest(request, context);
+      } else {
+        logger.log("OTRO ROL");
+      }
       Result<Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String>> result = read();
       responseRest.getEspecificoResponse().setListaespecificos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Especificos encontrados");
