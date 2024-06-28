@@ -132,6 +132,7 @@ CREATE TABLE especifico (
 CREATE TABLE especificos (
     id SERIAL PRIMARY KEY,
     especificoid INTEGER NULL,
+    atributo VARCHAR(255) NOT NULL,
     nombreespecifico VARCHAR(255) NOT NULL,
     FOREIGN KEY (especificoid) REFERENCES especifico(id)
 );

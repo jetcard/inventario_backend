@@ -180,7 +180,7 @@ public abstract class ReadEspecificoAbstractHandler extends AuthorizerKeycloakAb
           especifico.setImporte(record.getValue("importe", BigDecimal.class));
           especifico.setDescripcion(record.getValue("descripcion", String.class));
 
-          especifico.setEspecificos(new ArrayList<>());
+          ///especifico.setEspecificos(new ArrayList<>());
           especificoMap.put(especificoId, especifico);
         }
         Long especificosId = record.get(ESPECIFICOS_ID);
@@ -189,7 +189,7 @@ public abstract class ReadEspecificoAbstractHandler extends AuthorizerKeycloakAb
           especificos.setId(especificosId);
           especificos.setEspecificoid(record.get(ESPECIFICOS_ESPECIFICOID));
           especificos.setNombreespecifico(record.get(ESPECIFICOS_NOMBREESPECIFICO));
-          especifico.getEspecificos().add(especificos);
+          ///especifico.getEspecificos().add(especificos);
         }
       }
       return new ArrayList<>(especificoMap.values());

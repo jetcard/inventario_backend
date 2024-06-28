@@ -31,7 +31,7 @@ public abstract class CreateEspecificoAbstractHandler implements RequestHandler<
         headers.put("Access-Control-Allow-Methods", "POST");
     }
     protected abstract int getEspecificoID(Especifico especifico) throws SQLException;
-    protected abstract void save(Especifico especifico, List<Especificos> especificosList) throws SQLException;
+    protected abstract void save(Especifico especifico) throws SQLException;
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -40,12 +40,16 @@ public abstract class CreateEspecificoAbstractHandler implements RequestHandler<
         LambdaLogger logger = context.getLogger();
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         List<Especifico> list = new ArrayList<>();
-        List<Especificos> especificosList = new ArrayList<>();
+        //List<Especificos> especificosList = new ArrayList<>();
+        List<EspecificacionTecnica> especificacionesList = new ArrayList<>();
+
         String output ="";
         try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(input.getBody());
-            String body = input.getBody();
+
+            //String body = input.getBody();
+            String body = "{\"responsableId\":4,\"articuloId\":3,\"tipoId\":1,\"grupoId\":1,\"codinventario\":\"VQVREE\",\"modelo\":\"NINAS\",\"marca\":\"ZZDZCSCW\",\"nroserie\":\"V1VV3A\",\"fechaingreso\":\"2024-06-12\",\"fechaingresostr\":\"2024-06-12\",\"importe\":\"522515\",\"moneda\":\"S/\",\"descripcion\":\"As\",\"proveedorId\":1,\"especificaciones\":[{\"atributo\":\"COLOR\",\"nombreespecifico\":\"AZUL\"},{\"atributo\":\"DIMENSION\",\"nombreespecifico\":\"123\"}]}";
             if (body != null && !body.isEmpty()) {
                 logger.log(body);
 
@@ -72,7 +76,16 @@ public abstract class CreateEspecificoAbstractHandler implements RequestHandler<
                     especificosListaInicial.add(defaultEspecificos);
 
                     // Set the especificosList to the especificos property of especifico
-                    especifico.setEspecificos(especificosListaInicial);
+                    /*EspecificacionTecnica especificacionTecnica=new EspecificacionTecnica();
+                    List<EspecificacionTecnica> especificacionTecnicaList = new ArrayList<>();
+                    List<EspecificacionTecnica> especificaciones = jsonNode.get("especificaciones").asLong();
+                    especifico.setEspecificaciones(especificacionTecnicaList);*/
+                    //Especificos(especificosListaInicial);
+
+                    for (EspecificacionTecnica especificacion : especifico.getEspecificaciones()) {
+                        // Aquí puedes hacer cualquier ajuste necesario en los atributos de EspecificacionTecnica
+                        especificacionesList.add(especificacion);
+                    }
 
                     logger.log("especifico = "+especifico);
 
@@ -117,9 +130,15 @@ public abstract class CreateEspecificoAbstractHandler implements RequestHandler<
                     long especificoID = getEspecificoID(especifico);
                     especifico.setId(especificoID);
 
-                    JsonNode especificosNode = jsonNode.get("especificos");
+                    JsonNode especificosNode = jsonNode.get("especificaciones");
                     if (especificosNode != null && especificosNode.isArray()) {
                         for (JsonNode especificoNode : especificosNode) {
+                            EspecificacionTecnica especificacionTecnica=new EspecificacionTecnica();
+                            especificacionTecnica.setAtributo(especificoNode.get("atributo")!=null?especificoNode.get("atributo").asText():"");
+                            especificacionTecnica.setNombreespecifico(especificoNode.get("nombreespecifico")!=null?especificoNode.get("nombreespecifico").asText():"");
+                            especificacionesList.add(especificacionTecnica);
+
+                            /*
                             //especificoNode.get("especificoid").asText();
                             //logger.log("especificoNode.get(especificoid).asText() = " + especificoNode.get("especificoid")!=null?especificoNode.get("especificoid").asText():"");
                             Especificos especificos = new Especificos();
@@ -128,11 +147,13 @@ public abstract class CreateEspecificoAbstractHandler implements RequestHandler<
                             //especificos.setNombreespecifico(especificoNode.get("nombreespecifico").asText(""));
                             especificos.setNombreespecifico(especificoNode.get("nombreespecifico")!=null?especificoNode.get("nombreespecifico").asText():"");
                             especificosList.add(especificos);
+                            */
+
                         }
                     }
-                    especifico.setEspecificos(especificosList);
+                    especifico.setEspecificaciones(especificacionesList);//setEspecificos(especificosList);
                     logger.log(":::::::::::::::::::::::::::::::::: PREPARANDO PARA INSERTAR ::::::::::::::::::::::::::::::::::");
-                    save(especifico, especificosList);
+                    save(especifico);
                     logger.log(":::::::::::::::::::::::::::::::::: INSERCIÓN COMPLETA ::::::::::::::::::::::::::::::::::");
                     list.add(especifico);
                     responseRest.getEspecificoResponse().setListaespecificos(list);

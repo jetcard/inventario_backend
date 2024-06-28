@@ -72,7 +72,7 @@ public abstract class BusquedaPorIdsAbstractHandler implements RequestHandler<AP
       especifico.setId(record.getValue("id", Long.class));
       especifico.setResponsable(record.getValue("responsableId", Responsable.class));
       especifico.setArticulo(record.getValue("articuloId", Articulo.class));
-      especifico.setEspecificos(record.getValue("descripespecifico", List.class));
+      ///especifico.setEspecificos(record.getValue("descripespecifico", List.class));
       listaEspecificos.add(especifico);
     }
     return listaEspecificos;

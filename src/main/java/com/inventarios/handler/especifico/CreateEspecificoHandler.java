@@ -50,7 +50,26 @@ public class CreateEspecificoHandler extends CreateEspecificoAbstractHandler {
   }
 */
   @Override
-  public void save(Especifico especifico, List<Especificos> especificosList) throws SQLException{
+  public void save(Especifico especifico) throws SQLException{
+    DSLContext dsl = RDSConexion.getDSL();
+    try {
+      dsl.transaction(configuration -> {
+        DSLContext transactionalDsl = DSL.using(configuration);
+        long especificoid = especifico.getId();//updateEspecifico(transactionalDsl, especifico);
+        System.out.println("especificoid = "+especifico.getId());
+        especifico.setId(especificoid);
+        /*for (Especificos especificos : especificosList) {
+          especificos.setEspecificoid(especifico.getId());
+          insertEspecificos(transactionalDsl, especificos);
+        }*/
+      });
+    } catch (Exception e) {
+      // Manejar el error de la transacción
+    }
+  }
+
+
+  public void savex(Especifico especifico, List<Especificos> especificosList) throws SQLException{
     DSLContext dsl = RDSConexion.getDSL();
     try {
       dsl.transaction(configuration -> {

@@ -1,7 +1,6 @@
 package com.inventarios.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -46,10 +45,14 @@ public class Especifico implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Proveedor proveedor;
-
-    @OneToMany(mappedBy = "especifico", cascade = CascadeType.ALL, orphanRemoval = true)
+//Tiene que haber una tabla que guarde los las especificaciones técnicas
+    //Si se está utilizando específicos mandarlo a Comunes y utilizar Especificos
+    //como la nueva tabla que albergue a las especificaciones técnicas de Activos
+    /*@OneToMany(mappedBy = "especifico", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Especificos> especificos;
+    private List<Especificos> especificos;*/
+
+    private List<EspecificacionTecnica> especificaciones;
 
     private String descripcion;
 
@@ -165,12 +168,12 @@ public class Especifico implements Serializable {
         this.proveedor = proveedor;
     }
 
-    public List<Especificos> getEspecificos() {
-        return especificos;
+    public List<EspecificacionTecnica> getEspecificaciones() {
+        return especificaciones;
     }
 
-    public void setEspecificos(List<Especificos> especificos) {
-        this.especificos = especificos;
+    public void setEspecificaciones(List<EspecificacionTecnica> especificaciones) {
+        this.especificaciones = especificaciones;
     }
 
     public String getDescripcion() {
