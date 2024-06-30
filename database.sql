@@ -5,10 +5,10 @@ DELETE FROM parametros;
 DELETE FROM activo;
 
 -- Tabla 'especificos'
-DELETE FROM especificos;
+DELETE FROM especificaciones;
 
 -- Tabla 'especifico'
-DELETE FROM especifico;
+--DELETE FROM especifico;
 
 -- Tabla 'atributos'
 DELETE FROM atributos;
@@ -106,9 +106,9 @@ CREATE TABLE atributos (
     FOREIGN KEY (atributoid) REFERENCES atributo(id)
 );
 
-CREATE TABLE especifico (
+CREATE TABLE activo (
     id SERIAL PRIMARY KEY,
-    responsableId INTEGER NOT NULL,
+    responsableId INTEGER NOT NULL,z
     articuloId INTEGER NOT NULL,
     tipoId INTEGER NOT NULL,
     grupoId INTEGER NOT NULL,
@@ -129,12 +129,12 @@ CREATE TABLE especifico (
     FOREIGN KEY (proveedorId) REFERENCES proveedor(id)
 );
 
-CREATE TABLE especificos (
+CREATE TABLE especificaciones (--especificos
     id SERIAL PRIMARY KEY,
-    especificoid INTEGER NULL,
-    atributo VARCHAR(255) NOT NULL,
-    nombreespecifico VARCHAR(255) NOT NULL,
-    FOREIGN KEY (especificoid) REFERENCES especifico(id)
+    especificacionid INTEGER NULL,--especificoid
+    nombreatributo VARCHAR(255) NOT NULL,--atributo, nombreespecifico
+    descripcionatributo VARCHAR(255) NULL,
+    FOREIGN KEY (especificacionid) REFERENCES activo(id)
 );
 
 CREATE TABLE activo (

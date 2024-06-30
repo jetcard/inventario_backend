@@ -105,12 +105,8 @@ public abstract class CreateAtributoAbstractHandler implements RequestHandler<AP
                     JsonNode atributosNode = jsonNode.get("atributos");
                     if (atributosNode != null && atributosNode.isArray()) {
                         for (JsonNode atributoNode : atributosNode) {
-                            //atributoNode.get("atributoid").asText();
-                            //logger.log("atributoNode.get(atributoid).asText() = " + atributoNode.get("atributoid")!=null?atributoNode.get("atributoid").asText():"");
                             Atributos atributos = new Atributos();
                             atributos.setAtributoid(atributo.getId());
-                            ///atributos.setAtributo(atributo);
-                            //atributos.setNombreatributo(atributoNode.get("nombreatributo").asText(""));
                             atributos.setNombreatributo(atributoNode.get("nombreatributo")!=null?atributoNode.get("nombreatributo").asText():"");
                             atributosList.add(atributos);
                         }

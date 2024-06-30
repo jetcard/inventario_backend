@@ -1,213 +1,186 @@
 package com.inventarios.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
-import jakarta.persistence.ManyToOne;
+import java.util.List;
+
 @Entity
-@Table(name="activo")
+@Table(name="especifico")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Activo implements Serializable {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;//cód. TI serial number
-  private String codinventario;//cód. Administración
-  private String modelo;
-  private String marca;
-  private String procesador;
-  private String tipodisco;
-  private String capacidadDisco;
-  private String memoria;
-  private String nroserie;
-  //formato default
-  //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  private LocalDate fechaingreso;
-  private String fechaingresostr;
-  private String moneda;
-  private BigDecimal importe;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-  private Responsable responsable;
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JsonIgnoreProperties( {"hibernateLazyInitializer", "handler"})
+    private Responsable responsable;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-  private Tipo tipo;
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-  private Grupo grupo;
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JsonIgnoreProperties ( {"hibernateLazyInitializer", "handler"})
+    private Articulo articulo;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-  private Articulo articulo;
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JsonIgnoreProperties ( {"hibernateLazyInitializer", "handler"})
+    private Tipo tipo;
 
-  @Lob
-  @Basic(fetch = FetchType.LAZY)
-  @Column(name = "picture", columnDefinition = "bigint")
-  private byte[] picture;
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JsonIgnoreProperties ( {"hibernateLazyInitializer", "handler"})
+    private Grupo grupo;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-  private Proveedor proveedor;
+    private String codinventario;//cód. Administración
+    private String modelo;
+    private String marca;
+    private String nroserie;
+    //formato default
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate fechaingreso;
+    private String fechaingresostr;
+    private String moneda;
+    private BigDecimal importe;
 
-  public Long getId() {
-    return id;
-  }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Proveedor proveedor;
+//Tiene que haber una tabla que guarde los las especificaciones técnicas
+    //Si se está utilizando específicos mandarlo a Comunes y utilizar Especificos
+    //como la nueva tabla que albergue a las especificaciones técnicas de Activos
+    /*@OneToMany(mappedBy = "especifico", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Especificos> especificos;*/
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    private List<Especificaciones> especificaciones;
 
-  public String getCodinventario() {
-    return codinventario;
-  }
+    private String descripcion;
 
-  public void setCodinventario(String codinventario) {
-    this.codinventario = codinventario;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public String getModelo() {
-    return modelo;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public void setModelo(String modelo) {
-    this.modelo = modelo;
-  }
+    public Responsable getResponsable() {
+        return responsable;
+    }
 
-  public String getMarca() {
-    return marca;
-  }
+    public void setResponsable(Responsable responsable) {
+        this.responsable = responsable;
+    }
 
-  public void setMarca(String marca) {
-    this.marca = marca;
-  }
+    public Articulo getArticulo() {
+        return articulo;
+    }
 
-  public String getProcesador() {
-    return procesador;
-  }
+    public void setArticulo(Articulo articulo) {
+        this.articulo = articulo;
+    }
 
-  public void setProcesador(String procesador) {
-    this.procesador = procesador;
-  }
+    public Tipo getTipo() {
+        return tipo;
+    }
 
-  public String getTipodisco() {
-    return tipodisco;
-  }
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
 
-  public void setTipodisco(String tipodisco) {
-    this.tipodisco = tipodisco;
-  }
+    public Grupo getGrupo() {
+        return grupo;
+    }
 
-  public String getCapacidadDisco() {
-    return capacidadDisco;
-  }
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
 
-  public void setCapacidadDisco(String capacidadDisco) {
-    this.capacidadDisco = capacidadDisco;
-  }
+    public String getCodinventario() {
+        return codinventario;
+    }
 
-  public String getMemoria() {
-    return memoria;
-  }
+    public void setCodinventario(String codinventario) {
+        this.codinventario = codinventario;
+    }
 
-  public void setMemoria(String memoria) {
-    this.memoria = memoria;
-  }
+    public String getModelo() {
+        return modelo;
+    }
 
-  public String getNroserie() {
-    return nroserie;
-  }
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
 
-  public void setNroserie(String nroserie) {
-    this.nroserie = nroserie;
-  }
+    public String getMarca() {
+        return marca;
+    }
 
-  public LocalDate getFechaingreso() {
-    return fechaingreso;
-  }
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
 
-  public void setFechaingreso(LocalDate fechaingreso) {
-    this.fechaingreso = fechaingreso;
-  }
+    public String getNroserie() {
+        return nroserie;
+    }
 
-  public String getFechaingresostr() {
-    return fechaingresostr;
-  }
+    public void setNroserie(String nroserie) {
+        this.nroserie = nroserie;
+    }
 
-  public void setFechaingresostr(String fechaingresostr) {
-    this.fechaingresostr = fechaingresostr;
-  }
+    public LocalDate getFechaingreso() {
+        return fechaingreso;
+    }
 
-  public String getMoneda() {
-    return moneda;
-  }
+    public void setFechaingreso(LocalDate fechaingreso) {
+        this.fechaingreso = fechaingreso;
+    }
 
-  public void setMoneda(String moneda) {
-    this.moneda = moneda;
-  }
+    public String getFechaingresostr() {
+        return fechaingresostr;
+    }
 
-  public BigDecimal getImporte() {
-    return importe;
-  }
+    public void setFechaingresostr(String fechaingresostr) {
+        this.fechaingresostr = fechaingresostr;
+    }
 
-  public void setImporte(BigDecimal importe) {
-    this.importe = importe;
-  }
+    public String getMoneda() {
+        return moneda;
+    }
 
-  public Responsable getResponsable() {
-    return responsable;
-  }
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
+    }
 
-  public void setResponsable(Responsable responsable) {
-    this.responsable = responsable;
-  }
+    public BigDecimal getImporte() {
+        return importe;
+    }
 
-  public Tipo getTipo() {
-    return tipo;
-  }
+    public void setImporte(BigDecimal importe) {
+        this.importe = importe;
+    }
 
-  public void setTipo(Tipo tipo) {
-    this.tipo = tipo;
-  }
+    public Proveedor getProveedor() {
+        return proveedor;
+    }
 
-  public Grupo getGrupo() {
-    return grupo;
-  }
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
+    }
 
-  public void setGrupo(Grupo grupo) {
-    this.grupo = grupo;
-  }
+    public List<Especificaciones> getEspecificaciones() {
+        return especificaciones;
+    }
 
-  public Articulo getArticulo() {
-    return articulo;
-  }
+    public void setEspecificaciones(List<Especificaciones> especificaciones) {
+        this.especificaciones = especificaciones;
+    }
 
-  public void setArticulo(Articulo articulo) {
-    this.articulo = articulo;
-  }
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-  public byte[] getPicture() {
-    return picture;
-  }
-
-  public void setPicture(byte[] picture) {
-    this.picture = picture;
-  }
-
-  public Proveedor getProveedor() {
-    return proveedor;
-  }
-
-  public void setProveedor(Proveedor proveedor) {
-    this.proveedor = proveedor;
-  }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 }

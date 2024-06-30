@@ -4273,7 +4273,9 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{  \"statusCode\": 200 }"
+          "application/json": "{
+            \"statusCode\": 200
+            }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -4292,7 +4294,9 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{ \"statusCode\": 200 }"
+          "application/json": "{
+            \"statusCode\": 200
+            }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -4321,7 +4325,9 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{ \"statusCode\": 200 }"
+          "application/json": "{
+            \"statusCode\": 200
+            }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -4706,22 +4712,22 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/parametros/{id}
 
-  ############################## ESPECIFICACIONES #######################################
-  ResourceEspecificaciones:
+  ############################## ESPECIFICO #######################################
+  ResourceEspecifico:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt MyApi.RootResourceId
-      PathPart: especificaciones
+      PathPart: especifico
       RestApiId: !Ref MyApi
 
-  ResourceEspecificacionesId:
+  ResourceEspecificoId:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !Ref ResourceEspecificaciones
+      ParentId: !Ref ResourceEspecifico
       PathPart: "{id}"
       RestApiId: !Ref MyApi
 
-  EspecificacionesOptionsMethod:
+  EspecificoOptionsMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -4744,11 +4750,11 @@ Resources:
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: especificaciones
-      ResourceId: !Ref ResourceEspecificaciones
+      OperationName: especifico
+      ResourceId: !Ref ResourceEspecifico
       RestApiId: !Ref MyApi
 
-  EspecificacionesIdOptionsMethod:
+  EspecificoIdOptionsMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -4762,55 +4768,26 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{  \"statusCode\": 200  }"
-      MethodResponses:
-        - ResponseParameters:
-            method.response.header.Access-Control-Allow-Headers: true
-            method.response.header.Access-Control-Allow-Methods: true
-            method.response.header.Access-Control-Allow-Origin: true
-          StatusCode: '200'
-      OperationName: especificaciones
-      ResourceId: !Ref ResourceEspecificacionesId
-      RestApiId: !Ref MyApi
-
-  EspecificacionesGetMethod:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      HttpMethod: GET
-      AuthorizationType: NONE
-      Integration:
-        IntegrationHttpMethod: POST
-        RequestTemplates:
-          "application/json": "{ \"statusCode\": 200 }"
-        IntegrationResponses:
-          - ResponseParameters:
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-            StatusCode: '200'
-        Type: AWS_PROXY
-        Uri: !Sub
-          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
-          - Arn: !GetAtt ReadEspecificacionesFunction.Arn
-      MethodResponses:
-        - ResponseParameters:
-            method.response.header.Access-Control-Allow-Headers: true
-            method.response.header.Access-Control-Allow-Methods: true
-            method.response.header.Access-Control-Allow-Origin: true
-          StatusCode: '200'
-      OperationName: especificaciones
-      ResourceId: !Ref ResourceEspecificaciones
-      RestApiId: !Ref MyApi
-
-  EspecificacionesGetByIdMethod:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      HttpMethod: GET
-      AuthorizationType: NONE
-      Integration:
-        IntegrationHttpMethod: POST
-        RequestTemplates:
           "application/json": "{  \"statusCode\": 200   }"
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: especifico
+      ResourceId: !Ref ResourceEspecificoId
+      RestApiId: !Ref MyApi
+
+  EspecificoGetMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        RequestTemplates:
+          "application/json": "{  \"statusCode\": 200  }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -4820,18 +4797,76 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub
           - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
-          - Arn: !GetAtt BusquedaPorIdEspecificacionesFunction.Arn
+          - Arn: !GetAtt ReadEspecificoFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: especificaciones
-      ResourceId: !Ref ResourceEspecificacionesId
+      OperationName: especifico
+      ResourceId: !Ref ResourceEspecifico
       RestApiId: !Ref MyApi
 
-  EspecificacionesPostMethod:
+  EspecificoGetByIdMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        RequestTemplates:
+          "application/json": "{  \"statusCode\": 200  }"
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
+          - Arn: !GetAtt BusquedaPorIdEspecificoFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: especifico
+      ResourceId: !Ref ResourceEspecificoId
+      RestApiId: !Ref MyApi
+
+  #  EspecificoGetFiltroMethod:
+  #    Type: AWS::ApiGateway::Method
+  #    Properties:
+  #      HttpMethod: GET
+  #      AuthorizationType: NONE
+  #      Integration:
+  #        IntegrationHttpMethod: POST
+  #        RequestTemplates:
+  #          "application/json": "{  \"statusCode\": 200   }"
+  #        IntegrationResponses:
+  #          - ResponseParameters:
+  #              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+  #              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+  #              method.response.header.Access-Control-Allow-Origin: "'*'"
+  #            StatusCode: '200'
+  #        Type: AWS_PROXY
+  #        Uri: !Sub
+  #          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
+  #          - Arn: !GetAtt BusquedaPorIdsFunction.Arn
+  #      MethodResponses:
+  #        - ResponseParameters:
+  #            method.response.header.Access-Control-Allow-Headers: true
+  #            method.response.header.Access-Control-Allow-Methods: true
+  #            method.response.header.Access-Control-Allow-Origin: true
+  #          StatusCode: '200'
+  #      OperationName: especifico
+  #      ResourceId: !Ref ResourceEspecificoId
+  #      RestApiId: !Ref MyApi
+
+  EspecificoPostMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: POST
@@ -4847,18 +4882,18 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub
           - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations"
-          - lambdaArn: !GetAtt CrearEspecificacionesFunction.Arn
+          - lambdaArn: !GetAtt CrearEspecificoFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: especificaciones
-      ResourceId: !Ref ResourceEspecificaciones
+      OperationName: especifico
+      ResourceId: !Ref ResourceEspecifico
       RestApiId: !Ref MyApi
 
-  EspecificacionesUpdateMethod:
+  EspecificoUpdateMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -4874,18 +4909,18 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub
           - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambArn}/invocations"
-          - lambArn: !GetAtt UpdateEspecificacionesFunction.Arn
+          - lambArn: !GetAtt UpdateEspecificoFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: especificaciones
-      ResourceId: !Ref ResourceEspecificacionesId
+      OperationName: especifico
+      ResourceId: !Ref ResourceEspecificoId
       RestApiId: !Ref MyApi
 
-  EspecificacionesDeleteMethod:
+  EspecificoDeleteMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -4901,22 +4936,22 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub
           - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdarn}/invocations"
-          - lambdarn: !GetAtt DeleteEspecificacionesFunction.Arn
+          - lambdarn: !GetAtt DeleteEspecificoFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: especificaciones
-      ResourceId: !Ref ResourceEspecificacionesId
+      OperationName: especifico
+      ResourceId: !Ref ResourceEspecificoId
       RestApiId: !Ref MyApi
 
-  ReadEspecificacionesFunction:
+  ReadEspecificoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: ReadEspecificaciones
-      Handler: com.inventarios.handler.especificaciones.ReadEspecificacionesHandler
+      FunctionName: ReadEspecifico
+      Handler: com.inventarios.handler.especifico.ReadEspecificoHandler
       Runtime: java21
       Environment:
         Variables:
@@ -4951,19 +4986,19 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /especificaciones
+            Path: /especifico
             Method: get
 
-  ReadEspecificacionesFunctionLogGroup:
+  ReadEspecificoFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${ReadEspecificacionesFunction}"
+      LogGroupName: !Sub "/aws/lambda/${ReadEspecificoFunction}"
       RetentionInDays: 1
 
-  BusquedaPorIdEspecificacionesFunction:
+  BusquedaPorIdEspecificoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: com.inventarios.handler.especificaciones.BusquedaPorIdEspecificacionesHandler
+      Handler: com.inventarios.handler.especifico.BusquedaPorIdEspecificoHandler
       Runtime: java21
       Environment:
         Variables:
@@ -4998,20 +5033,67 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /especificaciones/{id}
+            Path: /especifico/{id}
             Method: get
 
-  BusquedaPorIdEspecificacionesFunctionLogGroup:
+  BusquedaPorIdEspecificoFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdEspecificacionesFunction}"
+      LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdEspecificoFunction}"
       RetentionInDays: 1
 
-  CrearEspecificacionesFunction:
+  #  BusquedaPorIdsFunction:
+  #    Type: AWS::Serverless::Function
+  #    Properties:
+  #      Handler: com.inventarios.handler.especifico.BusquedaPorIdsHandler
+  #      Runtime: java21
+  #      Environment:
+  #        Variables:
+  #          DBName: !Ref PostgresDatabaseName
+  #          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+  #          user: !Ref PostgresUsername
+  #          pass: !Ref PostgresPassword
+  #          RDSSecretArn: !Ref RDSSecret
+  #      Policies:
+  #        - AWSLambdaBasicExecutionRole
+  #        - AWSLambda_ReadOnlyAccess
+  #        - AWSXrayWriteOnlyAccess
+  #        - AWSLambdaVPCAccessExecutionRole
+  #        - !Ref SecretsPolicy
+  #        - AWSLambdaExecute
+  #        - Version: '2012-10-17'
+  #          Statement:
+  #            - Effect: Allow
+  #              Action:
+  #                - rds:DescribeDBClusters
+  #                - rds:DescribeDBInstances
+  #                - rds:DescribeDBClusterEndpoints
+  #                - rds-db:Connect
+  #              Resource: "*"
+  #            - Effect: Allow
+  #              Action:
+  #                - 'secretsmanager:GetSecretValue'
+  #                - 'secretsmanager:DescribeSecret'
+  #              Resource: !Ref RDSSecret
+  #      Events:
+  #        BusquedaPorIdRequest:
+  #          Type: Api
+  #          Properties:
+  #            RestApiId: !Ref MyApi
+  #            Path: /especificofiltro/{id}
+  #            Method: get
+
+  #  BusquedaPorIdsFunctionLogGroup:
+  #    Type: AWS::Logs::LogGroup
+  #    Properties:
+  #      LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdsFunction}"
+  #      RetentionInDays: 1
+
+  CrearEspecificoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: CrearEspecificaciones
-      Handler: com.inventarios.handler.especificaciones.CreateEspecificacionesHandler
+      FunctionName: CrearEspecifico
+      Handler: com.inventarios.handler.especifico.CreateEspecificoHandler
       Runtime: java21
       Environment:
         Variables:
@@ -5046,21 +5128,20 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /especificaciones
+            Path: /especifico
             Method: post
 
-  CrearEspecificacionesFunctionLogGroup:
+  CrearEspecificoFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${CrearEspecificacionesFunction}"
+      LogGroupName: !Sub "/aws/lambda/${CrearEspecificoFunction}"
       RetentionInDays: 1
 
-
-  UpdateEspecificacionesFunction:
+  UpdateEspecificoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: UpdateEspecificaciones
-      Handler: com.inventarios.handler.especificaciones.UpdateEspecificacionesHandler
+      FunctionName: UpdateEspecifico
+      Handler: com.inventarios.handler.especifico.UpdateEspecificoHandler
       Runtime: java21
       Environment:
         Variables:
@@ -5095,20 +5176,20 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /especificaciones/{id}
+            Path: /especifico/{id}
             Method: put
 
-  UpdateEspecificacionesFunctionLogGroup:
+  UpdateEspecificoFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${UpdateEspecificacionesFunction}"
+      LogGroupName: !Sub "/aws/lambda/${UpdateEspecificoFunction}"
       RetentionInDays: 1
 
-  DeleteEspecificacionesFunction:
+  DeleteEspecificoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: DeleteEspecificaciones
-      Handler: com.inventarios.handler.especificaciones.DeleteEspecificacionesHandler
+      FunctionName: DeleteEspecifico
+      Handler: com.inventarios.handler.especifico.DeleteEspecificoHandler
       Runtime: java21
       Environment:
         Variables:
@@ -5143,58 +5224,559 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /especificaciones/{id}
+            Path: /especifico/{id}
             Method: delete
 
-  DeleteEspecificacionesFunctionLogGroup:
+  DeleteEspecificoFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${DeleteEspecificacionesFunction}"
+      LogGroupName: !Sub "/aws/lambda/${DeleteEspecificoFunction}"
       RetentionInDays: 1
 
-  EspecificacionesGetApiGatewayInvoke:
+  EspecificoGetApiGatewayInvoke:
     Type: AWS::Lambda::Permission
     DependsOn:
       - MyApi
-      - ReadEspecificacionesFunction
+      - ReadEspecificoFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt ReadEspecificacionesFunction.Arn
+      FunctionName: !GetAtt ReadEspecificoFunction.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/especificaciones
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/especifico
 
-  EspecificacionesPostApiGatewayInvoke:
+  EspecificoBusquedaApiGatewayInvoke:
     Type: AWS::Lambda::Permission
     DependsOn:
       - MyApi
-      - CrearEspecificacionesFunction
+      - BusquedaPorIdEspecificoFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt CrearEspecificacionesFunction.Arn
+      FunctionName: !GetAtt BusquedaPorIdEspecificoFunction.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/especificaciones
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/especifico/{id}
 
-  EspecificacionesUpdateApiGatewayInvoke:
+  EspecificoPostApiGatewayInvoke:
     Type: AWS::Lambda::Permission
     DependsOn:
       - MyApi
-      - UpdateEspecificacionesFunction
+      - CrearEspecificoFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt UpdateEspecificacionesFunction.Arn
+      FunctionName: !GetAtt CrearEspecificoFunction.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/PUT/especificaciones/{id}
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/especifico
 
-  EspecificacionesDeleteApiGatewayInvoke:
+  EspecificoUpdateApiGatewayInvoke:
     Type: AWS::Lambda::Permission
     DependsOn:
       - MyApi
-      - DeleteEspecificacionesFunction
+      - UpdateEspecificoFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt DeleteEspecificacionesFunction.Arn
+      FunctionName: !GetAtt UpdateEspecificoFunction.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/especificaciones/{id}
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/PUT/especifico/{id}
+
+  EspecificoDeleteApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - DeleteEspecificoFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt DeleteEspecificoFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/especifico/{id}
+
+  ############################## ESPECIFICOS #######################################
+  ResourceEspecificos:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt MyApi.RootResourceId
+      PathPart: especificos
+      RestApiId: !Ref MyApi
+
+  ResourceEspecificosId:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !Ref ResourceEspecificos
+      PathPart: "{id}"
+      RestApiId: !Ref MyApi
+
+  EspecificosOptionsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: OPTIONS
+      Integration:
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: MOCK
+        RequestTemplates:
+          "application/json": "{
+            \"statusCode\": 200
+            }"
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: especificos
+      ResourceId: !Ref ResourceEspecificos
+      RestApiId: !Ref MyApi
+
+  EspecificosIdOptionsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: OPTIONS
+      Integration:
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'PUT,DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: MOCK
+        RequestTemplates:
+          "application/json": "{  \"statusCode\": 200  }"
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: especificos
+      ResourceId: !Ref ResourceEspecificosId
+      RestApiId: !Ref MyApi
+
+  EspecificosGetMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        RequestTemplates:
+          "application/json": "{ \"statusCode\": 200 }"
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
+          - Arn: !GetAtt ReadEspecificosFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: especificos
+      ResourceId: !Ref ResourceEspecificos
+      RestApiId: !Ref MyApi
+
+  EspecificosGetByIdMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        RequestTemplates:
+          "application/json": "{  \"statusCode\": 200   }"
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
+          - Arn: !GetAtt BusquedaPorIdEspecificosFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: especificos
+      ResourceId: !Ref ResourceEspecificosId
+      RestApiId: !Ref MyApi
+
+  EspecificosPostMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations"
+          - lambdaArn: !GetAtt CrearEspecificosFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: especificos
+      ResourceId: !Ref ResourceEspecificos
+      RestApiId: !Ref MyApi
+
+  EspecificosUpdateMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: PUT
+      Integration:
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'PUT,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambArn}/invocations"
+          - lambArn: !GetAtt UpdateEspecificosFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: especificos
+      ResourceId: !Ref ResourceEspecificosId
+      RestApiId: !Ref MyApi
+
+  EspecificosDeleteMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: DELETE
+      Integration:
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdarn}/invocations"
+          - lambdarn: !GetAtt DeleteEspecificosFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: especificos
+      ResourceId: !Ref ResourceEspecificosId
+      RestApiId: !Ref MyApi
+
+  ReadEspecificosFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ReadEspecificos
+      Handler: com.inventarios.handler.especificaciones.ReadEspecificosHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        ReadRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /especificos
+            Method: get
+
+  ReadEspecificosFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${ReadEspecificosFunction}"
+      RetentionInDays: 1
+
+  BusquedaPorIdEspecificosFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.inventarios.handler.especificaciones.BusquedaPorIdEspecificosHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        BusquedaPorIdRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /especificos/{id}
+            Method: get
+
+  BusquedaPorIdEspecificosFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdEspecificosFunction}"
+      RetentionInDays: 1
+
+  CrearEspecificosFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CrearEspecificos
+      Handler: com.inventarios.handler.especificaciones.CreateEspecificosHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        CrearRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /especificos
+            Method: post
+
+  CrearEspecificosFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${CrearEspecificosFunction}"
+      RetentionInDays: 1
+
+
+  UpdateEspecificosFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateEspecificos
+      Handler: com.inventarios.handler.especificaciones.UpdateEspecificosHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        PutRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /especificos/{id}
+            Method: put
+
+  UpdateEspecificosFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${UpdateEspecificosFunction}"
+      RetentionInDays: 1
+
+  DeleteEspecificosFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DeleteEspecificos
+      Handler: com.inventarios.handler.especificaciones.DeleteEspecificosHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        DeleteRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /especificos/{id}
+            Method: delete
+
+  DeleteEspecificosFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${DeleteEspecificosFunction}"
+      RetentionInDays: 1
+
+  EspecificosGetApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - ReadEspecificosFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt ReadEspecificosFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/especificos
+
+  EspecificosPostApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - CrearEspecificosFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt CrearEspecificosFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/especificos
+
+  EspecificosUpdateApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - UpdateEspecificosFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt UpdateEspecificosFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/PUT/especificos/{id}
+
+  EspecificosDeleteApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - DeleteEspecificosFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt DeleteEspecificosFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/especificos/{id}
 
   RDSInstance:
     Type: AWS::RDS::DBInstance
