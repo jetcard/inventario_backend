@@ -13,7 +13,7 @@ import com.inventarios.model.Activo;
 import com.inventarios.model.Especificaciones;
 import java.sql.SQLException;
 import java.util.*;
-import com.inventarios.model.Grupo;
+
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -47,7 +47,7 @@ public abstract class CreateEspecificacionesAbstractHandler implements RequestHa
 
 
             String body = input.getBody();
-            //String body = "{\"modelo\":\"AS\",\"marca\":\"AS\",\"nroserie\":\"1\",\"fechacompra\":\"1\",\"importe\":777,\"grupoId\":1,\"account\":55555}";
+            //String body = "{\"modelo\":\"AS\",\"marca\":\"AS\",\"nroserie\":\"1\",\"fechacompra\":\"1\",\"importe\":777,\"categoriaId\":1,\"account\":55555}";
             logger.log("######################################### BODY ################################################");
             logger.log(body);
             logger.log("###############################################################################################");
@@ -64,7 +64,7 @@ public abstract class CreateEspecificacionesAbstractHandler implements RequestHa
             }
             logger.log("debe llegar aquí 2");
             // Obtener el ID del grupo del objeto especificaciones
-            //Long grupoId = especificaciones.getGrupo().getId();
+            //Long categoriaId = especificaciones.getGrupo().getId();
 
 
             logger.log("especificaciones: ");
@@ -80,7 +80,7 @@ public abstract class CreateEspecificacionesAbstractHandler implements RequestHa
             // Acceder a los datos del cuerpo de la solicitud
             String activoId = jsonNode.get("activoId").asText();
 
-            logger.log("id from path grupoId --->  " + activoId);
+            logger.log("id from path categoriaId --->  " + activoId);
             Long activoID = null;
             try {
                 activoID = Long.parseLong(activoId);
@@ -92,7 +92,7 @@ public abstract class CreateEspecificacionesAbstractHandler implements RequestHa
             }
             /*String bodyparaque = "{\"modelo\":\"+especificaciones.getModelo()+\",\"marca\":\"+especificaciones.getMarca()+" +
                     "\",\"nroserie\":\"+especificaciones.getNroserie()+\",\"fechacompra\":\"+especificaciones.getFechacompra()+" +
-                    "\",\"importe\":+especificaciones.getImporte()+,\"grupoId\":1,\"account\":+especificaciones.getAccount()}";
+                    "\",\"importe\":+especificaciones.getImporte()+,\"categoriaId\":1,\"account\":+especificaciones.getAccount()}";
             logger.log("bodyparaque: ");
             logger.log(bodyparaque);*/
             DSLContext dsl = RDSConexion.getDSL();
@@ -101,7 +101,7 @@ public abstract class CreateEspecificacionesAbstractHandler implements RequestHa
                     .where(DSL.field("id", Long.class).eq(activoID))
                     .fetchOptionalInto(Activo.class);
             if (!grupoSearch.isPresent()) {
-                //Long grupoId = especificaciones.getGrupo().getId();
+                //Long categoriaId = especificaciones.getGrupo().getId();
 
                 return response
                         .withBody("El grupo especificado no existe")
@@ -120,7 +120,7 @@ public abstract class CreateEspecificacionesAbstractHandler implements RequestHa
             save(especificaciones, activoID);
             logger.log(":::::::::::::::::::::::::::::::::: INSERCIÓN COMPLETA ::::::::::::::::::::::::::::::::::");
             list.add(especificaciones);
-            responseRest.getEspecificacionesResponse().setListaespecificacioness(list);
+            responseRest.getEspecificacionesResponse().setListaespecificaciones(list);
             responseRest.setMetadata("Respuesta ok", "00", "especificaciones guardado");
               /*} else {
                 responseRest.setMetadata("Respuesta nok", "-1", "especificaciones no encontrado");

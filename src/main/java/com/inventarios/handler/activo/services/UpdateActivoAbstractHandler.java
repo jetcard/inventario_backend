@@ -27,10 +27,10 @@ public abstract class UpdateActivoAbstractHandler implements RequestHandler<APIG
   }
 
   protected abstract void update(Long id,
-                                 Responsable responsable,
+                                 Custodio custodio,
                                  Articulo articulo,
                                  Tipo tipo,
-                                 Grupo grupo) throws SQLException;
+                                 Categoria categoria) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {

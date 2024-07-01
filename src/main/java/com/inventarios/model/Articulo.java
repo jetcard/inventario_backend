@@ -10,13 +10,11 @@ import java.io.Serializable;
 @Entity
 @Table(name="articulo")
 public class Articulo implements Serializable{
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String nombrearticulo;
   private String descriparticulo;
-
   public Long getId() {
     return id;
   }

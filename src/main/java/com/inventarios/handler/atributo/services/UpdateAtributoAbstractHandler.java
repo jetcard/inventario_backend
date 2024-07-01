@@ -6,11 +6,9 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
 import com.inventarios.model.*;
-
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -30,10 +28,10 @@ public abstract class UpdateAtributoAbstractHandler implements RequestHandler<AP
   }
 
   protected abstract void update(Long id,
-                                 Responsable responsable,
+                                 Custodio custodio,
                                  Articulo articulo,
                                  Tipo tipo,
-                                 Grupo grupo) throws SQLException;
+                                 Categoria categoria) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -61,10 +59,10 @@ public abstract class UpdateAtributoAbstractHandler implements RequestHandler<AP
         if (atributo != null) {
           if (id.equals(atributo.getId())) {
             update(atributo.getId(),
-                    atributo.getResponsable(),
+                    atributo.getCustodio(),
                     atributo.getArticulo(),
                     atributo.getTipo(),
-                    atributo.getGrupo());
+                    atributo.getCategoria());
           } else {
             return response
                     .withBody("Id in path does not match id in body")

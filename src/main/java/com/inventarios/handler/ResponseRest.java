@@ -2,7 +2,6 @@ package com.inventarios.handler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 public class ResponseRest {
     private ArrayList<HashMap<String, String>> metadata = new ArrayList<>();
     public ArrayList<HashMap<String, String>> getMetadata() {

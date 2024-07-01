@@ -11,7 +11,6 @@ import com.inventarios.handler.atributo.response.AtributoResponseRest;
 import com.inventarios.model.*;
 import java.sql.SQLException;
 import java.util.*;
-
 import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -68,17 +67,17 @@ public abstract class CreateAtributoAbstractHandler implements RequestHandler<AP
                     atributo.setAtributos(atributosListaInicial);
 
                     logger.log("atributo = "+atributo);
-                    Long responsableId = jsonNode.get("responsableId").asLong();
-                    logger.log("responsableId = "+responsableId);
+                    Long custodioId = jsonNode.get("custodioId").asLong();
+                    logger.log("custodioId = "+custodioId);
                     Long articuloId = jsonNode.get("articuloId").asLong();
                     logger.log("articuloId = "+articuloId);
                     Long tipoId = jsonNode.get("tipoId").asLong();
                     logger.log("tipoId = "+tipoId);
-                    Long grupoId = jsonNode.get("grupoId").asLong();
-                    logger.log("grupoId = "+grupoId);
+                    Long categoriaId = jsonNode.get("categoriaId").asLong();
+                    logger.log("categoriaId = "+categoriaId);
 
-                    Responsable responsable=new Responsable();
-                    responsable.setId(responsableId);
+                    Custodio custodio =new Custodio();
+                    custodio.setId(custodioId);
 
                     Articulo articulo=new Articulo();
                     articulo.setId(articuloId);
@@ -86,18 +85,18 @@ public abstract class CreateAtributoAbstractHandler implements RequestHandler<AP
                     Tipo tipo=new Tipo();
                     tipo.setId(tipoId);
 
-                    Grupo grupo=new Grupo();
-                    grupo.setId(grupoId);
+                    Categoria categoria =new Categoria();
+                    categoria.setId(categoriaId);
 
-                    atributo.setResponsable(responsable);
+                    atributo.setCustodio(custodio);
                     atributo.setArticulo(articulo);
                     atributo.setTipo(tipo);
-                    atributo.setGrupo(grupo);
+                    atributo.setCategoria(categoria);
 
-                    atributo.getResponsable().setId(responsableId);
+                    atributo.getCustodio().setId(custodioId);
                     atributo.getArticulo().setId(articuloId);
                     atributo.getTipo().setId(tipoId);
-                    atributo.getGrupo().setId(grupoId);
+                    atributo.getCategoria().setId(categoriaId);
 
                     long atributoID = getAtributoID(atributo);
                     atributo.setId(atributoID);

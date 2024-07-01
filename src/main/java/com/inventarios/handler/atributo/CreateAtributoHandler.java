@@ -8,9 +8,7 @@ import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import java.sql.SQLException;
 import java.util.List;
-
 public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
-
   @Override
   public int getAtributoID(Atributo atributo) throws SQLException {
     DSLContext dsl = RDSConexion.getDSL();
@@ -61,7 +59,7 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
         System.out.println("atributoid = "+atributo.getId());
         atributo.setId(atributoid);
         System.out.println("WHERE atributoid = "+atributo.getId());
-        System.out.println("WHERE getResponsable = "+atributo.getResponsable());
+        System.out.println("WHERE getResponsable = "+atributo.getCustodio());
         System.out.println("WHERE getArticulo = "+atributo.getArticulo());
         System.out.println("WHERE getAtributos = "+atributo.getAtributos().get(0));
         //System.out.println("WHERE atributoid = "+atributoid);
@@ -108,9 +106,9 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
 
   private int insertAtributo(DSLContext dsl, Atributo atributo) {
     return dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("responsableid"), atributo.getResponsable().getId())
+            .set(DSL.field("custodioid"), atributo.getCustodio().getId())
             .set(DSL.field("articuloid"), atributo.getArticulo().getId())
-            .set(DSL.field("grupoid"), atributo.getGrupo().getId())
+            .set(DSL.field("categoriaid"), atributo.getCategoria().getId())
             .set(DSL.field("tipoid"), atributo.getTipo().getId())
             .returningResult(DSL.field("id"))
             .fetchOne()
@@ -119,9 +117,9 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
 
   private int updateAtributo(DSLContext dsl, Atributo atributo) {
     return dsl.update(ATRIBUTO_TABLE)
-          .set(DSL.field("responsableid"), atributo.getResponsable().getId())
+          .set(DSL.field("custodioid"), atributo.getCustodio().getId())
           .set(DSL.field("articuloid"), atributo.getArticulo().getId())
-            .set(DSL.field("grupoid"), atributo.getGrupo().getId())
+            .set(DSL.field("categoriaid"), atributo.getCategoria().getId())
             .set(DSL.field("tipoid"), atributo.getTipo().getId())
           .where(DSL.field("id").eq(atributo.getId())) // Especificar la condición de actualización
           .execute(); // Ejecutar la actualización y devolver el número de filas afectadas
@@ -129,7 +127,7 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
 
   /*private void insertAtributox(DSLContext dsl, Atributo atributo) {
     dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("responsableId"), atributo.getResponsable().getId())
+            .set(DSL.field("custodioId"), atributo.getResponsable().getId())
             .set(DSL.field("articuloId"), atributo.getArticulo().getId())
             .execute();
   }*/
@@ -165,7 +163,7 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
 
   private Long insertAtributo(DSLContext dsl, Atributo atributo) {
     return dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("responsableId"), atributo.getResponsable().getId())
+            .set(DSL.field("custodioId"), atributo.getResponsable().getId())
             .set(DSL.field("articuloId"), atributo.getArticulo().getId())
             .returningResult(DSL.field("atributoId"))
             .fetchOne()
@@ -200,7 +198,7 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
 
   private Long insertAtributo(DSLContext dsl, Atributo atributo) {
     return dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("responsableId"), atributo.getResponsable().getId())
+            .set(DSL.field("custodioId"), atributo.getResponsable().getId())
             .set(DSL.field("articuloId"), atributo.getArticulo().getId())
             .returningResult(DSL.field("atributoId"))
             .fetchOne()
@@ -235,7 +233,7 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
 
   private Long insertAtributo(DSLContext dsl, Atributo atributo) {
     return dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("responsableId"), atributo.getResponsable().getId())
+            .set(DSL.field("custodioId"), atributo.getResponsable().getId())
             .set(DSL.field("articuloId"), atributo.getArticulo().getId())
             .returningResult(DSL.field("id"))
             .fetchOne()
@@ -267,7 +265,7 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
 
   private Long insertAtributo(DSLContext dsl, Atributo atributo) {
     return dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("responsableId"), atributo.getResponsable().getId())
+            .set(DSL.field("custodioId"), atributo.getResponsable().getId())
             .set(DSL.field("articuloId"), atributo.getArticulo().getId())
             .returningResult(DSL.field("id"))
             .fetchOne()
@@ -299,7 +297,7 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
 
   private Long insertAtributo(DSLContext dsl, Atributo atributo) {
     return dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("responsableId"), atributo.getResponsable().getId())
+            .set(DSL.field("custodioId"), atributo.getResponsable().getId())
             .set(DSL.field("articuloId"), atributo.getArticulo().getId())
             .returningResult(DSL.field("id"))
             .fetchOne()
@@ -320,7 +318,7 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
         DSLContext transactionalDsl = DSL.using(configuration);
 
         Long atributoId = transactionalDsl.insertInto(ATRIBUTO_TABLE)
-                .set(DSL.field("responsableId"), atributo.getResponsable().getId())
+                .set(DSL.field("custodioId"), atributo.getResponsable().getId())
                 .set(DSL.field("articuloId"), atributo.getArticulo().getId())
                 .returningResult(DSL.field("id"))
                 .fetchOne()
@@ -338,14 +336,14 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
     }
   }*/
 
-  /*protected void save(Atributo atributo, Atributos atributos, Long grupoID) {
+  /*protected void save(Atributo atributo, Atributos atributos, Long categoriaId) {
     DSLContext dsl = DatabaseConnection.getDSL();
     try {
       dsl.transaction(configuration -> {
         DSLContext transactionalDsl = DSL.using(configuration);
 
         Long atributoId = transactionalDsl.insertInto(ATRIBUTO_TABLE)
-                .set(DSL.field("responsableId"), atributo.getResponsable().getId())
+                .set(DSL.field("custodioId"), atributo.getResponsable().getId())
                 .set(DSL.field("articuloId"), atributo.getArticulo().getId())
                 .returningResult(DSL.field("id"))
                 .fetchOne()
@@ -360,10 +358,10 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
       // Manejar el error de la transacción
     }
   }*/
-  /*protected void save(Atributo atributo, Atributos atributos, Long grupoID) {
+  /*protected void save(Atributo atributo, Atributos atributos, Long categoriaId) {
     DSLContext dsl = DatabaseConnection.getDSL();
     Long atributoId = dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("responsableId"), atributo.getResponsable().getId())
+            .set(DSL.field("custodioId"), atributo.getResponsable().getId())
             .set(DSL.field("articuloId"), atributo.getArticulo().getId())
             .returningResult(DSL.field("id"))
             .fetchOne()
@@ -379,5 +377,5 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
     dsl.insertInto(ATRIBUTO_TABLE)
             .set(DSL.field("responsable"), atributo.getResponsable())
             .set(DSL.field("articulo"), atributo.getArticulo())
-            .set(DSL.field("grupoId"), grupoID)
+            .set(DSL.field("categoriaId"), categoriaId)
             .execute();*/

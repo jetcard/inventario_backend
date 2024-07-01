@@ -20,23 +20,23 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
   protected final static Table<Record> ATRIBUTO_TABLE = table("atributo");
   protected final static Table<Record> ATRIBUTOS_TABLE = table("atributos");
   protected final static Field<Long> ATRIBUTO_ID = field(name("atributo", "id"), Long.class);
-  protected final static Field<Long> ATRIBUTO_RESPONSABLE_ID = field(name("atributo", "responsableid"), Long.class);
+  protected final static Field<Long> ATRIBUTO_RESPONSABLE_ID = field(name("atributo", "custodioid"), Long.class);
   protected final static Field<Long> ATRIBUTO_ARTICULO_ID = field(name("atributo", "articuloid"), Long.class);
   protected final static Field<Long> ATRIBUTOS_ID = field(name("atributos", "id"), Long.class);
   protected final static Field<Long> ATRIBUTOS_ATRIBUTOID = field(name("atributos", "atributoid"), Long.class);
   protected final static Field<String> ATRIBUTOS_NOMBREATRIBUTO = field(name("atributos", "nombreatributo"), String.class);
 
-  protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
+  protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("custodio");
   protected static final Field<String> RESPONSABLE_TABLE_COLUMNA = DSL.field("arearesponsable", String.class);
   protected final static Table<Record> ARTICULO_TABLE = table("articulo");
   protected static final Field<String> ARTICULO_TABLE_COLUMNA = DSL.field("nombrearticulo", String.class);
   protected final static Table<Record> TIPO_TABLE = DSL.table("tipo");
   protected static final Field<String> TIPO_TABLE_COLUMNA = DSL.field("nombretipo", String.class);
-  protected final static Table<Record> GRUPO_TABLE = DSL.table("grupo");
+  protected final static Table<Record> GRUPO_TABLE = DSL.table("categoria");
   protected static final Field<String> GRUPO_TABLE_COLUMNA = DSL.field("nombregrupo", String.class);
 
   protected final static Field<Long> ATRIBUTO_TIPO_ID = field(name("atributo", "tipoid"), Long.class);
-  protected final static Field<Long> ATRIBUTO_GRUPO_ID = field(name("atributo", "grupoid"), Long.class);
+  protected final static Field<Long> ATRIBUTO_GRUPO_ID = field(name("atributo", "categoriaid"), Long.class);
 
   final static Map<String, String> headers = new HashMap<>();
 
@@ -88,10 +88,10 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
           atributo.setId(atributoId);
           // Aquí deberías asignar los valores correspondientes a responsable y articulo
           // Consultas adicionales o mapeos deben ser implementados para Responsable y Articulo
-          Responsable responsable = new Responsable();
-          responsable.setId(record.get(ATRIBUTO_RESPONSABLE_ID));
-          responsable.setArearesponsable(mostrarResponsable(responsable.getId()));
-          atributo.setResponsable(responsable);
+          Custodio custodio = new Custodio();
+          custodio.setId(record.get(ATRIBUTO_RESPONSABLE_ID));
+          custodio.setArearesponsable(mostrarResponsable(custodio.getId()));
+          atributo.setCustodio(custodio);
           //atributo.setResponsable(findResponsableById(record.get(ATRIBUTO_RESPONSABLE_ID)));
           Articulo articulo = new Articulo();
           articulo.setId(record.get(ATRIBUTO_ARTICULO_ID));
@@ -104,10 +104,10 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
           tipo.setNombretipo(mostrarTipoBien(tipo.getId()));
           atributo.setTipo(tipo);
 
-          Grupo grupo=new Grupo();
-          grupo.setId(record.get(ATRIBUTO_GRUPO_ID));
-          grupo.setNombregrupo(mostrarGrupo(grupo.getId()));
-          atributo.setGrupo(grupo);
+          Categoria categoria =new Categoria();
+          categoria.setId(record.get(ATRIBUTO_GRUPO_ID));
+          categoria.setNombregrupo(mostrarGrupo(categoria.getId()));
+          atributo.setCategoria(categoria);
 
           atributo.setAtributos(new ArrayList<>());
           atributoMap.put(atributoId, atributo);
@@ -131,14 +131,14 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
       atributo.setId(record.getValue("id", Long.class));
 
       / *Responsable responsable=new Responsable();
-      responsable.setId(record.getValue("responsableid", Long.class));
+      responsable.setId(record.getValue("custodioid", Long.class));
       Articulo articulo=new Articulo();
       articulo.setId(record.getValue("articuloid", Long.class));
       atributo.setResponsable(responsable);
       atributo.setArticulo(articulo);* /
 
       Responsable responsable = new Responsable();
-      responsable.setId(record.getValue("responsableid", Long.class));
+      responsable.setId(record.getValue("custodioid", Long.class));
       responsable.setArearesponsable(mostrarResponsable(responsable.getId()));
       atributo.setResponsable(responsable);
 

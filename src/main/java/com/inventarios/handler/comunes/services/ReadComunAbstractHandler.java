@@ -19,11 +19,11 @@ import org.jooq.impl.DSL;
 public abstract class ReadComunAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   protected final static Table<Record> COMUN_TABLE = DSL.table("comun");
-  protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
+  protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("custodio");
   protected static final Field<String> RESPONSABLE_TABLE_COLUMNA = DSL.field("arearesponsable", String.class);
   protected final static Table<Record> TIPO_TABLE = DSL.table("tipo");
   protected static final Field<String> TIPO_TABLE_COLUMNA = DSL.field("nombretipo", String.class);
-  protected final static Table<Record> GRUPO_TABLE = DSL.table("grupo");
+  protected final static Table<Record> GRUPO_TABLE = DSL.table("categoria");
   protected static final Field<String> GRUPO_TABLE_COLUMNA = DSL.field("nombregrupo", String.class);
 
   final static Map<String, String> headers = new HashMap<>();
@@ -85,22 +85,22 @@ public abstract class ReadComunAbstractHandler implements RequestHandler<APIGate
       comun.setDescripcomun(record.getValue("descripcomun", String.class));
       //comun.setDescripcortacomun(record.getValue("descripcortacomun", String.class));
 
-      //comun.setGrupo(record.getValue("grupoId", Grupo.class));
+      //comun.setGrupo(record.getValue("categoriaId", Grupo.class));
       ///comun.setPicture(record.getValue("picture", byte[].class));
-      Responsable responsable = new Responsable();
-      responsable.setId(record.getValue("responsableid", Long.class));
-      responsable.setArearesponsable(mostrarResponsable(responsable.getId()));
-      comun.setResponsable(responsable);
+      Custodio custodio = new Custodio();
+      custodio.setId(record.getValue("custodioid", Long.class));
+      custodio.setArearesponsable(mostrarResponsable(custodio.getId()));
+      comun.setResponsable(custodio);
 
       Tipo tipo = new Tipo();
       tipo.setId(record.getValue("tipoid", Long.class));
       tipo.setNombretipo(mostrarTipoBien(tipo.getId()));
       comun.setTipo(tipo);
 
-      Grupo grupo=new Grupo();
-      grupo.setId(record.getValue("grupoid", Long.class));
-      grupo.setNombregrupo(mostrarGrupo(grupo.getId()));
-      comun.setGrupo(grupo);
+      Categoria categoria =new Categoria();
+      categoria.setId(record.getValue("categoriaid", Long.class));
+      categoria.setNombregrupo(mostrarGrupo(categoria.getId()));
+      comun.setGrupo(categoria);
 
       listaComunes.add(comun);
     }

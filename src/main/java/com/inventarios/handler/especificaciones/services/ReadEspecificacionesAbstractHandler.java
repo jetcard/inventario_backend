@@ -35,7 +35,7 @@ public abstract class ReadEspecificacionesAbstractHandler implements RequestHand
     headers.put("Access-Control-Allow-Methods", "GET");
   }
 
-  protected abstract Result<Record3<Long, Long, String>> read(long responsableId, long articuloId, long tipoId, long grupoId) throws SQLException;
+  protected abstract Result<Record3<Long, Long, String>> read(long custodioId, long articuloId, long tipoId, long categoriaId) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -50,19 +50,19 @@ public abstract class ReadEspecificacionesAbstractHandler implements RequestHand
     // Extraer los valores específicos
     String output = "";
     //comparar con los valores de la tabla especificaciones
-    long responsableId  = queryParams.containsKey("responsableId") ? Long.parseLong(queryParams.get("responsableId")) : 0;
+    long custodioId  = queryParams.containsKey("custodioId") ? Long.parseLong(queryParams.get("custodioId")) : 0;
     long articuloId     = queryParams.containsKey("articuloId") ? Long.parseLong(queryParams.get("articuloId")) : 0;
     long tipoId         = queryParams.containsKey("tipoId") ? Long.parseLong(queryParams.get("tipoId")) : 0;
-    long grupoId        = queryParams.containsKey("grupoId") ? Long.parseLong(queryParams.get("grupoId")) : 0;
+    long categoriaId        = queryParams.containsKey("categoriaId") ? Long.parseLong(queryParams.get("categoriaId")) : 0;
 
     // Imprimir los valores en los logs (opcional)
-    logger.log("responsableId: " + responsableId);
+    logger.log("custodioId: " + custodioId);
     logger.log("articuloId: " + articuloId);
     logger.log("tipoId: " + tipoId);
-    logger.log("grupoId: " + grupoId);
+    logger.log("categoriaId: " + categoriaId);
 
     try {
-      Result<Record3<Long, Long, String>> result = read(responsableId, articuloId, tipoId, grupoId);
+      Result<Record3<Long, Long, String>> result = read(custodioId, articuloId, tipoId, categoriaId);
       responseRest.getAtributosResponse().setListaatributoss(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "especificacioness encontrados");
       Gson gson = GsonFactory.createGson();

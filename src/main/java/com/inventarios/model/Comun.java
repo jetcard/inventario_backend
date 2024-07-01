@@ -3,7 +3,6 @@ package com.inventarios.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
-
 @Entity
 @Table(name="comun")
 public class Comun implements Serializable {
@@ -13,7 +12,7 @@ public class Comun implements Serializable {
 
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties( {"hibernateLazyInitializer", "handler"})
-    private Responsable responsable;
+    private Custodio custodio;
 
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties ( {"hibernateLazyInitializer", "handler"})
@@ -21,7 +20,7 @@ public class Comun implements Serializable {
 
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties ( {"hibernateLazyInitializer", "handler"})
-    private Grupo grupo;
+    private Categoria categoria;
 
     private String descripcomun;
     //private String descripcortacomun;
@@ -34,12 +33,12 @@ public class Comun implements Serializable {
         this.id = id;
     }
 
-    public Responsable getResponsable() {
-        return responsable;
+    public Custodio getResponsable() {
+        return custodio;
     }
 
-    public void setResponsable(Responsable responsable) {
-        this.responsable = responsable;
+    public void setResponsable(Custodio custodio) {
+        this.custodio = custodio;
     }
 
     public Tipo getTipo() {
@@ -50,12 +49,12 @@ public class Comun implements Serializable {
         this.tipo = tipo;
     }
 
-    public Grupo getGrupo() {
-        return grupo;
+    public Categoria getGrupo() {
+        return categoria;
     }
 
-    public void setGrupo(Grupo grupo) {
-        this.grupo = grupo;
+    public void setGrupo(Categoria categoria) {
+        this.categoria = categoria;
     }
 
     public String getDescripcomun() {

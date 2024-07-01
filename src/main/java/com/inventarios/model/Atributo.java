@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.List;
-
 @Entity
 @Table(name="atributo")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -13,23 +12,18 @@ public class Atributo  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties( {"hibernateLazyInitializer", "handler"})
-    private Responsable responsable;
-
+    private Custodio custodio;
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties ( {"hibernateLazyInitializer", "handler"})
     private Articulo articulo;
-
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties ( {"hibernateLazyInitializer", "handler"})
     private Tipo tipo;
-
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties ( {"hibernateLazyInitializer", "handler"})
-    private Grupo grupo;
-
+    private Categoria categoria;
     @OneToMany(mappedBy = "atributo", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Atributos> atributos;
@@ -42,12 +36,12 @@ public class Atributo  implements Serializable {
         this.id = id;
     }
 
-    public Responsable getResponsable() {
-        return responsable;
+    public Custodio getCustodio() {
+        return custodio;
     }
 
-    public void setResponsable(Responsable responsable) {
-        this.responsable = responsable;
+    public void setCustodio(Custodio custodio) {
+        this.custodio = custodio;
     }
 
     public Articulo getArticulo() {
@@ -66,12 +60,12 @@ public class Atributo  implements Serializable {
         this.tipo = tipo;
     }
 
-    public Grupo getGrupo() {
-        return grupo;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void setGrupo(Grupo grupo) {
-        this.grupo = grupo;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
     public List<Atributos> getAtributos() {

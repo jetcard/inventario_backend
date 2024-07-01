@@ -2,7 +2,6 @@ package com.inventarios.model;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
-
 @Entity
 @Table(name="parametro")
 public class Parametro implements Serializable {

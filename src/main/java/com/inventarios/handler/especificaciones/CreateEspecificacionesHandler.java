@@ -12,10 +12,8 @@ public class CreateEspecificacionesHandler extends CreateEspecificacionesAbstrac
     dsl.insertInto(ESPECIFICACIONES_TABLE)
             //.set(DSL.field("descripespecifico"), especificaciones.getDescripespecifico())
             .set(DSL.field("nombreatributo"), especificaciones.getNombreatributo().toUpperCase())
-            .set(DSL.field("nombreatributo"), especificaciones.getDescripcionatributo())
+            .set(DSL.field("descripcionatributo"), especificaciones.getDescripcionatributo().toUpperCase())
             .set(DSL.field("especificacionid"), activoID)
             .execute();
-
   }
-
 }

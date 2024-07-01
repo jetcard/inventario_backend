@@ -45,7 +45,6 @@ Resources:
         Types:
           - REGIONAL
 
-
   ########################### AUTHORIZATION ###################################
   ResourceKeycloak:
     Type: AWS::ApiGateway::Resource
@@ -68,9 +67,7 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -145,22 +142,22 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/keycloak
 
-  ############################## GRUPOS #######################################
-  ResourceGrupo:
+  ############################## CATEGORIAS #######################################
+  ResourceCategoria:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt MyApi.RootResourceId
-      PathPart: grupos
+      PathPart: categorias
       RestApiId: !Ref MyApi
 
-  ResourceGrupoId:
+  ResourceCategoriaId:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !Ref ResourceGrupo
+      ParentId: !Ref ResourceCategoria
       PathPart: "{id}"
       RestApiId: !Ref MyApi
 
-  GrupoOptionsMethod:
+  CategoriaOptionsMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -174,20 +171,18 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: grupos
-      ResourceId: !Ref ResourceGrupo
+      OperationName: categorias
+      ResourceId: !Ref ResourceCategoria
       RestApiId: !Ref MyApi
 
-  GrupoIdOptionsMethod:
+  CategoriaIdOptionsMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -210,11 +205,11 @@ Resources:
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: grupos
-      ResourceId: !Ref ResourceGrupoId
+      OperationName: categorias
+      ResourceId: !Ref ResourceCategoriaId
       RestApiId: !Ref MyApi
 
-  GrupoGetMethod:
+  CategoriaGetMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: GET
@@ -232,18 +227,18 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub
           - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
-          - Arn: !GetAtt ReadGrupoFunction.Arn
+          - Arn: !GetAtt ReadCategoriaFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: grupos
-      ResourceId: !Ref ResourceGrupo
+      OperationName: categorias
+      ResourceId: !Ref ResourceCategoria
       RestApiId: !Ref MyApi
 
-  GrupoGetByIdMethod:
+  CategoriaGetByIdMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: GET
@@ -261,18 +256,18 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub
           - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
-          - Arn: !GetAtt BusquedaGrupoFunction.Arn
+          - Arn: !GetAtt BusquedaCategoriaFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: grupos
-      ResourceId: !Ref ResourceGrupoId
+      OperationName: categorias
+      ResourceId: !Ref ResourceCategoriaId
       RestApiId: !Ref MyApi
 
-  GrupoPostMethod:
+  CategoriaPostMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: POST
@@ -288,18 +283,18 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub
           - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations"
-          - lambdaArn: !GetAtt CrearGrupoFunction.Arn
+          - lambdaArn: !GetAtt CrearCategoriaFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: grupos
-      ResourceId: !Ref ResourceGrupo
+      OperationName: categorias
+      ResourceId: !Ref ResourceCategoria
       RestApiId: !Ref MyApi
 
-  GrupoUpdateMethod:
+  CategoriaUpdateMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -315,18 +310,18 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub
           - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambArn}/invocations"
-          - lambArn: !GetAtt UpdateGrupoFunction.Arn
+          - lambArn: !GetAtt UpdateCategoriaFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: grupos
-      ResourceId: !Ref ResourceGrupoId
+      OperationName: categorias
+      ResourceId: !Ref ResourceCategoriaId
       RestApiId: !Ref MyApi
 
-  GrupoDeleteMethod:
+  CategoriaDeleteMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -342,22 +337,22 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub
           - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdarn}/invocations"
-          - lambdarn: !GetAtt DeleteGrupoFunction.Arn
+          - lambdarn: !GetAtt DeleteCategoriaFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: grupos
-      ResourceId: !Ref ResourceGrupoId
+      OperationName: categorias
+      ResourceId: !Ref ResourceCategoriaId
       RestApiId: !Ref MyApi
 
-  ReadGrupoFunction:
+  ReadCategoriaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: ReadGrupo
-      Handler: com.inventarios.handler.grupos.ReadGrupoHandler
+      FunctionName: ReadCategoria
+      Handler: com.inventarios.handler.categoria.ReadCategoriaHandler
       Runtime: java21
       Environment:
         Variables:
@@ -392,20 +387,20 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /grupos
+            Path: /categorias
             Method: get
 
-  ReadGrupoFunctionLogGroup:
+  ReadCategoriaFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${ReadGrupoFunction}"
+      LogGroupName: !Sub "/aws/lambda/${ReadCategoriaFunction}"
       RetentionInDays: 1
 
-  BusquedaGrupoFunction:
+  BusquedaCategoriaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: BusquedaGrupo
-      Handler: com.inventarios.handler.grupos.BusquedaGrupoHandler
+      FunctionName: BusquedaCategoria
+      Handler: com.inventarios.handler.categoria.BusquedaCategoriaHandler
       Runtime: java21
       Environment:
         Variables:
@@ -440,20 +435,20 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /grupos/{id}
+            Path: /categorias/{id}
             Method: get
 
-  BusquedaGrupoFunctionLogGroup:
+  BusquedaCategoriaFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${BusquedaGrupoFunction}"
+      LogGroupName: !Sub "/aws/lambda/${BusquedaCategoriaFunction}"
       RetentionInDays: 1
 
-  CrearGrupoFunction:
+  CrearCategoriaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: CrearGrupo
-      Handler: com.inventarios.handler.grupos.CreateGrupoHandler
+      FunctionName: CrearCategoria
+      Handler: com.inventarios.handler.categoria.CreateCategoriaHandler
       Runtime: java21
       Environment:
         Variables:
@@ -488,20 +483,20 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /grupos
+            Path: /categorias
             Method: post
 
-  CrearGrupoFunctionLogGroup:
+  CrearCategoriaFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${CrearGrupoFunction}"
+      LogGroupName: !Sub "/aws/lambda/${CrearCategoriaFunction}"
       RetentionInDays: 1
 
-  UpdateGrupoFunction:
+  UpdateCategoriaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: UpdateGrupo
-      Handler: com.inventarios.handler.grupos.UpdateGrupoHandler
+      FunctionName: UpdateCategoria
+      Handler: com.inventarios.handler.categoria.UpdateCategoriaHandler
       Runtime: java21
       Environment:
         Variables:
@@ -536,20 +531,20 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /grupos/{id}
+            Path: /categorias/{id}
             Method: put
 
-  UpdateGrupoFunctionLogGroup:
+  UpdateCategoriaFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${UpdateGrupoFunction}"
+      LogGroupName: !Sub "/aws/lambda/${UpdateCategoriaFunction}"
       RetentionInDays: 1
 
-  DeleteGrupoFunction:
+  DeleteCategoriaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: DeleteGrupo
-      Handler: com.inventarios.handler.grupos.DeleteGrupoHandler
+      FunctionName: DeleteCategoria
+      Handler: com.inventarios.handler.categoria.DeleteCategoriaHandler
       Runtime: java21
       Environment:
         Variables:
@@ -584,71 +579,71 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /grupos/{id}
+            Path: /categorias/{id}
             Method: delete
 
-  DeleteGrupoFunctionLogGroup:
+  DeleteCategoriaFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${DeleteGrupoFunction}"
+      LogGroupName: !Sub "/aws/lambda/${DeleteCategoriaFunction}"
       RetentionInDays: 1
 
-  GrupoGetApiGatewayInvoke:
+  CategoriaGetApiGatewayInvoke:
     Type: AWS::Lambda::Permission
     DependsOn:
       - MyApi
-      - ReadGrupoFunction
+      - ReadCategoriaFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt ReadGrupoFunction.Arn
+      FunctionName: !GetAtt ReadCategoriaFunction.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/grupos
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/categorias
 
-  GrupoPostApiGatewayInvoke:
+  CategoriaPostApiGatewayInvoke:
     Type: AWS::Lambda::Permission
     DependsOn:
       - MyApi
-      - CrearGrupoFunction
+      - CrearCategoriaFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt CrearGrupoFunction.Arn
+      FunctionName: !GetAtt CrearCategoriaFunction.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/grupos
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/categorias
 
-  GrupoGetByIdApiGatewayInvoke:
+  CategoriaGetByIdApiGatewayInvoke:
     Type: AWS::Lambda::Permission
     DependsOn:
       - MyApi
-      - BusquedaGrupoFunction
+      - BusquedaCategoriaFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt BusquedaGrupoFunction.Arn
+      FunctionName: !GetAtt BusquedaCategoriaFunction.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/grupos/{id}
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/categorias/{id}
 
-  GrupoUpdateApiGatewayInvoke:
+  CategoriaUpdateApiGatewayInvoke:
     Type: AWS::Lambda::Permission
     DependsOn:
       - MyApi
-      - UpdateGrupoFunction
+      - UpdateCategoriaFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt UpdateGrupoFunction.Arn
+      FunctionName: !GetAtt UpdateCategoriaFunction.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/PUT/grupos/{id}
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/PUT/categorias/{id}
 
-  GrupoDeleteApiGatewayInvoke:
+  CategoriaDeleteApiGatewayInvoke:
     Type: AWS::Lambda::Permission
     DependsOn:
       - MyApi
-      - DeleteGrupoFunction
+      - DeleteCategoriaFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt DeleteGrupoFunction.Arn
+      FunctionName: !GetAtt DeleteCategoriaFunction.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/grupos/{id}
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/categorias/{id}
 
-  ############################## ACTIVOS #######################################
+  ############################## ACTIVO #######################################
   #/activos
   ResourceActivo:
     Type: AWS::ApiGateway::Resource
@@ -706,7 +701,7 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{  \"statusCode\": 200 }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -725,9 +720,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -757,9 +750,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -865,7 +856,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: ReadActivo
-      Handler: com.inventarios.handler.activos.ReadActivoHandler
+      Handler: com.inventarios.handler.activo.ReadActivoHandler
       Runtime: java21
       Environment:
         Variables:
@@ -913,7 +904,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: BusquedaActivo
-      Handler: com.inventarios.handler.activos.BusquedaActivoHandler
+      Handler: com.inventarios.handler.activo.BusquedaPorIdActivoHandler
       Runtime: java21
       Environment:
         Variables:
@@ -961,7 +952,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: CrearActivo
-      Handler: com.inventarios.handler.activos.CreateActivoHandler
+      Handler: com.inventarios.handler.activo.CreateActivoHandler
       Runtime: java21
       Environment:
         Variables:
@@ -1009,7 +1000,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: UpdateActivo
-      Handler: com.inventarios.handler.activos.UpdateActivoHandler
+      Handler: com.inventarios.handler.activo.UpdateActivoHandler
       Runtime: java21
       Environment:
         Variables:
@@ -1057,7 +1048,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: DeleteActivo
-      Handler: com.inventarios.handler.activos.DeleteActivoHandler
+      Handler: com.inventarios.handler.activo.DeleteActivoHandler
       Runtime: java21
       Environment:
         Variables:
@@ -1156,22 +1147,22 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/activos/{id}
 
-  ###############################  RESPONSABLE  ###############################
-  ResourceResponsable:
+  ###############################  CUSTODIO  ###############################
+  ResourceCustodio:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt MyApi.RootResourceId
-      PathPart: responsables
+      PathPart: custodios
       RestApiId: !Ref MyApi
 
-  ResourceResponsableId:
+  ResourceCustodioId:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !Ref ResourceResponsable
+      ParentId: !Ref ResourceCustodio
       PathPart: "{id}"
       RestApiId: !Ref MyApi
 
-  ResponsableOptionsMethod:
+  CustodioOptionsMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -1194,11 +1185,11 @@ Resources:
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: responsables
-      ResourceId: !Ref ResourceResponsable
+      OperationName: custodios
+      ResourceId: !Ref ResourceCustodio
       RestApiId: !Ref MyApi
 
-  ResponsableIdOptionsMethod:
+  CustodioIdOptionsMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -1212,20 +1203,18 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: responsables
-      ResourceId: !Ref ResourceResponsableId
+      OperationName: custodios
+      ResourceId: !Ref ResourceCustodioId
       RestApiId: !Ref MyApi
 
-  ResponsableGetMethod:
+  CustodioGetMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: GET
@@ -1233,9 +1222,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -1245,18 +1232,18 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub
           - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
-          - Arn: !GetAtt ReadResponsableFunction.Arn
+          - Arn: !GetAtt ReadCustodioFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: responsables
-      ResourceId: !Ref ResourceResponsable
+      OperationName: custodios
+      ResourceId: !Ref ResourceCustodio
       RestApiId: !Ref MyApi
 
-  ResponsableGetByIdMethod:
+  CustodioGetByIdMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: GET
@@ -1264,9 +1251,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -1276,18 +1261,18 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub
           - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
-          - Arn: !GetAtt BusquedaPorIdResponsableFunction.Arn
+          - Arn: !GetAtt BusquedaPorIdCustodioFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: responsables
-      ResourceId: !Ref ResourceResponsableId
+      OperationName: custodios
+      ResourceId: !Ref ResourceCustodioId
       RestApiId: !Ref MyApi
 
-  ResponsablePostMethod:
+  CustodioPostMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: POST
@@ -1303,18 +1288,18 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub
           - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations"
-          - lambdaArn: !GetAtt CrearResponsableFunction.Arn
+          - lambdaArn: !GetAtt CrearCustodioFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: responsables
-      ResourceId: !Ref ResourceResponsable
+      OperationName: custodios
+      ResourceId: !Ref ResourceCustodio
       RestApiId: !Ref MyApi
 
-  ResponsableUpdateMethod:
+  CustodioUpdateMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -1330,18 +1315,18 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub
           - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambArn}/invocations"
-          - lambArn: !GetAtt UpdateResponsableFunction.Arn
+          - lambArn: !GetAtt UpdateCustodioFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: responsables
-      ResourceId: !Ref ResourceResponsableId
+      OperationName: custodios
+      ResourceId: !Ref ResourceCustodioId
       RestApiId: !Ref MyApi
 
-  ResponsableDeleteMethod:
+  CustodioDeleteMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       AuthorizationType: NONE
@@ -1357,22 +1342,22 @@ Resources:
         Type: AWS_PROXY
         Uri: !Sub
           - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdarn}/invocations"
-          - lambdarn: !GetAtt DeleteResponsableFunction.Arn
+          - lambdarn: !GetAtt DeleteCustodioFunction.Arn
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
             method.response.header.Access-Control-Allow-Methods: true
             method.response.header.Access-Control-Allow-Origin: true
           StatusCode: '200'
-      OperationName: responsables
-      ResourceId: !Ref ResourceResponsableId
+      OperationName: custodios
+      ResourceId: !Ref ResourceCustodioId
       RestApiId: !Ref MyApi
 
-  ReadResponsableFunction:
+  ReadCustodioFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: ReadResponsable
-      Handler: com.inventarios.handler.responsables.ReadResponsableHandler
+      FunctionName: ReadCustodio
+      Handler: com.inventarios.handler.custodio.ReadCustodioHandler
       Runtime: java21
       Environment:
         Variables:
@@ -1407,20 +1392,20 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /responsables
+            Path: /custodios
             Method: get
 
-  ReadResponsableFunctionLogGroup:
+  ReadCustodioFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${ReadResponsableFunction}"
+      LogGroupName: !Sub "/aws/lambda/${ReadCustodioFunction}"
       RetentionInDays: 1
 
-  BusquedaPorIdResponsableFunction:
+  BusquedaPorIdCustodioFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: BusquedaPorIdResponsable
-      Handler: com.inventarios.handler.responsables.BusquedaPorIdResponsableHandler
+      FunctionName: BusquedaPorIdCustodio
+      Handler: com.inventarios.handler.custodio.BusquedaPorIdCustodioHandler
       Runtime: java21
       Environment:
         Variables:
@@ -1455,20 +1440,20 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /responsables/{id}
+            Path: /custodios/{id}
             Method: get
 
-  BusquedaPorIdResponsableFunctionLogGroup:
+  BusquedaPorIdCustodioFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdResponsableFunction}"
+      LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdCustodioFunction}"
       RetentionInDays: 1
 
-  CrearResponsableFunction:
+  CrearCustodioFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: CrearResponsable
-      Handler: com.inventarios.handler.responsables.CreateResponsableHandler
+      FunctionName: CrearCustodio
+      Handler: com.inventarios.handler.custodio.CreateCustodioHandler
       Runtime: java21
       Environment:
         Variables:
@@ -1503,20 +1488,20 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /responsables
+            Path: /custodios
             Method: post
 
-  CrearResponsableFunctionLogGroup:
+  CrearCustodioFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${CrearResponsableFunction}"
+      LogGroupName: !Sub "/aws/lambda/${CrearCustodioFunction}"
       RetentionInDays: 1
 
-  UpdateResponsableFunction:
+  UpdateCustodioFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: UpdateResponsable
-      Handler: com.inventarios.handler.responsables.UpdateResponsableHandler
+      FunctionName: UpdateCustodio
+      Handler: com.inventarios.handler.custodio.UpdateCustodioHandler
       Runtime: java21
       Environment:
         Variables:
@@ -1551,20 +1536,20 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /responsables/{id}
+            Path: /custodios/{id}
             Method: put
 
-  UpdateResponsableFunctionLogGroup:
+  UpdateCustodioFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${UpdateResponsableFunction}"
+      LogGroupName: !Sub "/aws/lambda/${UpdateCustodioFunction}"
       RetentionInDays: 1
 
-  DeleteResponsableFunction:
+  DeleteCustodioFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: DeleteResponsable
-      Handler: com.inventarios.handler.responsables.DeleteResponsableHandler
+      FunctionName: DeleteCustodio
+      Handler: com.inventarios.handler.custodio.DeleteCustodioHandler
       Runtime: java21
       Environment:
         Variables:
@@ -1599,58 +1584,58 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /responsables/{id}
+            Path: /custodios/{id}
             Method: delete
 
-  DeleteResponsableFunctionLogGroup:
+  DeleteCustodioFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${DeleteResponsableFunction}"
+      LogGroupName: !Sub "/aws/lambda/${DeleteCustodioFunction}"
       RetentionInDays: 1
 
-  ResponsableGetApiGatewayInvoke:
+  CustodioGetApiGatewayInvoke:
     Type: AWS::Lambda::Permission
     DependsOn:
       - MyApi
-      - ReadResponsableFunction
+      - ReadCustodioFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt ReadResponsableFunction.Arn
+      FunctionName: !GetAtt ReadCustodioFunction.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/responsables
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/custodios
 
-  ResponsablePostApiGatewayInvoke:
+  CustodioPostApiGatewayInvoke:
     Type: AWS::Lambda::Permission
     DependsOn:
       - MyApi
-      - CrearResponsableFunction
+      - CrearCustodioFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt CrearResponsableFunction.Arn
+      FunctionName: !GetAtt CrearCustodioFunction.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/responsables
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/custodios
 
-  ResponsableUpdateApiGatewayInvoke:
+  CustodioUpdateApiGatewayInvoke:
     Type: AWS::Lambda::Permission
     DependsOn:
       - MyApi
-      - UpdateResponsableFunction
+      - UpdateCustodioFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt UpdateResponsableFunction.Arn
+      FunctionName: !GetAtt UpdateCustodioFunction.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/PUT/responsables/{id}
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/PUT/custodios/{id}
 
-  ResponsableDeleteApiGatewayInvoke:
+  CustodioDeleteApiGatewayInvoke:
     Type: AWS::Lambda::Permission
     DependsOn:
       - MyApi
-      - DeleteResponsableFunction
+      - DeleteCustodioFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt DeleteResponsableFunction.Arn
+      FunctionName: !GetAtt DeleteCustodioFunction.Arn
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/responsables/{id}
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/custodios/{id}
 
 
   ###############################  TIPOBIEN  ###############################
@@ -5249,17 +5234,17 @@ Resources:
       - AtributosPostMethod
       - AtributosUpdateMethod
       - AtributosDeleteMethod
-      - GrupoGetMethod
-      - GrupoGetByIdMethod
-      - GrupoPostMethod
-      - GrupoUpdateMethod
-      - GrupoDeleteMethod
+      - CategoriaGetMethod
+      - CategoriaGetByIdMethod
+      - CategoriaPostMethod
+      - CategoriaUpdateMethod
+      - CategoriaDeleteMethod
       - KeycloakPostMethod
-      - ResponsableGetMethod
-      - ResponsableGetByIdMethod
-      - ResponsablePostMethod
-      - ResponsableUpdateMethod
-      - ResponsableDeleteMethod
+      - CustodioGetMethod
+      - CustodioGetByIdMethod
+      - CustodioPostMethod
+      - CustodioUpdateMethod
+      - CustodioDeleteMethod
       - TipobienGetMethod
       - TipobienGetByIdMethod
       - TipobienPostMethod

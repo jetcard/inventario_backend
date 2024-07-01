@@ -1,26 +1,7 @@
 package com.inventarios.handler.activo.services;
 
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.google.gson.Gson;
-import com.inventarios.handler.activo.response.ActivoResponseRest;
-import com.inventarios.model.Articulo;
-import com.inventarios.model.Activo;
 //import com.inventarios.model.especificacionesFiltro;
-import com.inventarios.model.Responsable;
-import org.jooq.Field;
-import org.jooq.Record;
-import org.jooq.Result;
-import org.jooq.Table;
-import org.jooq.impl.DSL;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 public abstract class BusquedaPorIdsAbstractHandler{/* implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   protected static final Table<?> ACTIVO_TABLE = DSL.table("activo");
@@ -67,7 +48,7 @@ public abstract class BusquedaPorIdsAbstractHandler{/* implements RequestHandler
     for (Record record : result) {
       Activo activo = new Activo();
       activo.setId(record.getValue("id", Long.class));
-      activo.setResponsable(record.getValue("responsableId", Responsable.class));
+      activo.setResponsable(record.getValue("custodioId", Responsable.class));
       activo.setArticulo(record.getValue("articuloId", Articulo.class));
       ///especifico.setespecificaciones(record.getValue("descripespecifico", List.class));
       listaActivos.add(activo);

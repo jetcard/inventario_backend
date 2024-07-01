@@ -30,14 +30,14 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
 
     @GetMapping("/getAtributos")
     public ResponseEntity<List<String>> getAtributos(
-            @RequestParam int responsableId,
+            @RequestParam int custodioId,
             @RequestParam int articuloId,
             @RequestParam int tipoId,
-            @RequestParam int grupoId) {
+            @RequestParam int categoriaId) {
 
       List<String> atributos = new ArrayList<>();
 
-      if (responsableId == 5 && articuloId == 5 && tipoId == 1 && grupoId == 3) {
+      if (custodioId == 5 && articuloId == 5 && tipoId == 1 && categoriaId == 3) {
         atributos = Arrays.asList("ALTO", "ANCHO", "LARGO");
       } else {
         atributos = Arrays.asList("1", "2");
@@ -87,9 +87,9 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
 
   private int insertEspecifico(DSLContext dsl, Activo activo) {
     return dsl.insertInto(ACTIVO_TABLE)
-            .set(DSL.field("responsableid"), activo.getResponsable().getId())
+            .set(DSL.field("custodioid"), activo.getResponsable().getId())
             .set(DSL.field("articuloid"), activo.getArticulo().getId())
-            .set(DSL.field("grupoid"), activo.getGrupo().getId())
+            .set(DSL.field("categoriaid"), activo.getGrupo().getId())
             .set(DSL.field("tipoid"), activo.getTipo().getId())
             .set(DSL.field("codinventario"), activo.getCodinventario().toUpperCase())
             .set(DSL.field("modelo"), activo.getModelo().toUpperCase())
@@ -108,9 +108,9 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
 
   private int updateEspecifico(DSLContext dsl, Activo activo) {
     return dsl.update(ACTIVO_TABLE)
-          .set(DSL.field("responsableid"), activo.getResponsable().getId())
+          .set(DSL.field("custodioid"), activo.getResponsable().getId())
           .set(DSL.field("articuloid"), activo.getArticulo().getId())
-          .set(DSL.field("grupoid"), activo.getGrupo().getId())
+          .set(DSL.field("categoriaid"), activo.getGrupo().getId())
           .set(DSL.field("tipoid"), activo.getTipo().getId())
           .where(DSL.field("id").eq(activo.getId())) // Especificar la condición de actualización
           .execute(); // Ejecutar la actualización y devolver el número de filas afectadas
@@ -127,7 +127,7 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
 
     /*private void insertEspecificox(DSLContext dsl, Especifico especifico) {
     dsl.insertInto(ACTIVO_TABLE)
-            .set(DSL.field("responsableId"), especifico.getResponsable().getId())
+            .set(DSL.field("custodioId"), especifico.getResponsable().getId())
             .set(DSL.field("articuloId"), especifico.getArticulo().getId())
             .execute();
   }*/
@@ -202,7 +202,7 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
 
   private Long insertEspecifico(DSLContext dsl, Especifico especifico) {
     return dsl.insertInto(ACTIVO_TABLE)
-            .set(DSL.field("responsableId"), especifico.getResponsable().getId())
+            .set(DSL.field("custodioId"), especifico.getResponsable().getId())
             .set(DSL.field("articuloId"), especifico.getArticulo().getId())
             .returningResult(DSL.field("especificoId"))
             .fetchOne()
@@ -237,7 +237,7 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
 
   private Long insertEspecifico(DSLContext dsl, Especifico especifico) {
     return dsl.insertInto(ACTIVO_TABLE)
-            .set(DSL.field("responsableId"), especifico.getResponsable().getId())
+            .set(DSL.field("custodioId"), especifico.getResponsable().getId())
             .set(DSL.field("articuloId"), especifico.getArticulo().getId())
             .returningResult(DSL.field("especificoId"))
             .fetchOne()
@@ -272,7 +272,7 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
 
   private Long insertEspecifico(DSLContext dsl, Especifico especifico) {
     return dsl.insertInto(ACTIVO_TABLE)
-            .set(DSL.field("responsableId"), especifico.getResponsable().getId())
+            .set(DSL.field("custodioId"), especifico.getResponsable().getId())
             .set(DSL.field("articuloId"), especifico.getArticulo().getId())
             .returningResult(DSL.field("id"))
             .fetchOne()
@@ -304,7 +304,7 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
 
   private Long insertEspecifico(DSLContext dsl, Especifico especifico) {
     return dsl.insertInto(ACTIVO_TABLE)
-            .set(DSL.field("responsableId"), especifico.getResponsable().getId())
+            .set(DSL.field("custodioId"), especifico.getResponsable().getId())
             .set(DSL.field("articuloId"), especifico.getArticulo().getId())
             .returningResult(DSL.field("id"))
             .fetchOne()
@@ -336,7 +336,7 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
 
   private Long insertEspecifico(DSLContext dsl, Especifico especifico) {
     return dsl.insertInto(ACTIVO_TABLE)
-            .set(DSL.field("responsableId"), especifico.getResponsable().getId())
+            .set(DSL.field("custodioId"), especifico.getResponsable().getId())
             .set(DSL.field("articuloId"), especifico.getArticulo().getId())
             .returningResult(DSL.field("id"))
             .fetchOne()
@@ -357,7 +357,7 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
         DSLContext transactionalDsl = DSL.using(configuration);
 
         Long especificoId = transactionalDsl.insertInto(ACTIVO_TABLE)
-                .set(DSL.field("responsableId"), especifico.getResponsable().getId())
+                .set(DSL.field("custodioId"), especifico.getResponsable().getId())
                 .set(DSL.field("articuloId"), especifico.getArticulo().getId())
                 .returningResult(DSL.field("id"))
                 .fetchOne()
@@ -375,14 +375,14 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
     }
   }*/
 
-  /*protected void save(Especifico especifico, especificaciones especificaciones, Long grupoID) {
+  /*protected void save(Especifico especifico, especificaciones especificaciones, Long categoriaId) {
     DSLContext dsl = DatabaseConnection.getDSL();
     try {
       dsl.transaction(configuration -> {
         DSLContext transactionalDsl = DSL.using(configuration);
 
         Long especificoId = transactionalDsl.insertInto(ACTIVO_TABLE)
-                .set(DSL.field("responsableId"), especifico.getResponsable().getId())
+                .set(DSL.field("custodioId"), especifico.getResponsable().getId())
                 .set(DSL.field("articuloId"), especifico.getArticulo().getId())
                 .returningResult(DSL.field("id"))
                 .fetchOne()
@@ -397,10 +397,10 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
       // Manejar el error de la transacción
     }
   }*/
-  /*protected void save(Especifico especifico, especificaciones especificaciones, Long grupoID) {
+  /*protected void save(Especifico especifico, especificaciones especificaciones, Long categoriaId) {
     DSLContext dsl = DatabaseConnection.getDSL();
     Long especificoId = dsl.insertInto(ACTIVO_TABLE)
-            .set(DSL.field("responsableId"), especifico.getResponsable().getId())
+            .set(DSL.field("custodioId"), especifico.getResponsable().getId())
             .set(DSL.field("articuloId"), especifico.getArticulo().getId())
             .returningResult(DSL.field("id"))
             .fetchOne()
@@ -416,5 +416,5 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
     dsl.insertInto(ACTIVO_TABLE)
             .set(DSL.field("responsable"), especifico.getResponsable())
             .set(DSL.field("articulo"), especifico.getArticulo())
-            .set(DSL.field("grupoId"), grupoID)
+            .set(DSL.field("categoriaId"), categoriaId)
             .execute();*/

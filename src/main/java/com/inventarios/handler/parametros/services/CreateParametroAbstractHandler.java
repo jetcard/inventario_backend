@@ -42,7 +42,7 @@ public abstract class CreateParametroAbstractHandler implements RequestHandler<A
         logger.log("Content-Type: " + contentTypeHeader);
         try {
             String body = input.getBody();
-            //String body = "{\"modelo\":\"AS\",\"marca\":\"AS\",\"nroserie\":\"1\",\"fechacompra\":\"1\",\"importe\":777,\"grupoId\":1,\"account\":55555}";
+            //String body = "{\"modelo\":\"AS\",\"marca\":\"AS\",\"nroserie\":\"1\",\"fechacompra\":\"1\",\"importe\":777,\"categoriaId\":1,\"account\":55555}";
             logger.log("##################### BODY PARAMETRO ######################");
             logger.log(body);
             logger.log("#######################################################");
@@ -59,7 +59,7 @@ public abstract class CreateParametroAbstractHandler implements RequestHandler<A
             }
             logger.log("debe llegar aquí 2");
             // Obtener el ID del grupo del objeto Parametro
-            //Long grupoId = parametro.getGrupo().getId();
+            //Long categoriaId = parametro.getGrupo().getId();
             logger.log("Parametro: ");
 
             //if (parametro != null) {

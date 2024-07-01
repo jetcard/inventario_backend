@@ -1,36 +1,31 @@
 package com.inventarios.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-
 @Entity
-@Table(name="especifico")
+@Table(name="activo")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Activo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties( {"hibernateLazyInitializer", "handler"})
-    private Responsable responsable;
-
+    private Custodio custodio;
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties ( {"hibernateLazyInitializer", "handler"})
     private Articulo articulo;
-
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties ( {"hibernateLazyInitializer", "handler"})
     private Tipo tipo;
-
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties ( {"hibernateLazyInitializer", "handler"})
-    private Grupo grupo;
-
+    private Categoria categoria;
     private String codinventario;//cód. Administración
     private String modelo;
     private String marca;
@@ -41,37 +36,29 @@ public class Activo implements Serializable {
     private String fechaingresostr;
     private String moneda;
     private BigDecimal importe;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Proveedor proveedor;
 //Tiene que haber una tabla que guarde los las especificaciones técnicas
     //Si se está utilizando específicos mandarlo a Comunes y utilizar Especificos
     //como la nueva tabla que albergue a las especificaciones técnicas de Activos
-    /*@OneToMany(mappedBy = "especifico", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "activo", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Especificos> especificos;*/
-
     private List<Especificaciones> especificaciones;
-
     private String descripcion;
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
-    public Responsable getResponsable() {
-        return responsable;
+    public Custodio getResponsable() {
+        return custodio;
     }
-
-    public void setResponsable(Responsable responsable) {
-        this.responsable = responsable;
+    public void setResponsable(Custodio custodio) {
+        this.custodio = custodio;
     }
-
     public Articulo getArticulo() {
         return articulo;
     }
@@ -88,12 +75,12 @@ public class Activo implements Serializable {
         this.tipo = tipo;
     }
 
-    public Grupo getGrupo() {
-        return grupo;
+    public Categoria getGrupo() {
+        return categoria;
     }
 
-    public void setGrupo(Grupo grupo) {
-        this.grupo = grupo;
+    public void setGrupo(Categoria categoria) {
+        this.categoria = categoria;
     }
 
     public String getCodinventario() {

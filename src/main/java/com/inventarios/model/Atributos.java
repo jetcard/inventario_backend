@@ -1,11 +1,7 @@
 package com.inventarios.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-
 import java.io.Serializable;
-
 @Entity
 @Table(name="atributos")
 public class Atributos implements Serializable {

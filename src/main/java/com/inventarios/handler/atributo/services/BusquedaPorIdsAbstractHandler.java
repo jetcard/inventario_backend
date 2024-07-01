@@ -10,7 +10,7 @@ import com.inventarios.handler.atributo.response.AtributoResponseRest;
 import com.inventarios.model.Articulo;
 import com.inventarios.model.Atributo;
 import com.inventarios.model.AtributosFiltro;
-import com.inventarios.model.Responsable;
+import com.inventarios.model.Custodio;
 import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -70,7 +70,7 @@ public abstract class BusquedaPorIdsAbstractHandler implements RequestHandler<AP
     for (Record record : result) {
       Atributo atributo = new Atributo();
       atributo.setId(record.getValue("id", Long.class));
-      atributo.setResponsable(record.getValue("responsableId", Responsable.class));
+      atributo.setCustodio(record.getValue("custodioId", Custodio.class));
       atributo.setArticulo(record.getValue("articuloId", Articulo.class));
       atributo.setAtributos(record.getValue("descripatributo", List.class));
       listaAtributos.add(atributo);

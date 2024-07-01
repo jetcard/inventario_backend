@@ -48,7 +48,7 @@ public class AuthorizerKeycloakHandler extends AuthorizerKeycloakAbstractHandler
                     PublicKey publicKey = getPublicKeyFromJWK(jwkJson);
                     Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) publicKey, null);
                     JWTVerifier verifier = JWT.require(algorithm)
-                            .withIssuer("https://examensolucion-u8698.vm.elestio.app/realms/ExamenSolucion")
+                            .withIssuer("https://examensolucion-u8698.vm.elestio.app/realms/Inventario")
                             .build();
                     DecodedJWT jwt = verifier.verify(authToken);
 

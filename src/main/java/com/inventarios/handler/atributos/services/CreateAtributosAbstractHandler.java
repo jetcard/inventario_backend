@@ -12,7 +12,7 @@ import com.inventarios.handler.atributos.response.AtributosResponseRest;
 import com.inventarios.model.Atributos;
 import java.sql.SQLException;
 import java.util.*;
-import com.inventarios.model.Grupo;
+import com.inventarios.model.Categoria;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public abstract class CreateAtributosAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     protected final static Table<Record> ATRIBUTOS_TABLE = DSL.table("atributos");
-    protected final static Table<Record> GRUPO_TABLE = DSL.table("grupo");
+    protected final static Table<Record> GRUPO_TABLE = DSL.table("categoria");
     final static Map<String, String> headers = new HashMap<>();
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -35,7 +35,7 @@ public abstract class CreateAtributosAbstractHandler implements RequestHandler<A
         headers.put("Access-Control-Allow-Methods", "POST");
     }
 
-    protected abstract void save(Atributos atributos, Long grupoID) throws SQLException;
+    protected abstract void save(Atributos atributos, Long categoriaID) throws SQLException;
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -51,7 +51,7 @@ public abstract class CreateAtributosAbstractHandler implements RequestHandler<A
 
 
             String body = input.getBody();
-            //String body = "{\"modelo\":\"AS\",\"marca\":\"AS\",\"nroserie\":\"1\",\"fechacompra\":\"1\",\"importe\":777,\"grupoId\":1,\"account\":55555}";
+            //String body = "{\"modelo\":\"AS\",\"marca\":\"AS\",\"nroserie\":\"1\",\"fechacompra\":\"1\",\"importe\":777,\"categoriaId\":1,\"account\":55555}";
             logger.log("######################################### BODY ################################################");
             logger.log(body);
             logger.log("###############################################################################################");
@@ -68,7 +68,7 @@ public abstract class CreateAtributosAbstractHandler implements RequestHandler<A
             }
             logger.log("debe llegar aquí 2");
             // Obtener el ID del grupo del objeto Atributos
-            //Long grupoId = atributos.getGrupo().getId();
+            //Long categoriaId = atributos.getGrupo().getId();
 
 
             logger.log("Atributos: ");
@@ -82,13 +82,13 @@ public abstract class CreateAtributosAbstractHandler implements RequestHandler<A
             JsonNode jsonNode = mapper.readTree(body);
 
             // Acceder a los datos del cuerpo de la solicitud
-            String grupoId = jsonNode.get("grupoId").asText();
+            String categoriaId = jsonNode.get("categoriaId").asText();
 
-            logger.log("id from path grupoId --->  " + grupoId);
-            Long grupoID = null;
+            logger.log("id from path categoriaId --->  " + categoriaId);
+            Long categoriaID = null;
             try {
-                grupoID = Long.parseLong(grupoId);
-                logger.log("ID del grupo: " + grupoID);
+                categoriaID = Long.parseLong(categoriaId);
+                logger.log("ID del grupo: " + categoriaID);
             } catch (NumberFormatException e) {
                 return response
                         .withBody("Invalid id in path")
@@ -96,16 +96,16 @@ public abstract class CreateAtributosAbstractHandler implements RequestHandler<A
             }
             /*String bodyparaque = "{\"modelo\":\"+atributos.getModelo()+\",\"marca\":\"+atributos.getMarca()+" +
                     "\",\"nroserie\":\"+atributos.getNroserie()+\",\"fechacompra\":\"+atributos.getFechacompra()+" +
-                    "\",\"importe\":+atributos.getImporte()+,\"grupoId\":1,\"account\":+atributos.getAccount()}";
+                    "\",\"importe\":+atributos.getImporte()+,\"categoriaId\":1,\"account\":+atributos.getAccount()}";
             logger.log("bodyparaque: ");
             logger.log(bodyparaque);*/
             DSLContext dsl = RDSConexion.getDSL();
-            Optional<Grupo> grupoSearch = dsl.select()
+            Optional<Categoria> grupoSearch = dsl.select()
                     .from(GRUPO_TABLE)
-                    .where(DSL.field("id", Long.class).eq(grupoID))
-                    .fetchOptionalInto(Grupo.class);
+                    .where(DSL.field("id", Long.class).eq(categoriaID))
+                    .fetchOptionalInto(Categoria.class);
             if (!grupoSearch.isPresent()) {
-                //Long grupoId = atributos.getGrupo().getId();
+                //Long categoriaId = atributos.getGrupo().getId();
 
                 return response
                         .withBody("El grupo especificado no existe")
@@ -121,7 +121,7 @@ public abstract class CreateAtributosAbstractHandler implements RequestHandler<A
             compressedPicture = Util.compressZLib(atributos.getPicture());
           }*/
             logger.log(":::::::::::::::::::::::::::::::::: PREPARANDO PARA INSERTAR ::::::::::::::::::::::::::::::::::");
-            save(atributos, grupoID);
+            save(atributos, categoriaID);
             logger.log(":::::::::::::::::::::::::::::::::: INSERCIÓN COMPLETA ::::::::::::::::::::::::::::::::::");
             list.add(atributos);
             responseRest.getAtributosResponse().setListaatributoss(list);

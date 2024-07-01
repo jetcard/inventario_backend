@@ -26,13 +26,13 @@ DELETE FROM dependencia;
 DELETE FROM tipo;
 
 -- Tabla 'responsable'
-DELETE FROM responsable;
+DELETE FROM custodio;
 
 -- Tabla 'articulo'
 DELETE FROM articulo;
 
 -- Tabla 'grupo'
-DELETE FROM grupo;
+DELETE FROM categoria;
 
 -- Tabla 'proveedor'
 DELETE FROM proveedor;
@@ -44,7 +44,7 @@ CREATE TABLE proveedor (
     contacto VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE grupo (
+CREATE TABLE categoria (
     id SERIAL PRIMARY KEY,
     nombregrupo VARCHAR(255) NOT NULL,
     descripgrupo VARCHAR(255) NOT NULL
@@ -56,7 +56,7 @@ CREATE TABLE articulo (
     descriparticulo VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE responsable (
+CREATE TABLE custodio (
     id SERIAL PRIMARY KEY,
     arearesponsable VARCHAR(255) NOT NULL,
     nombresyapellidos VARCHAR(255) NOT NULL,
@@ -78,25 +78,25 @@ CREATE TABLE dependencia (
 
 CREATE TABLE comun (
     id SERIAL PRIMARY KEY,
-    responsableId INTEGER NOT NULL,
+    custodioId INTEGER NOT NULL,
     tipoId INTEGER NOT NULL,
-    grupoId INTEGER NOT NULL,
+    categoriaId INTEGER NOT NULL,
     descripcomun VARCHAR(255) NOT NULL,
-    FOREIGN KEY (responsableId) REFERENCES responsable(id),
+    FOREIGN KEY (custodioId) REFERENCES responsable(id),
     FOREIGN KEY (tipoId) REFERENCES tipo(id),
-    FOREIGN KEY (grupoId) REFERENCES grupo(id)
+    FOREIGN KEY (categoriaId) REFERENCES grupo(id)
 );
 
 CREATE TABLE atributo (
     id SERIAL PRIMARY KEY,
-    responsableId INTEGER NOT NULL,
+    custodioId INTEGER NOT NULL,
     articuloId INTEGER NOT NULL,
     tipoId INTEGER NOT NULL,
-    grupoId INTEGER NOT NULL,
-    FOREIGN KEY (responsableId) REFERENCES responsable(id),
+    categoriaId INTEGER NOT NULL,
+    FOREIGN KEY (custodioId) REFERENCES custodio(id),
     FOREIGN KEY (articuloId) REFERENCES articulo(id),
     FOREIGN KEY (tipoId) REFERENCES tipo(id),
-    FOREIGN KEY (grupoId) REFERENCES grupo(id)
+    FOREIGN KEY (categoriaId) REFERENCES categoria(id)
 );
 
 CREATE TABLE atributos (
@@ -108,10 +108,10 @@ CREATE TABLE atributos (
 
 CREATE TABLE activo (
     id SERIAL PRIMARY KEY,
-    responsableId INTEGER NOT NULL,z
+    custodioId INTEGER NOT NULL,
     articuloId INTEGER NOT NULL,
     tipoId INTEGER NOT NULL,
-    grupoId INTEGER NOT NULL,
+    categoriaId INTEGER NOT NULL,
     proveedorId INTEGER NULL,
     codinventario VARCHAR(50)  NULL,
     modelo VARCHAR(255)  NULL,
@@ -121,11 +121,11 @@ CREATE TABLE activo (
     fechaingresostr VARCHAR(20) NULL,
     moneda VARCHAR(10) NOT NULL,
     importe NUMERIC NOT NULL,
-    descripcion VARCHAR(255) NOT NULL,
-    FOREIGN KEY (responsableId) REFERENCES responsable(id),
+    descripcion VARCHAR(255) NULL,
+    FOREIGN KEY (custodioId) REFERENCES custodio(id),
     FOREIGN KEY (articuloId) REFERENCES articulo(id),
     FOREIGN KEY (tipoId) REFERENCES tipo(id),
-    FOREIGN KEY (grupoId) REFERENCES grupo(id),
+    FOREIGN KEY (categoriaId) REFERENCES categoria(id),
     FOREIGN KEY (proveedorId) REFERENCES proveedor(id)
 );
 
@@ -135,28 +135,6 @@ CREATE TABLE especificaciones (--especificos
     nombreatributo VARCHAR(255) NOT NULL,--atributo, nombreespecifico
     descripcionatributo VARCHAR(255) NULL,
     FOREIGN KEY (especificacionid) REFERENCES activo(id)
-);
-
-CREATE TABLE activo (
-    id SERIAL PRIMARY KEY,
-    responsableId INTEGER NOT NULL,
-    proveedorId INTEGER NULL,
-    tipoId INTEGER NOT NULL,
-    grupoId INTEGER NOT NULL,
-    articuloId INTEGER NOT NULL,
-    codinventario VARCHAR(50)  NULL,
-    modelo VARCHAR(255)  NULL,
-    marca VARCHAR(255) NOT NULL,
-    nroserie VARCHAR(255) NOT NULL,
-    fechaingreso DATE NOT NULL,
-    fechaingresostr VARCHAR(20) NULL,
-    moneda VARCHAR(10) NOT NULL,
-    importe NUMERIC NOT NULL,
-    FOREIGN KEY (grupoId) REFERENCES grupo(id),
-    FOREIGN KEY (articuloId) REFERENCES articulo(id),
-    FOREIGN KEY (responsableId) REFERENCES responsable(id),
-    FOREIGN KEY (tipoId) REFERENCES tipo(id),
-    FOREIGN KEY (proveedorId) REFERENCES proveedor(id)
 );
 
 CREATE TABLE parametros (

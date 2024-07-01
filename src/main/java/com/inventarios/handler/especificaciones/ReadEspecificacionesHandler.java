@@ -7,13 +7,13 @@ import org.jooq.impl.DSL;
 import java.sql.SQLException;
 import static org.jooq.impl.DSL.field;
 public class ReadEspecificacionesHandler extends ReadEspecificacionesAbstractHandler {
-  protected Result<Record3<Long, Long, String>> read(long responsableId, long articuloId, long tipoId, long grupoId) throws SQLException {
+  protected Result<Record3<Long, Long, String>> read(long custodioId, long articuloId, long tipoId, long categoriaId) throws SQLException {
 
     DSLContext dsl = RDSConexion.getDSL();
     Condition condition = DSL.trueCondition();
 
-    if (responsableId > 0) {
-      condition = condition.and(field("atributo.responsableid").eq(responsableId));
+    if (custodioId > 0) {
+      condition = condition.and(field("atributo.custodioid").eq(custodioId));
     }
     if (articuloId > 0) {
       condition = condition.and(field("atributo.articuloid").eq(articuloId));
@@ -21,8 +21,8 @@ public class ReadEspecificacionesHandler extends ReadEspecificacionesAbstractHan
     if (tipoId > 0) {
       condition = condition.and(field("atributo.tipoid").eq(tipoId));
     }
-    if (grupoId > 0) {
-      condition = condition.and(field("atributo.grupoid").eq(grupoId));
+    if (categoriaId > 0) {
+      condition = condition.and(field("atributo.categoriaid").eq(categoriaId));
     }
 
     return dsl.select(
@@ -38,13 +38,13 @@ public class ReadEspecificacionesHandler extends ReadEspecificacionesAbstractHan
             .fetch();
   }
   /*
-  protected Result<Record> read(String responsableId, String articuloId, String tipoId, String grupoId) throws SQLException {
+  protected Result<Record> read(String custodioId, String articuloId, String tipoId, String categoriaId) throws SQLException {
 
     DSLContext dsl = RDSConexion.getDSL();
     Condition condition = DSL.trueCondition();
 
-    if (responsableId != null && !responsableId.isEmpty()) {
-      condition = condition.and(field("especifico.responsableId").eq(responsableId));
+    if (custodioId != null && !custodioId.isEmpty()) {
+      condition = condition.and(field("especifico.custodioId").eq(custodioId));
     }
     if (articuloId != null && !articuloId.isEmpty()) {
       condition = condition.and(field("especifico.articuloId").eq(articuloId));
@@ -52,8 +52,8 @@ public class ReadEspecificacionesHandler extends ReadEspecificacionesAbstractHan
     if (tipoId != null && !tipoId.isEmpty()) {
       condition = condition.and(field("especifico.tipoId").eq(tipoId));
     }
-    if (grupoId != null && !grupoId.isEmpty()) {
-      condition = condition.and(field("especifico.grupoId").eq(grupoId));
+    if (categoriaId != null && !categoriaId.isEmpty()) {
+      condition = condition.and(field("especifico.categoriaId").eq(categoriaId));
     }
 
     return dsl.select()

@@ -11,8 +11,8 @@ import com.google.gson.GsonBuilder;
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.comunes.response.ComunResponseRest;
 import com.inventarios.model.Comun;
-import com.inventarios.model.Grupo;
-import com.inventarios.model.Responsable;
+import com.inventarios.model.Categoria;
+import com.inventarios.model.Custodio;
 import com.inventarios.model.Tipo;
 import java.sql.SQLException;
 import java.util.*;
@@ -25,9 +25,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public abstract class CreateComunAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     protected final static Table<Record> COMUN_TABLE = DSL.table("comun");
-    protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("responsable");
+    protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("custodio");
     protected final static Table<Record> TIPO_TABLE = DSL.table("tipo");
-    protected final static Table<Record> GRUPO_TABLE = DSL.table("grupo");
+    protected final static Table<Record> GRUPO_TABLE = DSL.table("categoria");
     final static Map<String, String> headers = new HashMap<>();
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -40,7 +40,7 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
         headers.put("Access-Control-Allow-Methods", "POST");
     }
 
-    protected abstract void save(Comun comun, Long responsableID, Long tipoID, Long grupoID) throws SQLException;
+    protected abstract void save(Comun comun, Long custodioId, Long tipoID, Long categoriaId) throws SQLException;
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -56,7 +56,7 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
 
 
             String body = input.getBody();
-            //String body = "{\"modelo\":\"AS\",\"marca\":\"AS\",\"nroserie\":\"1\",\"fechacompra\":\"1\",\"importe\":777,\"grupoId\":1,\"account\":55555}";
+            //String body = "{\"modelo\":\"AS\",\"marca\":\"AS\",\"nroserie\":\"1\",\"fechacompra\":\"1\",\"importe\":777,\"categoriaId\":1,\"account\":55555}";
             logger.log("##################### BODY COMUN ######################");
             logger.log(body);
             logger.log("#######################################################");
@@ -73,7 +73,7 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
             }
             logger.log("debe llegar aquí 2");
             // Obtener el ID del grupo del objeto Comun
-            //Long grupoId = comun.getGrupo().getId();
+            //Long categoriaId = comun.getGrupo().getId();
 
 
             logger.log("Comun: ");
@@ -85,13 +85,13 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(body);
 
-            Long responsableID = null;
+            Long custodioId = null;
             Long tipoID = null;
-            Long grupoID = null;
+            Long categoriaId = null;
             try {
-                responsableID = Long.parseLong(jsonNode.get("responsableId").asText());
+                custodioId = Long.parseLong(jsonNode.get("custodioId").asText());
                 tipoID = Long.parseLong(jsonNode.get("tipoId").asText());
-                grupoID = Long.parseLong(jsonNode.get("grupoId").asText());
+                categoriaId = Long.parseLong(jsonNode.get("categoriaId").asText());
             } catch (NumberFormatException e) {
                 return response
                         .withBody("Invalid id in path")
@@ -101,15 +101,15 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
 
             /*String bodyparaque = "{\"modelo\":\"+comun.getModelo()+\",\"marca\":\"+comun.getMarca()+" +
                     "\",\"nroserie\":\"+comun.getNroserie()+\",\"fechacompra\":\"+comun.getFechacompra()+" +
-                    "\",\"importe\":+comun.getImporte()+,\"grupoId\":1,\"account\":+comun.getAccount()}";
+                    "\",\"importe\":+comun.getImporte()+,\"categoriaId\":1,\"account\":+comun.getAccount()}";
             logger.log("bodyparaque: ");
             logger.log(bodyparaque);*/
             DSLContext dsl = RDSConexion.getDSL();
 
-            Optional<Responsable> responsableSearch = dsl.select()
+            Optional<Custodio> responsableSearch = dsl.select()
                     .from(RESPONSABLE_TABLE)
-                    .where(DSL.field("id", Long.class).eq(responsableID))
-                    .fetchOptionalInto(Responsable.class);
+                    .where(DSL.field("id", Long.class).eq(custodioId))
+                    .fetchOptionalInto(Custodio.class);
             if (!responsableSearch.isPresent()) {
                 return response
                         .withBody("El responsable especificado no existe")
@@ -126,10 +126,10 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
                         .withStatusCode(404);
             }
 
-            Optional<Grupo> grupoSearch = dsl.select()
+            Optional<Categoria> grupoSearch = dsl.select()
                     .from(GRUPO_TABLE)
-                    .where(DSL.field("id", Long.class).eq(grupoID))
-                    .fetchOptionalInto(Grupo.class);
+                    .where(DSL.field("id", Long.class).eq(categoriaId))
+                    .fetchOptionalInto(Categoria.class);
             if (!grupoSearch.isPresent()) {
                 return response
                         .withBody("El grupo especificado no existe")
@@ -149,7 +149,7 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
             comun.setGrupo(grupoSearch.get());
             logger.log("Comun.getGrupo II : "+comun.getGrupo());
 
-            save(comun, responsableID, tipoID, grupoID);
+            save(comun, custodioId, tipoID, categoriaId);
             logger.log(":::::::::::::::::::::::::::::::::: INSERCIÓN COMPLETA ::::::::::::::::::::::::::::::::::");
             list.add(comun);
             responseRest.getComunResponse().setListacomunes(list);

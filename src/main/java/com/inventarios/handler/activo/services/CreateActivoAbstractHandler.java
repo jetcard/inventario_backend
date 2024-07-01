@@ -44,8 +44,8 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(input.getBody());
 
-            String body = input.getBody();
-            //String body = "{\"responsableId\":4,\"articuloId\":3,\"tipoId\":1,\"grupoId\":1,\"codinventario\":\"VQVREE\",\"modelo\":\"NINAS\",\"marca\":\"ZZDZCSCW\",\"nroserie\":\"V1VV3A\",\"fechaingreso\":\"2024-06-12\",\"fechaingresostr\":\"2024-06-12\",\"importe\":\"522515\",\"moneda\":\"S/\",\"descripcion\":\"As\",\"proveedorId\":1,\"especificaciones\":[{\"atributo\":\"COLOR\",\"nombreespecifico\":\"AZUL\"},{\"atributo\":\"DIMENSION\",\"nombreespecifico\":\"123\"}]}";
+            //String body = input.getBody();
+            String body = "{\"custodioId\":4,\"articuloId\":3,\"tipoId\":1,\"categoriaId\":1,\"codinventario\":\"VQVREE\",\"modelo\":\"NINAS\",\"marca\":\"ZZDZCSCW\",\"nroserie\":\"V1VV3A\",\"fechaingreso\":\"2024-06-12\",\"fechaingresostr\":\"2024-06-12\",\"importe\":\"522515\",\"moneda\":\"S/\",\"descripcion\":\"As\",\"proveedorId\":1,\"especificaciones\":[{\"atributo\":\"COLOR\",\"nombreespecifico\":\"AZUL\"},{\"atributo\":\"DIMENSION\",\"nombreespecifico\":\"123\"}]}";
             if (body != null && !body.isEmpty()) {
                 logger.log(body);
 
@@ -85,19 +85,19 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
 
                     logger.log("especifico = "+ activo);
 
-                    Long responsableId = jsonNode.get("responsableId").asLong();
-                    logger.log("responsableId = "+responsableId);
+                    Long custodioId = jsonNode.get("custodioId").asLong();
+                    logger.log("custodioId = "+custodioId);
                     Long articuloId = jsonNode.get("articuloId").asLong();
                     logger.log("articuloId = "+articuloId);
                     Long tipoId = jsonNode.get("tipoId").asLong();
                     logger.log("tipoId = "+tipoId);
-                    Long grupoId = jsonNode.get("grupoId").asLong();
-                    logger.log("grupoId = "+grupoId);
+                    Long categoriaId = jsonNode.get("categoriaId").asLong();
+                    logger.log("categoriaId = "+categoriaId);
                     Long proveedorId = jsonNode.get("proveedorId").asLong();
                     logger.log("proveedorId = "+proveedorId);
 
-                    Responsable responsable=new Responsable();
-                    responsable.setId(responsableId);
+                    Custodio custodio =new Custodio();
+                    custodio.setId(custodioId);
 
                     Articulo articulo=new Articulo();
                     articulo.setId(articuloId);
@@ -105,22 +105,22 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
                     Tipo tipo=new Tipo();
                     tipo.setId(tipoId);
 
-                    Grupo grupo=new Grupo();
-                    grupo.setId(grupoId);
+                    Categoria categoria =new Categoria();
+                    categoria.setId(categoriaId);
 
                     Proveedor proveedor=new Proveedor();
                     proveedor.setId(proveedorId);
 
-                    activo.setResponsable(responsable);
+                    activo.setResponsable(custodio);
                     activo.setArticulo(articulo);
                     activo.setTipo(tipo);
-                    activo.setGrupo(grupo);
+                    activo.setGrupo(categoria);
                     activo.setProveedor(proveedor);
 
-                    activo.getResponsable().setId(responsableId);
+                    activo.getResponsable().setId(custodioId);
                     activo.getArticulo().setId(articuloId);
                     activo.getTipo().setId(tipoId);
-                    activo.getGrupo().setId(grupoId);
+                    activo.getGrupo().setId(categoriaId);
                     activo.getProveedor().setId(proveedorId);
 
                     long especificoID = getEspecificoID(activo);
@@ -129,10 +129,10 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
                     JsonNode especificacionesNode = jsonNode.get("especificaciones");
                     if (especificacionesNode != null && especificacionesNode.isArray()) {
                         for (JsonNode especificoNode : especificacionesNode) {
-                            Especificaciones especificacion=new Especificaciones();
-                            especificacion.setNombreatributo(especificoNode.get("nombreatributo")!=null?especificoNode.get("nombreatributo").asText():"");
-                            especificacion.setDescripcionatributo(especificoNode.get("descripcionatributo")!=null?especificoNode.get("descripcionatributo").asText():"");
-                            especificacionesList.add(especificacion);
+                            Especificaciones especificaciones=new Especificaciones();
+                            especificaciones.setNombreatributo(especificoNode.get("nombreatributo")!=null?especificoNode.get("nombreatributo").asText():"");
+                            especificaciones.setDescripcionatributo(especificoNode.get("descripcionatributo")!=null?especificoNode.get("descripcionatributo").asText():"");
+                            especificacionesList.add(especificaciones);
                         }
                     }
                     activo.setEspecificaciones(especificacionesList);//setespecificaciones(especificacionesList);
