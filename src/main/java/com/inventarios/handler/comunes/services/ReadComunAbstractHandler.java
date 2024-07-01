@@ -37,9 +37,9 @@ public abstract class ReadComunAbstractHandler implements RequestHandler<APIGate
   }
 
   protected abstract Result<Record> read() throws SQLException;
-  protected abstract String mostrarResponsable(Long id) throws SQLException;
+  protected abstract String mostrarCustodio(Long id) throws SQLException;
   protected abstract String mostrarTipoBien(Long id) throws SQLException;
-  protected abstract String mostrarGrupo(Long id) throws SQLException;
+  protected abstract String mostrarCategoria(Long id) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -89,7 +89,7 @@ public abstract class ReadComunAbstractHandler implements RequestHandler<APIGate
       ///comun.setPicture(record.getValue("picture", byte[].class));
       Custodio custodio = new Custodio();
       custodio.setId(record.getValue("custodioid", Long.class));
-      custodio.setArearesponsable(mostrarResponsable(custodio.getId()));
+      custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
       comun.setResponsable(custodio);
 
       Tipo tipo = new Tipo();
@@ -99,7 +99,7 @@ public abstract class ReadComunAbstractHandler implements RequestHandler<APIGate
 
       Categoria categoria =new Categoria();
       categoria.setId(record.getValue("categoriaid", Long.class));
-      categoria.setNombregrupo(mostrarGrupo(categoria.getId()));
+      categoria.setNombregrupo(mostrarCategoria(categoria.getId()));
       comun.setGrupo(categoria);
 
       listaComunes.add(comun);

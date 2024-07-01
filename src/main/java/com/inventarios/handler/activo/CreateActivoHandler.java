@@ -8,6 +8,7 @@ import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import java.sql.SQLException;
 import java.util.List;
+
 public class CreateActivoHandler extends CreateActivoAbstractHandler {
   @Override
   public int getEspecificoID(Activo activo) throws SQLException {
@@ -15,7 +16,7 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
     try {
       int especificoid = dsl.transactionResult(configuration -> {
         DSLContext transactionalDsl = DSL.using(configuration);
-        return insertEspecifico(transactionalDsl, activo);
+        return insertActivo(transactionalDsl, activo);
       });
       return especificoid;
     } catch (Exception e) {
@@ -85,7 +86,7 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
     }
   }
 
-  private int insertEspecifico(DSLContext dsl, Activo activo) {
+  private int insertActivo(DSLContext dsl, Activo activo) {
     return dsl.insertInto(ACTIVO_TABLE)
             .set(DSL.field("custodioid"), activo.getResponsable().getId())
             .set(DSL.field("articuloid"), activo.getArticulo().getId())

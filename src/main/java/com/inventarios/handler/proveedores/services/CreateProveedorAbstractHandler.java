@@ -24,7 +24,12 @@ public abstract class CreateProveedorAbstractHandler implements RequestHandler<A
     headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     headers.put("Access-Control-Allow-Methods", "POST");
   }
-  protected abstract void save(String ruc, String razonsocial, String contacto) throws SQLException;
+  protected abstract void save(String ruc,
+                               String razonsocial,
+                               String direccionFiscal,
+                               String contacto,
+                               String telefono,
+                               String correo ) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -40,7 +45,13 @@ public abstract class CreateProveedorAbstractHandler implements RequestHandler<A
         context.getLogger().log("body " + body);
         Proveedor proveedor = new Gson().fromJson(body, Proveedor.class);
         if (proveedor != null) {
-          save(proveedor.getRuc(), proveedor.getRazonsocial().toUpperCase(), proveedor.getContacto().toUpperCase());
+          save(proveedor.getRuc(),
+              proveedor.getRazonsocial().toUpperCase(),
+              proveedor.getDireccionFiscal().toUpperCase(),
+              proveedor.getContacto().toUpperCase(),
+              proveedor.getTelefono().toUpperCase(),
+              proveedor.getCorreo().toLowerCase()
+          );
           responseRest.setMetadata("Respuesta ok", "00", "Proveedor guardado");
         }
         output = new Gson().toJson(responseRest);

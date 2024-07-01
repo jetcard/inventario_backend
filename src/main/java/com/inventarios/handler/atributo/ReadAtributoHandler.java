@@ -23,7 +23,7 @@ public class ReadAtributoHandler extends ReadAtributoAbstractHandler {
   }
 
   @Override
-  protected String mostrarResponsable(Long id) throws SQLException {
+  protected String mostrarCustodio(Long id) throws SQLException {
     var dsl = RDSConexion.getDSL();
     Record record = dsl.select(RESPONSABLE_TABLE_COLUMNA)
             .from(RESPONSABLE_TABLE)
@@ -53,7 +53,7 @@ public class ReadAtributoHandler extends ReadAtributoAbstractHandler {
   }
 
   @Override
-  protected String mostrarGrupo(Long id) throws SQLException {
+  protected String mostrarCategoria(Long id) throws SQLException {
     var dsl = RDSConexion.getDSL();
     Record record = dsl.select(GRUPO_TABLE_COLUMNA)
             .from(GRUPO_TABLE)

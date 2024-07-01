@@ -69,10 +69,10 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
   }
 
   protected abstract Result<Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String>> read() throws SQLException;
-  protected abstract String mostrarResponsable(Long id) throws SQLException;
+  protected abstract String mostrarCustodio(Long id) throws SQLException;
   protected abstract String mostrarArticulo(Long id) throws SQLException;
   protected abstract String mostrarTipoBien(Long id) throws SQLException;
-  protected abstract String mostrarGrupo(Long id) throws SQLException;
+  protected abstract String mostrarCategoria(Long id) throws SQLException;
   protected abstract String mostrarProveedor(Long id) throws SQLException;
 
   @Override
@@ -147,7 +147,7 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
           // Consultas adicionales o mapeos deben ser implementados para Responsable y Articulo
           Custodio custodio = new Custodio();
           custodio.setId(record.get(ACTIVO_RESPONSABLE_ID));
-          custodio.setArearesponsable(mostrarResponsable(custodio.getId()));
+          custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
           activo.setResponsable(custodio);
           //especifico.setResponsable(findResponsableById(record.get(ACTIVO_RESPONSABLE_ID)));
           Articulo articulo = new Articulo();
@@ -163,7 +163,7 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
 
           Categoria categoria =new Categoria();
           categoria.setId(record.get(ACTIVO_GRUPO_ID));
-          categoria.setNombregrupo(mostrarGrupo(categoria.getId()));
+          categoria.setNombregrupo(mostrarCategoria(categoria.getId()));
           activo.setGrupo(categoria);
 
           //

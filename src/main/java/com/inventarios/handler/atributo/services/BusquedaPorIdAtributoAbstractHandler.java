@@ -55,10 +55,10 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
   }
 
   protected abstract Result<Record5<Long, Long, Long, Long, Long>> busquedaPorArticuloId(String articuloId) throws SQLException;
-  protected abstract String mostrarResponsable(Long id) throws SQLException;
+  protected abstract String mostrarCustodio(Long id) throws SQLException;
   protected abstract String mostrarArticulo(Long id) throws SQLException;
   protected abstract String mostrarTipoBien(Long id) throws SQLException;
-  protected abstract String mostrarGrupo(Long id) throws SQLException;
+  protected abstract String mostrarCategoria(Long id) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -95,7 +95,7 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
 
       Custodio custodio = new Custodio();
       custodio.setId(record.get(ATRIBUTO_RESPONSABLE_ID));
-      custodio.setArearesponsable(mostrarResponsable(custodio.getId()));
+      custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
       atributo.setCustodio(custodio);
 
       Articulo articulo = new Articulo();
@@ -111,7 +111,7 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
 
       Categoria categoria =new Categoria();
       categoria.setId(record.get(ATRIBUTO_GRUPO_ID));
-      categoria.setNombregrupo(mostrarGrupo(categoria.getId()));
+      categoria.setNombregrupo(mostrarCategoria(categoria.getId()));
       atributo.setCategoria(categoria);
       listaAtributos.add(atributo);
     }

@@ -5188,8 +5188,8 @@ Resources:
       DBName: !Ref PostgresDatabaseName
       MasterUsername: !Ref PostgresUsername
       MasterUserPassword: !Ref PostgresPassword
-      DBInstanceClass: db.t3.micro
-      AllocatedStorage: "20"
+      DBInstanceClass: db.m5.large
+      AllocatedStorage: 20
       PubliclyAccessible: true
     DeletionPolicy: Delete
 

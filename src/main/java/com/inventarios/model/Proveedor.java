@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 @Entity
 @Table(name="proveedor")
 public class Proveedor  implements Serializable{
@@ -14,7 +15,10 @@ public class Proveedor  implements Serializable{
     private Long id;
     private String razonsocial;
     private String ruc;
+    private String direccionFiscal;
     private String contacto;
+    private String telefono;
+    private String correo;
 
     public Long getId() {
         return id;
@@ -40,11 +44,35 @@ public class Proveedor  implements Serializable{
         this.ruc = ruc;
     }
 
+    public String getDireccionFiscal() {
+        return direccionFiscal;
+    }
+
+    public void setDireccionFiscal(String direccionFiscal) {
+        this.direccionFiscal = direccionFiscal;
+    }
+
     public String getContacto() {
         return contacto;
     }
 
     public void setContacto(String contacto) {
         this.contacto = contacto;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 }

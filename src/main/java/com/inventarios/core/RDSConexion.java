@@ -1,6 +1,69 @@
 
 package com.inventarios.core;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public class RDSConexion {
+
+  public static final String DATABASE_NAME_ENV = "DBName";
+  public static final String POSTGRES_SECRET_ARN_ENV = "RDSSecretArn";
+  public static final String DB_ENDPOINT = "DBEnpoint";
+  public static final String DB_USER = "user";
+  public static final String DB_PASS = "pass";
+
+  private static HikariDataSource dataSource;
+
+  static {
+    initDataSource();
+  }
+
+  private static void initDataSource() {
+    HikariConfig config = new HikariConfig();
+    config.setJdbcUrl("jdbc:postgresql://" + rdsEndpoint() + "/" + rdsDatabase());
+    config.setUsername(rdsUserDB());
+    config.setPassword(rdsPassDB());
+    config.setMaximumPoolSize(20);  // Ajusta según tus necesidades
+
+    dataSource = new HikariDataSource(config);
+  }
+
+  public static Connection getConnection() throws SQLException {
+    return dataSource.getConnection();
+  }
+
+  public static String rdsDatabase() {
+    return System.getenv(DATABASE_NAME_ENV);
+  }
+
+  public static String rdsSecretArn() {
+    return System.getenv(POSTGRES_SECRET_ARN_ENV);
+  }
+
+  public static String rdsEndpoint() {
+    return System.getenv(DB_ENDPOINT);
+  }
+
+  public static String rdsUserDB() {
+    return System.getenv(DB_USER);
+  }
+
+  public static String rdsPassDB() {
+    return System.getenv(DB_PASS);
+  }
+
+  public static DSLContext getDSL() throws SQLException {
+    return DSL.using(getConnection(), SQLDialect.POSTGRES);
+  }
+}
+
+/*
 import com.amazonaws.secretsmanager.sql.AWSSecretsManagerPostgreSQLDriver;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -68,7 +131,7 @@ public class RDSConexion {
     return (DSL.using(getConnection(), SQLDialect.POSTGRES));
   }
 
-}
+}*/
 /*Pruebas
 public class RDSConexion {
   public static final String DATABASE_NAME_ENV = "DBName";

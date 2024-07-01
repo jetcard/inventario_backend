@@ -7,7 +7,6 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import java.sql.SQLException;
 import java.util.*;
-
 import com.inventarios.handler.atributo.response.AtributoResponseRest;
 import com.inventarios.model.*;
 import com.inventarios.util.GsonFactory;
@@ -49,10 +48,10 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
   }
 
   protected abstract Result<Record8<Long, Long, Long, Long, Long, Long, Long, String>> read() throws SQLException;
-  protected abstract String mostrarResponsable(Long id) throws SQLException;
+  protected abstract String mostrarCustodio(Long id) throws SQLException;
   protected abstract String mostrarArticulo(Long id) throws SQLException;
   protected abstract String mostrarTipoBien(Long id) throws SQLException;
-  protected abstract String mostrarGrupo(Long id) throws SQLException;
+  protected abstract String mostrarCategoria(Long id) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -90,7 +89,7 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
           // Consultas adicionales o mapeos deben ser implementados para Responsable y Articulo
           Custodio custodio = new Custodio();
           custodio.setId(record.get(ATRIBUTO_RESPONSABLE_ID));
-          custodio.setArearesponsable(mostrarResponsable(custodio.getId()));
+          custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
           atributo.setCustodio(custodio);
           //atributo.setResponsable(findResponsableById(record.get(ATRIBUTO_RESPONSABLE_ID)));
           Articulo articulo = new Articulo();
@@ -106,7 +105,7 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
 
           Categoria categoria =new Categoria();
           categoria.setId(record.get(ATRIBUTO_GRUPO_ID));
-          categoria.setNombregrupo(mostrarGrupo(categoria.getId()));
+          categoria.setNombregrupo(mostrarCategoria(categoria.getId()));
           atributo.setCategoria(categoria);
 
           atributo.setAtributos(new ArrayList<>());
@@ -139,7 +138,7 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
 
       Responsable responsable = new Responsable();
       responsable.setId(record.getValue("custodioid", Long.class));
-      responsable.setArearesponsable(mostrarResponsable(responsable.getId()));
+      responsable.setArearesponsable(mostrarCustodio(responsable.getId()));
       atributo.setResponsable(responsable);
 
       Articulo articulo = new Articulo();

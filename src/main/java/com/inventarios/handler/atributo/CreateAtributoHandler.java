@@ -5,9 +5,13 @@ import com.inventarios.handler.atributo.services.CreateAtributoAbstractHandler;
 import com.inventarios.model.Atributo;
 import com.inventarios.model.Atributos;
 import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.Record8;
+import org.jooq.Result;
 import org.jooq.impl.DSL;
 import java.sql.SQLException;
 import java.util.List;
+
 public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
   @Override
   public int getAtributoID(Atributo atributo) throws SQLException {
@@ -24,85 +28,23 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
     }
   }
 
-
-  /*
-  public void save(Atributo atributo, List<Atributos> atributosList) throws SQLException {
-    DSLContext dsl = RDSConexion.getDSL();
-    try {
-      dsl.transaction(configuration -> {
-        DSLContext transactionalDsl = DSL.using(configuration);
-
-        long atributoid = atributo.getId();
-        atributo.setId(atributoid);
-
-        for (Atributos atributos : atributosList) {
-          atributos.setAtributoid(atributo.getId());
-          //atributos.setAtributo(atributo);
-          ///atributos.setAtributo(null); // Rompe la referencia cíclica
-          insertAtributos(transactionalDsl, atributos);
-        }
-      });
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw new SQLException("Error saving atributo and atributos", e);
-    }
-  }*/
-
   @Override
   public void save(Atributo atributo, List<Atributos> atributosList) throws SQLException{
     DSLContext dsl = RDSConexion.getDSL();
     try {
       dsl.transaction(configuration -> {
         DSLContext transactionalDsl = DSL.using(configuration);
-
-        long atributoid = atributo.getId();//updateAtributo(transactionalDsl, atributo);
-        System.out.println("atributoid = "+atributo.getId());
+        long atributoid = atributo.getId();
         atributo.setId(atributoid);
-        System.out.println("WHERE atributoid = "+atributo.getId());
-        System.out.println("WHERE getResponsable = "+atributo.getCustodio());
-        System.out.println("WHERE getArticulo = "+atributo.getArticulo());
-        System.out.println("WHERE getAtributos = "+atributo.getAtributos().get(0));
-        //System.out.println("WHERE atributoid = "+atributoid);
-
         for (Atributos atributos : atributosList) {
           atributos.setAtributoid(atributo.getId());
-          //atributos.setAtributo(atributo);
-          //atributos.setAtributo(new Atributo(atributo.getId(), atributo.getResponsable(), atributo.getArticulo()));
-          //atributos.setAtributo(atributo); // Establecer la relación con el Atributo padre
           System.out.println("atributos.getAtributoid() para insertAtributos = "+atributos.getAtributoid());
           insertAtributos(transactionalDsl, atributos);
         }
       });
     } catch (Exception e) {
-      // Manejar el error de la transacción
     }
   }
-
-  ///@Override
-  /*public void save1xx(Atributo atributo, List<Atributos> atributosList) {
-    DSLContext dsl = RDSConexion.getDSL();
-    try {
-      dsl.transaction(configuration -> {
-        DSLContext transactionalDsl = DSL.using(configuration);
-
-        /*insertAtributo(transactionalDsl, atributo);
-        System.out.println("WHERE atributoid = "+atributo.getId());
-        System.out.println("WHERE getResponsable = "+atributo.getResponsable());
-        System.out.println("WHERE getArticulo = "+atributo.getArticulo());
-        System.out.println("WHERE getAtributos = "+atributo.getAtributos().get(0));
-        //System.out.println("WHERE atributoid = "+atributoid);* /
-
-        for (Atributos atributos : atributosList) {
-          atributos.setAtributo(atributo);
-          //atributos.setAtributo(new Atributo(atributo.getId(), atributo.getResponsable(), atributo.getArticulo()));
-          //atributos.setAtributo(atributo); // Establecer la relación con el Atributo padre
-          insertAtributos(transactionalDsl, atributos);
-        }
-      });
-    } catch (Exception e) {
-      // Manejar el error de la transacción
-    }
-  }*/
 
   private int insertAtributo(DSLContext dsl, Atributo atributo) {
     return dsl.insertInto(ATRIBUTO_TABLE)
@@ -115,267 +57,63 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
             .getValue(DSL.field("id", Integer.class));
   }
 
-  private int updateAtributo(DSLContext dsl, Atributo atributo) {
-    return dsl.update(ATRIBUTO_TABLE)
-          .set(DSL.field("custodioid"), atributo.getCustodio().getId())
-          .set(DSL.field("articuloid"), atributo.getArticulo().getId())
-            .set(DSL.field("categoriaid"), atributo.getCategoria().getId())
-            .set(DSL.field("tipoid"), atributo.getTipo().getId())
-          .where(DSL.field("id").eq(atributo.getId())) // Especificar la condición de actualización
-          .execute(); // Ejecutar la actualización y devolver el número de filas afectadas
-}
-
-  /*private void insertAtributox(DSLContext dsl, Atributo atributo) {
-    dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("custodioId"), atributo.getResponsable().getId())
-            .set(DSL.field("articuloId"), atributo.getArticulo().getId())
-            .execute();
-  }*/
-
-
-  //desde el activo el combo puede buscar por id de atributos para que me de el nombre del atributo
   private void insertAtributos(DSLContext dsl, Atributos atributos) {
     dsl.insertInto(ATRIBUTOS_TABLE)
-            //.set(DSL.field("atributoid"), atributos.getAtributo().getId())
             .set(DSL.field("atributoid"), atributos.getAtributoid())
             .set(DSL.field("nombreatributo"), atributos.getNombreatributo().toUpperCase())
             .execute();
   }
 
-  /*public void save(Atributo atributo, List<Atributos> atributosList) {
-    DSLContext dsl = RDSConexion.getDSL();
-    try {
-      dsl.transaction(configuration -> {
-        DSLContext transactionalDsl = DSL.using(configuration);
-
-        Long atributoId = insertAtributo(transactionalDsl, atributo);
-
-        for (Atributos atributoItem : atributosList) {
-          // Establecer la relación con el atributo usando el constructor que acepta el ID del atributo
-          atributoItem.setAtributo(new Atributo(atributoId));
-          insertAtributos(transactionalDsl, atributoItem);
-        }
-      });
-    } catch (Exception e) {
-      // Manejar el error de la transacción
-    }
+  protected Result<Record8<Long, Long, Long, Long, Long, Long, Long, String>> read() throws SQLException {
+    var dsl = RDSConexion.getDSL();
+    return dsl.select(
+                    ATRIBUTO_ID, ATRIBUTO_RESPONSABLE_ID, ATRIBUTO_ARTICULO_ID,
+                    ATRIBUTO_TIPO_ID, ATRIBUTO_GRUPO_ID,
+                    ATRIBUTOS_ID, ATRIBUTOS_ATRIBUTOID, ATRIBUTOS_NOMBREATRIBUTO
+            )
+            .from(ATRIBUTO_TABLE)
+            .leftJoin(ATRIBUTOS_TABLE)
+            .on(ATRIBUTO_ID.eq(ATRIBUTOS_ATRIBUTOID))
+            .fetch();
   }
 
-  private Long insertAtributo(DSLContext dsl, Atributo atributo) {
-    return dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("custodioId"), atributo.getResponsable().getId())
-            .set(DSL.field("articuloId"), atributo.getArticulo().getId())
-            .returningResult(DSL.field("atributoId"))
-            .fetchOne()
-            .getValue(DSL.field("atributoId", Long.class));
+  @Override
+  protected String mostrarCustodio(Long id) throws SQLException {
+    var dsl = RDSConexion.getDSL();
+    Record record = dsl.select(RESPONSABLE_TABLE_COLUMNA)
+            .from(RESPONSABLE_TABLE)
+            .where(DSL.field("id", Long.class).eq(id))
+            .fetchOne();
+    return record != null ? record.getValue(RESPONSABLE_TABLE_COLUMNA) : null;
   }
 
-  private void insertAtributos(DSLContext dsl, Atributos atributos) {
-    dsl.insertInto(ATRIBUTOS_TABLE)
-            .set(DSL.field("atributoId"), atributos.getAtributo().getId())
-            .set(DSL.field("nombreatributo"), atributos.getNombreatributo())
-            .set(DSL.field("descripatributo"), atributos.getDescripatributo())
-            .execute();
-  }*/
-  /*public void save(Atributo atributo, List<Atributos> atributosList) {
-    DSLContext dsl = RDSConexion.getDSL();
-    try {
-      dsl.transaction(configuration -> {
-        DSLContext transactionalDsl = DSL.using(configuration);
-
-        Long atributoId = insertAtributo(transactionalDsl, atributo);
-
-        for (Atributos atributoItem : atributosList) {
-          // Establecer la relación con el atributo usando el constructor que acepta el ID del atributo
-          atributoItem.setAtributo(new Atributo(atributoId));
-          insertAtributos(transactionalDsl, atributoItem);
-        }
-      });
-    } catch (Exception e) {
-      // Manejar el error de la transacción
-    }
+  @Override
+  protected String mostrarArticulo(Long id) throws SQLException {
+    var dsl = RDSConexion.getDSL();
+    Record record = dsl.select(ARTICULO_TABLE_COLUMNA)
+            .from(ARTICULO_TABLE)
+            .where(DSL.field("id", Long.class).eq(id))
+            .fetchOne();
+    return record != null ? record.getValue(ARTICULO_TABLE_COLUMNA) : null;
   }
 
-  private Long insertAtributo(DSLContext dsl, Atributo atributo) {
-    return dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("custodioId"), atributo.getResponsable().getId())
-            .set(DSL.field("articuloId"), atributo.getArticulo().getId())
-            .returningResult(DSL.field("atributoId"))
-            .fetchOne()
-            .getValue(DSL.field("atributoId", Long.class));
+  @Override
+  protected String mostrarTipoBien(Long id) throws SQLException {
+    var dsl = RDSConexion.getDSL();
+    Record record = dsl.select(TIPO_TABLE_COLUMNA)
+            .from(TIPO_TABLE)
+            .where(DSL.field("id", Long.class).eq(id))
+            .fetchOne();
+    return record != null ? record.getValue(TIPO_TABLE_COLUMNA) : null;
   }
 
-  private void insertAtributos(DSLContext dsl, Atributos atributos) {
-    dsl.insertInto(ATRIBUTOS_TABLE)
-            .set(DSL.field("atributoId"), atributos.getAtributo().getId())
-            .set(DSL.field("atributo"), atributos.getAtributo())
-            .execute();
-  }*/
+  @Override
+  protected String mostrarCategoria(Long id) throws SQLException {
+    var dsl = RDSConexion.getDSL();
+    Record record = dsl.select(GRUPO_TABLE_COLUMNA)
+            .from(GRUPO_TABLE)
+            .where(DSL.field("id", Long.class).eq(id))
+            .fetchOne();
+    return record != null ? record.getValue(GRUPO_TABLE_COLUMNA) : null;
+  }
 }
-
-  /*public void save(Atributo atributo, List<Atributos> atributosList) {
-    DSLContext dsl = RDSConexion.getDSL();
-    try {
-      dsl.transaction(configuration -> {
-        DSLContext transactionalDsl = DSL.using(configuration);
-
-        Long atributoId = insertAtributo(transactionalDsl, atributo);
-
-        for (Atributos atributos : atributosList) {
-          atributos.setAtributo(new Atributo(atributoId)); // Establecer la relación con el atributo
-          insertAtributos(transactionalDsl, atributos);
-        }
-      });
-    } catch (Exception e) {
-      // Manejar el error de la transacción
-    }
-  }
-
-  private Long insertAtributo(DSLContext dsl, Atributo atributo) {
-    return dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("custodioId"), atributo.getResponsable().getId())
-            .set(DSL.field("articuloId"), atributo.getArticulo().getId())
-            .returningResult(DSL.field("id"))
-            .fetchOne()
-            .getValue(DSL.field("id", Long.class));
-  }
-
-  private void insertAtributos(DSLContext dsl, Atributos atributos) {
-    dsl.insertInto(ATRIBUTOS_TABLE)
-            .set(DSL.field("atributoId"), atributos.getAtributo().getId())
-            .set(DSL.field("atributo"), atributos.getAtributo())
-            .execute();
-  }*/
-  /*public void save(Atributo atributo, List<Atributos> atributosList) {
-    DSLContext dsl = RDSConexion.getDSL();
-    try {
-      dsl.transaction(configuration -> {
-        DSLContext transactionalDsl = DSL.using(configuration);
-
-        Long atributoId = insertAtributo(transactionalDsl, atributo);
-
-        for (Atributos atributos : atributosList) {
-          insertAtributos(transactionalDsl, atributoId, atributos);
-        }
-      });
-    } catch (Exception e) {
-      // Manejar el error de la transacción
-    }
-  }
-
-  private Long insertAtributo(DSLContext dsl, Atributo atributo) {
-    return dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("custodioId"), atributo.getResponsable().getId())
-            .set(DSL.field("articuloId"), atributo.getArticulo().getId())
-            .returningResult(DSL.field("id"))
-            .fetchOne()
-            .getValue(DSL.field("id", Long.class));
-  }
-
-  private void insertAtributos(DSLContext dsl, Long atributoId, Atributos atributos) {
-    dsl.insertInto(ATRIBUTOS_TABLE)
-            .set(DSL.field("atributoId"), atributoId)
-            .set(DSL.field("descripcion"), atributos.getDescripcion())
-            .execute();
-  }*/
-  /*protected void save(Atributo atributo, List<Atributos> atributosList) {
-    DSLContext dsl = DatabaseConnection.getDSL();
-    try {
-      dsl.transaction(configuration -> {
-        DSLContext transactionalDsl = DSL.using(configuration);
-
-        Long atributoId = insertAtributo(transactionalDsl, atributo);
-
-        for (Atributos atributos : atributosList) {
-          insertAtributos(transactionalDsl, atributoId, atributos);
-        }
-      });
-    } catch (Exception e) {
-      // Manejar el error de la transacción
-    }
-  }
-
-  private Long insertAtributo(DSLContext dsl, Atributo atributo) {
-    return dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("custodioId"), atributo.getResponsable().getId())
-            .set(DSL.field("articuloId"), atributo.getArticulo().getId())
-            .returningResult(DSL.field("id"))
-            .fetchOne()
-            .getValue(DSL.field("id", Long.class));
-  }
-
-  private void insertAtributos(DSLContext dsl, Long atributoId, Atributos atributos) {
-    dsl.insertInto(ATRIBUTOS_TABLE)
-            .set(DSL.field("atributoId"), atributoId)
-            .set(DSL.field("descripcion"), atributos.getDescripcion())
-            .execute();
-  }*/
-  /*@Override
-  protected void save(Atributo atributo, List<Atributos> atributosList) {
-    DSLContext dsl = DatabaseConnection.getDSL();
-    try {
-      dsl.transaction(configuration -> {
-        DSLContext transactionalDsl = DSL.using(configuration);
-
-        Long atributoId = transactionalDsl.insertInto(ATRIBUTO_TABLE)
-                .set(DSL.field("custodioId"), atributo.getResponsable().getId())
-                .set(DSL.field("articuloId"), atributo.getArticulo().getId())
-                .returningResult(DSL.field("id"))
-                .fetchOne()
-                .getValue(DSL.field("id", Long.class));
-
-        for (Atributos atributos : atributosList) {
-          transactionalDsl.insertInto(ATRIBUTOS_TABLE)
-                  .set(DSL.field("atributoId"), atributoId)
-                  .set(DSL.field("descripcion"), atributos.getDescripcion())
-                  .execute();
-        }
-      });
-    } catch (Exception e) {
-      // Manejar el error de la transacción
-    }
-  }*/
-
-  /*protected void save(Atributo atributo, Atributos atributos, Long categoriaId) {
-    DSLContext dsl = DatabaseConnection.getDSL();
-    try {
-      dsl.transaction(configuration -> {
-        DSLContext transactionalDsl = DSL.using(configuration);
-
-        Long atributoId = transactionalDsl.insertInto(ATRIBUTO_TABLE)
-                .set(DSL.field("custodioId"), atributo.getResponsable().getId())
-                .set(DSL.field("articuloId"), atributo.getArticulo().getId())
-                .returningResult(DSL.field("id"))
-                .fetchOne()
-                .getValue(DSL.field("id", Long.class));
-
-        transactionalDsl.insertInto(ATRIBUTOS_TABLE)
-                .set(DSL.field("atributoId"), atributoId)
-                .set(DSL.field("descripcion"), atributos.getDescripcion())
-                .execute();
-      });
-    } catch (Exception e) {
-      // Manejar el error de la transacción
-    }
-  }*/
-  /*protected void save(Atributo atributo, Atributos atributos, Long categoriaId) {
-    DSLContext dsl = DatabaseConnection.getDSL();
-    Long atributoId = dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("custodioId"), atributo.getResponsable().getId())
-            .set(DSL.field("articuloId"), atributo.getArticulo().getId())
-            .returningResult(DSL.field("id"))
-            .fetchOne()
-            .getValue(DSL.field("id", Long.class));
-    dsl.insertInto(ATRIBUTOS_TABLE)
-            .set(DSL.field("atributoId"), atributoId)
-            .set(DSL.field("descripcion"), atributos.getDescripcion())
-            .execute();
-  }*/
-
-    /*
-    var dsl = DatabaseConnection.getDSL();
-    dsl.insertInto(ATRIBUTO_TABLE)
-            .set(DSL.field("responsable"), atributo.getResponsable())
-            .set(DSL.field("articulo"), atributo.getArticulo())
-            .set(DSL.field("categoriaId"), categoriaId)
-            .execute();*/
