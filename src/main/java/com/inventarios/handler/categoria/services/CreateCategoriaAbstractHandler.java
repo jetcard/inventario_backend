@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import com.inventarios.handler.categoria.response.CategoriaResponseRest;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -39,12 +40,12 @@ public abstract class CreateCategoriaAbstractHandler implements RequestHandler<A
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Categoria categoria = new Gson().fromJson(body, Categoria.class);
+        Categoria categoria = GsonFactory.createGson().fromJson(body, Categoria.class);
         if (categoria != null) {
           save(categoria.getNombregrupo().toUpperCase(), categoria.getDescripgrupo().toUpperCase());
           responseRest.setMetadata("Respuesta ok", "00", "Grupo guardado");
         }
-        output = new Gson().toJson(responseRest);
+        output = GsonFactory.createGson().toJson(responseRest);
       }
       return response.withStatusCode(200)
               .withBody(output);

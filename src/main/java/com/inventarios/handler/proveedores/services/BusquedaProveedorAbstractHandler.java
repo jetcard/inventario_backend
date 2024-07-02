@@ -10,6 +10,8 @@ import com.inventarios.handler.proveedores.response.ProveedorResponseRest;
 import com.inventarios.model.Proveedor;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
@@ -47,7 +49,7 @@ public abstract class BusquedaProveedorAbstractHandler implements RequestHandler
         Result<Record> result = busquedaPorNombreProveedor(idString);
         responseRest.getProveedorResponse().setListaproveedores(convertResultToList(result));
         responseRest.setMetadata("Respuesta ok", "00", "Proveedores encontrados");
-        output = new Gson().toJson(responseRest);
+        output = GsonFactory.createGson().toJson(responseRest);
         return response.withStatusCode(200).withBody(output);
       } else if (path.contains("/autocompletar/")) {
         String filter = pathParameters.get("id");
@@ -55,17 +57,17 @@ public abstract class BusquedaProveedorAbstractHandler implements RequestHandler
         Result<Record> result = autocompletarProveedor(filter);
         responseRest.getProveedorResponse().setListaproveedores(convertResultToList(result));
         responseRest.setMetadata("Respuesta ok", "00", "Proveedores encontrados");
-        output = new Gson().toJson(responseRest);
+        output = GsonFactory.createGson().toJson(responseRest);
         return response.withStatusCode(200).withBody(output);
       } else {
         responseRest.setMetadata("Error interno", "-1", "Ruta no encontrada");
-        output = new Gson().toJson(responseRest);
+        output = GsonFactory.createGson().toJson(responseRest);
         return response.withStatusCode(500).withBody(output);
       }
     } catch (Exception e) {
       logger.log("Error interno del servidor: " + e);
       responseRest.setMetadata("Error interno", "-1", "Error al obtener proveedores");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(500).withBody(output);
     }
 
@@ -78,7 +80,7 @@ public abstract class BusquedaProveedorAbstractHandler implements RequestHandler
       Result<Record> result = busquedaPorNombreProveedor(idString);
       responseRest.getProveedorResponse().setListaproveedores(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Proveedors encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
                     .withBody(output);
     } catch (Exception e) {

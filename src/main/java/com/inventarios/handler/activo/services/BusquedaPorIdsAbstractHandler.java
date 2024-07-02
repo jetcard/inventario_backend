@@ -32,7 +32,7 @@ public abstract class BusquedaPorIdsAbstractHandler{/* implements RequestHandler
       Result<Record> result = filtraPorIds(filtro);
       responseRest.getActivoResponse().setListaactivos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
                     .withBody(output);
   } catch (Exception e) {

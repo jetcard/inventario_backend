@@ -16,6 +16,8 @@ import com.inventarios.model.Custodio;
 import com.inventarios.model.Tipo;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -62,7 +64,7 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
             logger.log("#######################################################");
 
             Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-            //Comun comun = new Gson().fromJson(body, Comun.class);
+            //Comun comun = GsonFactory.createGson().fromJson(body, Comun.class);
             Comun comun = gson.fromJson(body, Comun.class);
 
             logger.log("debe llegar aquí 1 ya tenemos Comun");
@@ -155,7 +157,7 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
             responseRest.getComunResponse().setListacomunes(list);
             responseRest.setMetadata("Respuesta ok", "00", "Común guardado");
 
-            output = new Gson().toJson(responseRest);
+            output = GsonFactory.createGson().toJson(responseRest);
             return response.withStatusCode(200)
                     .withBody(output);
 

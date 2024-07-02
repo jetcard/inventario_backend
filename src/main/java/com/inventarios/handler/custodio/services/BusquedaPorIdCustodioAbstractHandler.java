@@ -10,6 +10,8 @@ import com.inventarios.handler.custodio.response.CustodioResponseRest;
 import com.inventarios.model.Custodio;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
@@ -43,7 +45,7 @@ public abstract class BusquedaPorIdCustodioAbstractHandler implements RequestHan
       Result<Record> result = busquedaPorNombreResponsable(idString);
       responseRest.getCustodioResponse().setListacustodios(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Responsables encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
                     .withBody(output);
   } catch (Exception e) {

@@ -10,6 +10,8 @@ import com.inventarios.handler.categoria.response.CategoriaResponseRest;
 import com.inventarios.model.Categoria;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
@@ -41,7 +43,7 @@ public abstract class BusquedaCategoriaAbstractHandler implements RequestHandler
       Result<Record> result = busquedaPorNombreGrupo(idString);
       responseRest.getCategoriaResponse().setListacategorias(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Grupos encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
                     .withBody(output);
   } catch (Exception e) {

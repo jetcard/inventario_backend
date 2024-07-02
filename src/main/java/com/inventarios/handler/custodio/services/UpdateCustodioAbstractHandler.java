@@ -10,6 +10,8 @@ import com.inventarios.handler.custodio.response.CustodioResponseRest;
 import com.inventarios.model.Custodio;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -46,7 +48,7 @@ public abstract class UpdateCustodioAbstractHandler implements RequestHandler<AP
      try {
          String body = input.getBody();
 
-         Custodio custodioFromBody = new Gson().fromJson(body, Custodio.class);
+         Custodio custodioFromBody = GsonFactory.createGson().fromJson(body, Custodio.class);
 
          if (custodioFromBody != null) {
                DSLContext dsl = RDSConexion.getDSL();
@@ -69,7 +71,7 @@ public abstract class UpdateCustodioAbstractHandler implements RequestHandler<AP
                } else {
                  responseRest.setMetadata("Respuesta nok", "-1", "Responsable no encontrado");
                }
-               output = new Gson().toJson(responseRest);
+               output = GsonFactory.createGson().toJson(responseRest);
                return response.withStatusCode(200)
                        .withBody(output);
          } else {

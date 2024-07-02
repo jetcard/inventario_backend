@@ -182,7 +182,7 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Atributo atributo = new Gson().fromJson(body, Atributo.class);
+        Atributo atributo = GsonFactory.createGson().fromJson(body, Atributo.class);
         if (atributo != null) {
           context.getLogger().log("atributo.getId() = " + atributo.getId());
           if (id.equals(atributo.getId())) {
@@ -196,7 +196,7 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
                     .withStatusCode(400);
           }
         }
-        output = new Gson().toJson(responseRest);
+        output = GsonFactory.createGson().toJson(responseRest);
       }
       return response.withStatusCode(200)
               .withBody(output);

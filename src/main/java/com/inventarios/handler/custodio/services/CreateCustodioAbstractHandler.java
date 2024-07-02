@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import com.inventarios.handler.custodio.response.CustodioResponseRest;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -39,12 +40,12 @@ public abstract class CreateCustodioAbstractHandler implements RequestHandler<AP
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Custodio custodio = new Gson().fromJson(body, Custodio.class);
+        Custodio custodio = GsonFactory.createGson().fromJson(body, Custodio.class);
         if (custodio != null) {
           save(custodio.getArearesponsable().toUpperCase(), custodio.getNombresyapellidos().toUpperCase());
           responseRest.setMetadata("Respuesta ok", "00", "Responsable guardado");
         }
-        output = new Gson().toJson(responseRest);
+        output = GsonFactory.createGson().toJson(responseRest);
       }
       return response.withStatusCode(200)
               .withBody(output);

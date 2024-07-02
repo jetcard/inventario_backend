@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.*;
 import com.inventarios.handler.atributos.response.AtributosResponseRest;
 import com.inventarios.model.Atributos;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Table;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -41,7 +42,7 @@ public abstract class ReadAtributosAbstractHandler implements RequestHandler<API
       Result<Record> result = read();
       responseRest.getAtributosResponse().setListaatributoss(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Atributoss encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
               .withBody(output);
     } catch (Exception e) {

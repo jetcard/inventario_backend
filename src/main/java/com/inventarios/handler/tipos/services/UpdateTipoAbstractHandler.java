@@ -10,6 +10,8 @@ import com.inventarios.handler.tipos.response.TipoResponseRest;
 import com.inventarios.model.Tipo;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -48,7 +50,7 @@ public abstract class UpdateTipoAbstractHandler implements RequestHandler<APIGat
      try {
          String body = input.getBody();
 
-         Tipo tipoFromBody = new Gson().fromJson(body, Tipo.class);
+         Tipo tipoFromBody = GsonFactory.createGson().fromJson(body, Tipo.class);
 
          if (tipoFromBody != null) {
                DSLContext dsl = RDSConexion.getDSL();
@@ -71,7 +73,7 @@ public abstract class UpdateTipoAbstractHandler implements RequestHandler<APIGat
                } else {
                  responseRest.setMetadata("Respuesta nok", "-1", "Tipo no encontrado");
                }
-               output = new Gson().toJson(responseRest);
+               output = GsonFactory.createGson().toJson(responseRest);
                return response.withStatusCode(200)
                        .withBody(output);
          } else {

@@ -9,6 +9,8 @@ import com.inventarios.handler.atributos.response.AtributosResponseRest;
 import com.inventarios.model.Atributos;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
@@ -42,7 +44,7 @@ public abstract class BusquedaPorIdAtributosAbstractHandler implements RequestHa
       Result<Record> result = busquedaPorNombreAtributos(idString);
       responseRest.getAtributosResponse().setListaatributoss(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Atributoss encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
                     .withBody(output);
   } catch (Exception e) {
@@ -75,7 +77,7 @@ public abstract class BusquedaPorIdAtributosAbstractHandler implements RequestHa
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Atributos atributos = new Gson().fromJson(body, Atributos.class);
+        Atributos atributos = GsonFactory.createGson().fromJson(body, Atributos.class);
         if (atributos != null) {
           context.getLogger().log("atributos.getId() = " + atributos.getId());
           if (id.equals(atributos.getId())) {
@@ -89,7 +91,7 @@ public abstract class BusquedaPorIdAtributosAbstractHandler implements RequestHa
                     .withStatusCode(400);
           }
         }
-        output = new Gson().toJson(responseRest);
+        output = GsonFactory.createGson().toJson(responseRest);
       }
       return response.withStatusCode(200)
               .withBody(output);

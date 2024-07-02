@@ -10,6 +10,8 @@ import com.inventarios.handler.tipos.response.TipoResponseRest;
 import com.inventarios.model.Tipo;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
@@ -44,7 +46,7 @@ public abstract class BusquedaPorIdTipoAbstractHandler implements RequestHandler
       Result<Record> result = busquedaPorNombreTipo(idString);
       responseRest.getTipoResponse().setListatipos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Tipos encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
                     .withBody(output);
   } catch (Exception e) {
@@ -76,7 +78,7 @@ public abstract class BusquedaPorIdTipoAbstractHandler implements RequestHandler
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Tipo tipo = new Gson().fromJson(body, Tipo.class);
+        Tipo tipo = GsonFactory.createGson().fromJson(body, Tipo.class);
         if (tipo != null) {
           context.getLogger().log("tipo.getId() = " + tipo.getId());
           if (id.equals(tipo.getId())) {
@@ -90,7 +92,7 @@ public abstract class BusquedaPorIdTipoAbstractHandler implements RequestHandler
                     .withStatusCode(400);
           }
         }
-        output = new Gson().toJson(responseRest);
+        output = GsonFactory.createGson().toJson(responseRest);
       }
       return response.withStatusCode(200)
               .withBody(output);

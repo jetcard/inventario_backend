@@ -10,6 +10,8 @@ import com.inventarios.handler.comunes.response.ComunResponseRest;
 import com.inventarios.model.Comun;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
@@ -43,7 +45,7 @@ public abstract class BusquedaPorIdComunAbstractHandler implements RequestHandle
       Result<Record> result = busquedaPorNombreComun(idString);
       responseRest.getComunResponse().setListacomunes(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Comuns encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
                     .withBody(output);
   } catch (Exception e) {

@@ -64,7 +64,7 @@ public abstract class ReadAtributoAbstractHandler implements RequestHandler<APIG
       Result<Record8<Long, Long, Long, Long, Long, Long, Long, String>> result = read();
       responseRest.getAtributoResponse().setListaatributos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Atributos encontrados");
-      //output = new Gson().toJson(responseRest);
+      //output = GsonFactory.createGson().toJson(responseRest);
       Gson gson = GsonFactory.createGson();
       output = gson.toJson(responseRest);
       return response.withStatusCode(200).withBody(output);

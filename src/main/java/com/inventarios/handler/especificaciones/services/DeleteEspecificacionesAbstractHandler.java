@@ -10,6 +10,8 @@ import com.inventarios.model.Especificaciones;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -41,7 +43,7 @@ public abstract class DeleteEspecificacionesAbstractHandler implements RequestHa
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Especificaciones especificaciones = new Gson().fromJson(body, Especificaciones.class);
+        Especificaciones especificaciones = GsonFactory.createGson().fromJson(body, Especificaciones.class);
         if (especificaciones != null) {
           //delete(2);
           delete(especificaciones.getId());

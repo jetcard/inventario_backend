@@ -13,6 +13,7 @@ import com.inventarios.model.Atributos;
 import java.sql.SQLException;
 import java.util.*;
 import com.inventarios.model.Categoria;
+import com.inventarios.util.GsonFactory;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -58,7 +59,7 @@ public abstract class CreateAtributosAbstractHandler implements RequestHandler<A
 
 
 
-            Atributos atributos = new Gson().fromJson(body, Atributos.class);
+            Atributos atributos = GsonFactory.createGson().fromJson(body, Atributos.class);
 
             logger.log("debe llegar aquí 1 ya tenemos Atributos");
             if (atributos == null) {
@@ -129,7 +130,7 @@ public abstract class CreateAtributosAbstractHandler implements RequestHandler<A
               /*} else {
                 responseRest.setMetadata("Respuesta nok", "-1", "Atributos no encontrado");
               }*/
-            output = new Gson().toJson(responseRest);
+            output = GsonFactory.createGson().toJson(responseRest);
             return response.withStatusCode(200)
                     .withBody(output);
             /*} else {

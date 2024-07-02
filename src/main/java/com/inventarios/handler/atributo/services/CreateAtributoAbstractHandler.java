@@ -74,7 +74,7 @@ public abstract class CreateAtributoAbstractHandler implements RequestHandler<AP
             String body = input.getBody();
             if (body != null && !body.isEmpty()) {
                 logger.log(body);
-                Atributo atributo = new Gson().fromJson(body, Atributo.class);
+                Atributo atributo = GsonFactory.createGson().fromJson(body, Atributo.class);
                 ///Atributo atributo = mapper.readValue(body, Atributo.class);
                 if (atributo != null) {
                     List<Atributos> atributosListaInicial = new ArrayList<>();

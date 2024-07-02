@@ -9,6 +9,8 @@ import com.inventarios.model.Atributos;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -51,7 +53,7 @@ public abstract class UpdateAtributosAbstractHandler implements RequestHandler<A
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Atributos atributos = new Gson().fromJson(body, Atributos.class);
+        Atributos atributos = GsonFactory.createGson().fromJson(body, Atributos.class);
         if (atributos != null) {
           if (id.equals(atributos.getId())) {
             ///update(atributos.getId(), atributos.getDescripatributo(), atributos.getNombreatributo());

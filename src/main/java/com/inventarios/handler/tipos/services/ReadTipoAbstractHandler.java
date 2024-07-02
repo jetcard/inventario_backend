@@ -10,6 +10,7 @@ import java.util.*;
 
 import com.inventarios.model.Tipo;
 import com.inventarios.handler.tipos.response.TipoResponseRest;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Table;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -39,7 +40,7 @@ public abstract class ReadTipoAbstractHandler implements RequestHandler<APIGatew
       Result<Record> result = read();
       responseRest.getTipoResponse().setListatipos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Tipos encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
               .withBody(output);
     } catch (Exception e) {

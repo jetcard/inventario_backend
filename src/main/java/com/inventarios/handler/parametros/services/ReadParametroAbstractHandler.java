@@ -10,6 +10,7 @@ import java.util.*;
 
 import com.inventarios.handler.parametros.response.ParametroResponseRest;
 import com.inventarios.model.*;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Field;
 import org.jooq.Table;
 import org.jooq.Record;
@@ -43,7 +44,7 @@ public abstract class ReadParametroAbstractHandler implements RequestHandler<API
       Result<Record> result = read();
       responseRest.getParametroResponse().setListaparametros(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Parametros listados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
               .withBody(output);
     } catch (Exception e) {

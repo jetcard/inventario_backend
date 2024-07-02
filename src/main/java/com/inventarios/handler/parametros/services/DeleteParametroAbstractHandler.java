@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import com.inventarios.handler.parametros.response.ParametroResponseRest;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -51,7 +52,7 @@ public abstract class DeleteParametroAbstractHandler implements RequestHandler<A
     try {
       delete(id);
       responseRest.setMetadata("Respuesta ok", "00", "Común eliminado");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response
               .withBody(output)
               .withStatusCode(200);

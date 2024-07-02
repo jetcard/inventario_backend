@@ -9,6 +9,8 @@ import com.inventarios.handler.especificaciones.response.EspecificacionesRespons
 import com.inventarios.model.Especificaciones;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
@@ -39,7 +41,7 @@ public abstract class BusquedaPorIdEspecificacionesAbstractHandler implements Re
       Result<Record> result = busquedaPorNombreespecificaciones(idString);
       responseRest.getEspecificacionesResponse().setListaespecificaciones(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "especificacioness encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
                     .withBody(output);
   } catch (Exception e) {
@@ -73,7 +75,7 @@ public abstract class BusquedaPorIdEspecificacionesAbstractHandler implements Re
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        especificaciones especificaciones = new Gson().fromJson(body, especificaciones.class);
+        especificaciones especificaciones = GsonFactory.createGson().fromJson(body, especificaciones.class);
         if (especificaciones != null) {
           context.getLogger().log("especificaciones.getId() = " + especificaciones.getId());
           if (id.equals(especificaciones.getId())) {
@@ -87,7 +89,7 @@ public abstract class BusquedaPorIdEspecificacionesAbstractHandler implements Re
                     .withStatusCode(400);
           }
         }
-        output = new Gson().toJson(responseRest);
+        output = GsonFactory.createGson().toJson(responseRest);
       }
       return response.withStatusCode(200)
               .withBody(output);

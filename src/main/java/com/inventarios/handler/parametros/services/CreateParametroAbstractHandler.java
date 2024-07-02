@@ -11,6 +11,8 @@ import com.inventarios.handler.parametros.response.ParametroResponseRest;
 import com.inventarios.model.Parametro;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -48,7 +50,7 @@ public abstract class CreateParametroAbstractHandler implements RequestHandler<A
             logger.log("#######################################################");
 
             Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-            //Parametro parametro = new Gson().fromJson(body, Parametro.class);
+            //Parametro parametro = GsonFactory.createGson().fromJson(body, Parametro.class);
             Parametro parametro = gson.fromJson(body, Parametro.class);
 
             logger.log("debe llegar aquí 1 ya tenemos Parametro");
@@ -74,7 +76,7 @@ public abstract class CreateParametroAbstractHandler implements RequestHandler<A
             responseRest.getParametroResponse().setListaparametros(list);
             responseRest.setMetadata("Respuesta ok", "00", "Parámetro guardado");
 
-            output = new Gson().toJson(responseRest);
+            output = GsonFactory.createGson().toJson(responseRest);
             return response.withStatusCode(200)
                     .withBody(output);
 

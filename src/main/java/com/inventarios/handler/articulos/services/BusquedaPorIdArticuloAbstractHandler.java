@@ -10,13 +10,14 @@ import com.inventarios.handler.articulos.response.ArticuloResponseRest;
 import com.inventarios.model.Articulo;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
-
 public abstract class BusquedaPorIdArticuloAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-
   final static Map<String, String> headers = new HashMap<>();
+
   static {
     headers.put("Content-Type", "application/json");
     headers.put("X-Custom-Header", "application/json");
@@ -43,7 +44,7 @@ public abstract class BusquedaPorIdArticuloAbstractHandler implements RequestHan
       Result<Record> result = busquedaPorNombreArticulo(idString);
       responseRest.getArticuloResponse().setListaarticulos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Articulos encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
                     .withBody(output);
   } catch (Exception e) {
@@ -53,7 +54,6 @@ public abstract class BusquedaPorIdArticuloAbstractHandler implements RequestHan
         .withStatusCode(500);
         }
   }
-
   protected List<Articulo> convertResultToList(Result<Record> result) {
     List<Articulo> listaArticulos = new ArrayList<>();
     for (Record record : result) {

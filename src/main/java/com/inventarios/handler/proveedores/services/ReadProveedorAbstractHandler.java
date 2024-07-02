@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.*;
 import com.inventarios.model.Proveedor;
 import com.inventarios.handler.proveedores.response.ProveedorResponseRest;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Field;
 import org.jooq.Table;
 import org.jooq.Record;
@@ -40,7 +41,7 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
       Result<Record> result = read();
       responseRest.getProveedorResponse().setListaproveedores(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Proveedores encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
               .withBody(output);
     } catch (Exception e) {
@@ -58,7 +59,10 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
       proveedor.setId(record.getValue("id", Long.class));
       proveedor.setRuc(record.getValue("ruc", String.class));
       proveedor.setRazonsocial(record.getValue("razonsocial", String.class));
+      proveedor.setDireccionfiscal(record.getValue("direccionfiscal", String.class));
       proveedor.setContacto(record.getValue("contacto", String.class));
+      proveedor.setTelefono(record.getValue("telefono", String.class));
+      proveedor.setCorreo(record.getValue("correo", String.class));
       listaProveedores.add(proveedor);
     }
     return listaProveedores;

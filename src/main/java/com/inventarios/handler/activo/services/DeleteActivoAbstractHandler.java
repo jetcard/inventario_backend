@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import com.inventarios.handler.activo.response.ActivoResponseRest;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -47,7 +48,7 @@ public abstract class DeleteActivoAbstractHandler implements RequestHandler<APIG
     try {
       delete(id);
       responseRest.setMetadata("Respuesta ok", "00", "Especifico eliminado");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response
               .withBody(output)
               .withStatusCode(200);
@@ -69,7 +70,7 @@ public abstract class DeleteActivoAbstractHandler implements RequestHandler<APIG
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Especifico especifico = new Gson().fromJson(body, Especifico.class);
+        Especifico especifico = GsonFactory.createGson().fromJson(body, Especifico.class);
         if (especifico != null) {
           //delete(2);
           delete(especifico.getId());

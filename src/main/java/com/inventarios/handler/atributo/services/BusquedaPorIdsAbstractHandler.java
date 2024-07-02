@@ -11,6 +11,7 @@ import com.inventarios.model.Articulo;
 import com.inventarios.model.Atributo;
 import com.inventarios.model.AtributosFiltro;
 import com.inventarios.model.Custodio;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -54,7 +55,7 @@ public abstract class BusquedaPorIdsAbstractHandler implements RequestHandler<AP
       Result<Record> result = filtraPorIds(filtro);
       responseRest.getAtributoResponse().setListaatributos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Atributos encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
                     .withBody(output);
   } catch (Exception e) {

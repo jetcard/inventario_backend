@@ -9,6 +9,8 @@ import com.inventarios.model.*;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -54,7 +56,7 @@ public abstract class UpdateActivoAbstractHandler implements RequestHandler<APIG
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Activo activo = new Gson().fromJson(body, Activo.class);
+        Activo activo = GsonFactory.createGson().fromJson(body, Activo.class);
         if (activo != null) {
           if (id.equals(activo.getId())) {
             update(activo.getId(),

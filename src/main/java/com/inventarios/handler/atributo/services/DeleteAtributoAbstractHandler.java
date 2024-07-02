@@ -9,6 +9,8 @@ import com.inventarios.handler.atributo.response.AtributoResponseRest;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -48,7 +50,7 @@ public abstract class DeleteAtributoAbstractHandler implements RequestHandler<AP
     try {
       delete(id);
       responseRest.setMetadata("Respuesta ok", "00", "Atributo eliminado");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response
               .withBody(output)
               .withStatusCode(200);
@@ -70,7 +72,7 @@ public abstract class DeleteAtributoAbstractHandler implements RequestHandler<AP
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Atributo atributo = new Gson().fromJson(body, Atributo.class);
+        Atributo atributo = GsonFactory.createGson().fromJson(body, Atributo.class);
         if (atributo != null) {
           //delete(2);
           delete(atributo.getId());

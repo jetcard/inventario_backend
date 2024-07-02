@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import com.google.gson.Gson;
 import com.inventarios.handler.custodio.response.CustodioResponseRest;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -49,7 +50,7 @@ public abstract class DeleteCustodioAbstractHandler implements RequestHandler<AP
     try {
       delete(id);
       responseRest.setMetadata("Respuesta ok", "00", "Responsable eliminado");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response
               .withBody(output)
               .withStatusCode(200);

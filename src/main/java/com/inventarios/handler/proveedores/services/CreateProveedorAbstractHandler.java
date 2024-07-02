@@ -4,17 +4,18 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.google.gson.Gson;
 import com.inventarios.model.Proveedor;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import com.inventarios.handler.proveedores.response.ProveedorResponseRest;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
 
 public abstract class CreateProveedorAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+
   protected final static Table<Record> PROVEEDOR_TABLE = DSL.table("proveedor");
   final static Map<String, String> headers = new HashMap<>();
   static {
@@ -26,7 +27,7 @@ public abstract class CreateProveedorAbstractHandler implements RequestHandler<A
   }
   protected abstract void save(String ruc,
                                String razonsocial,
-                               String direccionFiscal,
+                               String direccionfiscal,
                                String contacto,
                                String telefono,
                                String correo ) throws SQLException;
@@ -37,24 +38,26 @@ public abstract class CreateProveedorAbstractHandler implements RequestHandler<A
     ProveedorResponseRest responseRest = new ProveedorResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
       .withHeaders(headers);
-    String body = input.getBody();
+    //String body = input.getBody();
+    String body =
+            "{\"ruc\":\"27798362723\",\"razonsocial\":\"CONSULTORES\",\"direccionfiscal\":\"DIRECCION\",\"contacto\":\"HJASJSD\", \"telefono\": \"888888111\",\"correo\": \"kahh@ddkk.com\"}";
     context.getLogger().log("body " + body);
     String output ="";
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Proveedor proveedor = new Gson().fromJson(body, Proveedor.class);
+        Proveedor proveedor = GsonFactory.createGson().fromJson(body, Proveedor.class);
         if (proveedor != null) {
           save(proveedor.getRuc(),
               proveedor.getRazonsocial().toUpperCase(),
-              proveedor.getDireccionFiscal().toUpperCase(),
+              proveedor.getDireccionfiscal().toUpperCase(),
               proveedor.getContacto().toUpperCase(),
               proveedor.getTelefono().toUpperCase(),
               proveedor.getCorreo().toLowerCase()
           );
           responseRest.setMetadata("Respuesta ok", "00", "Proveedor guardado");
         }
-        output = new Gson().toJson(responseRest);
+        output = GsonFactory.createGson().toJson(responseRest);
       }
       return response.withStatusCode(200)
               .withBody(output);

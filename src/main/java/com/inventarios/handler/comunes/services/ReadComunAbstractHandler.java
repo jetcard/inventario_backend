@@ -10,6 +10,7 @@ import java.util.*;
 
 import com.inventarios.handler.comunes.response.ComunResponseRest;
 import com.inventarios.model.*;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Field;
 import org.jooq.Table;
 import org.jooq.Record;
@@ -52,7 +53,7 @@ public abstract class ReadComunAbstractHandler implements RequestHandler<APIGate
       Result<Record> result = read();
       responseRest.getComunResponse().setListacomunes(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Comunes listados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
               .withBody(output);
     } catch (Exception e) {

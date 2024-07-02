@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import com.inventarios.handler.tipos.response.TipoResponseRest;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -39,12 +40,12 @@ public abstract class CreateTipoAbstractHandler implements RequestHandler<APIGat
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Tipo tipo = new Gson().fromJson(body, Tipo.class);
+        Tipo tipo = GsonFactory.createGson().fromJson(body, Tipo.class);
         if (tipo != null) {
           save(tipo.getNombretipo().toUpperCase(), tipo.getDescriptipo().toUpperCase());
           responseRest.setMetadata("Respuesta ok", "00", "Tipo guardado");
         }
-        output = new Gson().toJson(responseRest);
+        output = GsonFactory.createGson().toJson(responseRest);
       }
       return response.withStatusCode(200)
               .withBody(output);

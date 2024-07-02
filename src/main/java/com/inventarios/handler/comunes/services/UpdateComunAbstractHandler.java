@@ -9,6 +9,8 @@ import com.inventarios.model.Comun;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -51,7 +53,7 @@ public abstract class UpdateComunAbstractHandler implements RequestHandler<APIGa
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Comun comun = new Gson().fromJson(body, Comun.class);
+        Comun comun = GsonFactory.createGson().fromJson(body, Comun.class);
         if (comun != null) {
           if (id.equals(comun.getId())) {
             update(comun.getId(), comun.getDescripcomun());

@@ -14,6 +14,7 @@ import com.inventarios.model.Especificaciones;
 import java.sql.SQLException;
 import java.util.*;
 
+import com.inventarios.util.GsonFactory;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -54,7 +55,7 @@ public abstract class CreateEspecificacionesAbstractHandler implements RequestHa
 
 
 
-            Especificaciones especificaciones = new Gson().fromJson(body, Especificaciones.class);
+            Especificaciones especificaciones = GsonFactory.createGson().fromJson(body, Especificaciones.class);
 
             logger.log("debe llegar aquí 1 ya tenemos especificaciones");
             if (especificaciones == null) {
@@ -125,7 +126,7 @@ public abstract class CreateEspecificacionesAbstractHandler implements RequestHa
               /*} else {
                 responseRest.setMetadata("Respuesta nok", "-1", "especificaciones no encontrado");
               }*/
-            output = new Gson().toJson(responseRest);
+            output = GsonFactory.createGson().toJson(responseRest);
             return response.withStatusCode(200)
                     .withBody(output);
             /*} else {

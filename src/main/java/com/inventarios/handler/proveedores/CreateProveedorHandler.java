@@ -8,7 +8,7 @@ import org.jooq.impl.DSL;
 public class CreateProveedorHandler extends CreateProveedorAbstractHandler {
   protected void save(String ruc,
                       String razonsocial,
-                      String direccionFiscal,
+                      String direccionfiscal,
                       String contacto,
                       String telefono,
                       String correo) throws SQLException {
@@ -16,10 +16,10 @@ public class CreateProveedorHandler extends CreateProveedorAbstractHandler {
     dsl.insertInto(PROVEEDOR_TABLE)
       .set(DSL.field("ruc"), ruc)
       .set(DSL.field("razonsocial"), razonsocial)
-      .set(DSL.field("direccionfiscal"), razonsocial)
+      .set(DSL.field("direccionfiscal"), direccionfiscal)
       .set(DSL.field("contacto"), contacto)
-      .set(DSL.field("telefono"), razonsocial)
-      .set(DSL.field("correo"), razonsocial)
+      .set(DSL.field("telefono"), telefono)
+      .set(DSL.field("correo"), correo)
       .execute();
   }
 

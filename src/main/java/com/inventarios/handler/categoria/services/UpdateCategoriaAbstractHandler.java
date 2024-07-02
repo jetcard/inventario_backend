@@ -10,6 +10,8 @@ import com.inventarios.handler.categoria.response.CategoriaResponseRest;
 import com.inventarios.model.Categoria;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -48,7 +50,7 @@ public abstract class UpdateCategoriaAbstractHandler implements RequestHandler<A
      try {
          String body = input.getBody();
          // Convertir el cuerpo de la solicitud a un objeto Grupo
-         Categoria categoriaFromBody = new Gson().fromJson(body, Categoria.class);
+         Categoria categoriaFromBody = GsonFactory.createGson().fromJson(body, Categoria.class);
          // Verificar si el objeto Grupo obtenido del cuerpo de la solicitud es válido
          if (categoriaFromBody != null) {
                DSLContext dsl = RDSConexion.getDSL();
@@ -71,7 +73,7 @@ public abstract class UpdateCategoriaAbstractHandler implements RequestHandler<A
                } else {
                  responseRest.setMetadata("Respuesta nok", "-1", "Grupo no encontrado");
                }
-               output = new Gson().toJson(responseRest);
+               output = GsonFactory.createGson().toJson(responseRest);
                return response.withStatusCode(200)
                        .withBody(output);
          } else {

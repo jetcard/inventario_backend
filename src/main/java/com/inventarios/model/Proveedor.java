@@ -15,7 +15,7 @@ public class Proveedor  implements Serializable{
     private Long id;
     private String razonsocial;
     private String ruc;
-    private String direccionFiscal;
+    private String direccionfiscal;
     private String contacto;
     private String telefono;
     private String correo;
@@ -44,12 +44,12 @@ public class Proveedor  implements Serializable{
         this.ruc = ruc;
     }
 
-    public String getDireccionFiscal() {
-        return direccionFiscal;
+    public String getDireccionfiscal() {
+        return direccionfiscal;
     }
 
-    public void setDireccionFiscal(String direccionFiscal) {
-        this.direccionFiscal = direccionFiscal;
+    public void setDireccionfiscal(String direccionfiscal) {
+        this.direccionfiscal = direccionfiscal;
     }
 
     public String getContacto() {

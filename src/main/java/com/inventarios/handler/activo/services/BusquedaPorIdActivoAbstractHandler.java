@@ -12,6 +12,7 @@ import com.inventarios.model.Activo;
 import java.sql.SQLException;
 import java.util.*;
 import com.inventarios.model.Custodio;
+import com.inventarios.util.GsonFactory;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
@@ -45,7 +46,7 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
       Result<Record> result = busquedaPorNombreEspecifico(idString);
       responseRest.getActivoResponse().setListaactivos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
                     .withBody(output);
   } catch (Exception e) {
@@ -78,7 +79,7 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Especifico especifico = new Gson().fromJson(body, Especifico.class);
+        Especifico especifico = GsonFactory.createGson().fromJson(body, Especifico.class);
         if (especifico != null) {
           context.getLogger().log("especifico.getId() = " + especifico.getId());
           if (id.equals(especifico.getId())) {
@@ -92,7 +93,7 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
                     .withStatusCode(400);
           }
         }
-        output = new Gson().toJson(responseRest);
+        output = GsonFactory.createGson().toJson(responseRest);
       }
       return response.withStatusCode(200)
               .withBody(output);

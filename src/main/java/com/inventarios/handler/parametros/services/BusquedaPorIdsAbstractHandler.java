@@ -11,6 +11,8 @@ import com.inventarios.model.AtributosFiltro;
 import com.inventarios.model.Parametro;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
@@ -45,7 +47,7 @@ public abstract class BusquedaPorIdsAbstractHandler implements RequestHandler<AP
       Result<Record> result = filterAtributos(filtro);
       responseRest.getParametroResponse().setListaparametros(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Parametros encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
                     .withBody(output);
   } catch (Exception e) {

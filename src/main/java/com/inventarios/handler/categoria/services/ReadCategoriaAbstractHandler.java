@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.*;
 import com.inventarios.model.Categoria;
 import com.inventarios.handler.categoria.response.CategoriaResponseRest;
+import com.inventarios.util.GsonFactory;
 import org.jooq.Table;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -41,7 +42,7 @@ public abstract class ReadCategoriaAbstractHandler implements RequestHandler<API
       Result<Record> result = read();
       responseRest.getCategoriaResponse().setListacategorias(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Grupos encontrados");
-      output = new Gson().toJson(responseRest);
+      output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200).withBody(output);
     } catch (Exception e) {
       responseRest.setMetadata("Respuesta nok", "-1", "Error al consultar");

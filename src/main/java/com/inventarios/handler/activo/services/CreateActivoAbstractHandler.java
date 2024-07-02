@@ -49,9 +49,7 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
             //String body = "{\"custodioId\":4,\"articuloId\":3,\"tipoId\":1,\"categoriaId\":1,\"codinventario\":\"VQVREE\",\"modelo\":\"NINAS\",\"marca\":\"ZZDZCSCW\",\"nroserie\":\"V1VV3A\",\"fechaingreso\":\"2024-06-12\",\"fechaingresostr\":\"2024-06-12\",\"importe\":\"522515\",\"moneda\":\"S/\",\"descripcion\":\"As\",\"proveedorId\":1,\"especificaciones\":[{\"atributo\":\"COLOR\",\"nombreespecifico\":\"AZUL\"},{\"atributo\":\"DIMENSION\",\"nombreespecifico\":\"123\"}]}";
             if (body != null && !body.isEmpty()) {
                 logger.log(body);
-
-                Gson gson = GsonFactory.createGson();
-                Activo activo = gson.fromJson(body, Activo.class);
+                Activo activo = GsonFactory.createGson().fromJson(body, Activo.class);
                 ///Especifico especifico = mapper.readValue(body, Especifico.class);
                 if (activo == null) {
                     return response

@@ -9,6 +9,8 @@ import com.inventarios.model.Parametro;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -51,7 +53,7 @@ public abstract class UpdateParametroAbstractHandler implements RequestHandler<A
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Parametro parametro = new Gson().fromJson(body, Parametro.class);
+        Parametro parametro = GsonFactory.createGson().fromJson(body, Parametro.class);
         if (parametro != null) {
           if (id.equals(parametro.getId())) {
             update(parametro.getId(), parametro.getNombre(), parametro.getDescripcion());

@@ -10,6 +10,8 @@ import com.inventarios.handler.proveedores.response.ProveedorResponseRest;
 import com.inventarios.model.Proveedor;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -47,7 +49,7 @@ public abstract class UpdateProveedorAbstractHandler implements RequestHandler<A
      try {
          String body = input.getBody();
          // Convertir el cuerpo de la solicitud a un objeto Proveedor
-         Proveedor proveedorFromBody = new Gson().fromJson(body, Proveedor.class);
+         Proveedor proveedorFromBody = GsonFactory.createGson().fromJson(body, Proveedor.class);
          // Verificar si el objeto Proveedor obtenido del cuerpo de la solicitud es válido
          if (proveedorFromBody != null) {
                DSLContext dsl = RDSConexion.getDSL();
@@ -71,7 +73,7 @@ public abstract class UpdateProveedorAbstractHandler implements RequestHandler<A
                } else {
                  responseRest.setMetadata("Respuesta nok", "-1", "Proveedor no encontrado");
                }
-               output = new Gson().toJson(responseRest);
+               output = GsonFactory.createGson().toJson(responseRest);
                return response.withStatusCode(200)
                        .withBody(output);
          } else {

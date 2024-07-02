@@ -10,6 +10,8 @@ import com.inventarios.handler.articulos.response.ArticuloResponseRest;
 import com.inventarios.model.Articulo;
 import java.sql.SQLException;
 import java.util.*;
+
+import com.inventarios.util.GsonFactory;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Table;
@@ -48,7 +50,7 @@ public abstract class UpdateArticuloAbstractHandler implements RequestHandler<AP
      try {
          String body = input.getBody();
 
-         Articulo articuloFromBody = new Gson().fromJson(body, Articulo.class);
+         Articulo articuloFromBody = GsonFactory.createGson().fromJson(body, Articulo.class);
 
          if (articuloFromBody != null) {
                DSLContext dsl = RDSConexion.getDSL();
@@ -71,7 +73,7 @@ public abstract class UpdateArticuloAbstractHandler implements RequestHandler<AP
                } else {
                  responseRest.setMetadata("Respuesta nok", "-1", "Articulo no encontrado");
                }
-               output = new Gson().toJson(responseRest);
+               output = GsonFactory.createGson().toJson(responseRest);
                return response.withStatusCode(200)
                        .withBody(output);
          } else {
