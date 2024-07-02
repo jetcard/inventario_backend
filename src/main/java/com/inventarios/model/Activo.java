@@ -47,18 +47,24 @@ public class Activo implements Serializable {
     @JsonManagedReference
     private List<Especificaciones> especificaciones;
     private String descripcion;
+
+
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
-    public Custodio getResponsable() {
+
+    public Custodio getCustodio() {
         return custodio;
     }
-    public void setResponsable(Custodio custodio) {
+
+    public void setCustodio(Custodio custodio) {
         this.custodio = custodio;
     }
+
     public Articulo getArticulo() {
         return articulo;
     }
@@ -75,11 +81,11 @@ public class Activo implements Serializable {
         this.tipo = tipo;
     }
 
-    public Categoria getGrupo() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setGrupo(Categoria categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 

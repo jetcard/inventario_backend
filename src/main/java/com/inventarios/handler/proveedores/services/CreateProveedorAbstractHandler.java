@@ -38,9 +38,9 @@ public abstract class CreateProveedorAbstractHandler implements RequestHandler<A
     ProveedorResponseRest responseRest = new ProveedorResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
       .withHeaders(headers);
-    //String body = input.getBody();
-    String body =
-            "{\"ruc\":\"27798362723\",\"razonsocial\":\"CONSULTORES\",\"direccionfiscal\":\"DIRECCION\",\"contacto\":\"HJASJSD\", \"telefono\": \"888888111\",\"correo\": \"kahh@ddkk.com\"}";
+    String body = input.getBody();
+    /*String body =
+            "{\"ruc\":\"27798362723\",\"razonsocial\":\"CONSULTORES\",\"direccionfiscal\":\"DIRECCION\",\"contacto\":\"HJASJSD\", \"telefono\": \"888888111\",\"correo\": \"kahh@ddkk.com\"}";*/
     context.getLogger().log("body " + body);
     String output ="";
     try {

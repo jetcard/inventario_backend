@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
+
   @Override
   public int getAtributoID(Atributo atributo) throws SQLException {
     DSLContext dsl = RDSConexion.getDSL();
@@ -35,6 +36,7 @@ public class CreateAtributoHandler extends CreateAtributoAbstractHandler {
       dsl.transaction(configuration -> {
         DSLContext transactionalDsl = DSL.using(configuration);
         long atributoid = atributo.getId();
+        System.out.println("atributoid = "+ atributo.getId());
         atributo.setId(atributoid);
         for (Atributos atributos : atributosList) {
           atributos.setAtributoid(atributo.getId());

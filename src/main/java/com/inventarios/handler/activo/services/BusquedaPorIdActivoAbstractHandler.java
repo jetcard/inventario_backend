@@ -62,7 +62,7 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
     for (Record record : result) {
       Activo activo = new Activo();
       activo.setId(record.getValue("id", Long.class));
-      activo.setResponsable(record.getValue("custodioId", Custodio.class));
+      activo.setCustodio(record.getValue("custodioId", Custodio.class));
       activo.setArticulo(record.getValue("articuloId", Articulo.class));
       ///especifico.setespecificaciones(record.getValue("descripespecifico", List.class));
       listaActivos.add(activo);

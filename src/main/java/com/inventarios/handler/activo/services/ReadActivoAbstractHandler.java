@@ -148,7 +148,7 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
           Custodio custodio = new Custodio();
           custodio.setId(record.get(ACTIVO_RESPONSABLE_ID));
           custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
-          activo.setResponsable(custodio);
+          activo.setCustodio(custodio);
           //especifico.setResponsable(findResponsableById(record.get(ACTIVO_RESPONSABLE_ID)));
           Articulo articulo = new Articulo();
           articulo.setId(record.get(ACTIVO_ARTICULO_ID));
@@ -164,7 +164,7 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
           Categoria categoria =new Categoria();
           categoria.setId(record.get(ACTIVO_GRUPO_ID));
           categoria.setNombregrupo(mostrarCategoria(categoria.getId()));
-          activo.setGrupo(categoria);
+          activo.setCategoria(categoria);
 
           //
           Proveedor proveedor=new Proveedor();

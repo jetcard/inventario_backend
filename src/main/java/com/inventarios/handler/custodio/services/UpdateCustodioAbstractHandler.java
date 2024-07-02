@@ -61,8 +61,8 @@ public abstract class UpdateCustodioAbstractHandler implements RequestHandler<AP
                  custodio.setArearesponsable(custodio.getArearesponsable());
                  custodio.setNombresyapellidos(custodio.getNombresyapellidos());
                  dsl.update(RESPONSABLE_TABLE)
-                         .set(DSL.field("arearesponsable"), custodioFromBody.getArearesponsable())
-                         .set(DSL.field("nombresyapellidos"), custodioFromBody.getNombresyapellidos())
+                         .set(DSL.field("arearesponsable"), custodioFromBody.getArearesponsable().toUpperCase())
+                         .set(DSL.field("nombresyapellidos"), custodioFromBody.getNombresyapellidos().toUpperCase())
                          .where(DSL.field("id").eq(custodio.getId()))
                          .execute();
                  list.add(custodio);

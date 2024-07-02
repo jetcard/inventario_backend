@@ -60,10 +60,10 @@ public abstract class UpdateActivoAbstractHandler implements RequestHandler<APIG
         if (activo != null) {
           if (id.equals(activo.getId())) {
             update(activo.getId(),
-                    activo.getResponsable(),
+                    activo.getCustodio(),
                     activo.getArticulo(),
                     activo.getTipo(),
-                    activo.getGrupo());
+                    activo.getCategoria());
           } else {
             return response
                     .withBody("Id in path does not match id in body")

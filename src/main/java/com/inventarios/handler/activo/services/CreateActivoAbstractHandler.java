@@ -6,7 +6,6 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.gson.Gson;
 import com.inventarios.handler.activo.response.ActivoResponseRest;
 import java.sql.SQLException;
 import java.util.*;
@@ -29,7 +28,7 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
         headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
         headers.put("Access-Control-Allow-Methods", "POST");
     }
-    protected abstract int getEspecificoID(Activo activo) throws SQLException;
+    protected abstract int getEspecificacionID(Activo activo) throws SQLException;
     protected abstract void save(Activo activo, List<Especificaciones> especificacionesList) throws SQLException;
 
     @Override
@@ -46,7 +45,7 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
             JsonNode jsonNode = mapper.readTree(input.getBody());
 
             String body = input.getBody();
-            //String body = "{\"custodioId\":4,\"articuloId\":3,\"tipoId\":1,\"categoriaId\":1,\"codinventario\":\"VQVREE\",\"modelo\":\"NINAS\",\"marca\":\"ZZDZCSCW\",\"nroserie\":\"V1VV3A\",\"fechaingreso\":\"2024-06-12\",\"fechaingresostr\":\"2024-06-12\",\"importe\":\"522515\",\"moneda\":\"S/\",\"descripcion\":\"As\",\"proveedorId\":1,\"especificaciones\":[{\"atributo\":\"COLOR\",\"nombreespecifico\":\"AZUL\"},{\"atributo\":\"DIMENSION\",\"nombreespecifico\":\"123\"}]}";
+            //String body = "{\"custodioId\":4,\"articuloId\":3,\"tipoId\":1,\"categoriaId\":1,\"codinventario\":\"VQVREE\",\"modelo\":\"NINAS\",\"marca\":\"ZZDZCSCW\",\"nroserie\":\"V1VV3A\",\"fechaingreso\":\"2024-06-12\",\"fechaingresostr\":\"2024-06-12\",\"importe\":\"522515\",\"moneda\":\"S/\",\"descripcion\":\"As\",\"proveedorId\":1,\"especificaciones\":[{\"nombreatributo\":\"COLOR\",\"descripcionatributo\":\"AZUL\"}]}";
             if (body != null && !body.isEmpty()) {
                 logger.log(body);
                 Activo activo = GsonFactory.createGson().fromJson(body, Activo.class);
@@ -57,30 +56,20 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
                             .withStatusCode(400);
                 }
                 if (activo != null) {
-                    //List<Especificaciones> especificacionesListaInicial = new ArrayList<>();
+                    List<Especificaciones> especificacionesListaInicial = new ArrayList<>();
 
                     // Initialize default value for especificoid
-                    //Long defaultEspecificoId = 0L;
+                    Long defaultEspecificacionId = 0L;
 
                     // Create a default especificaciones object
-                    /*Especificaciones defaultespecificaciones = new Especificaciones();
-                    defaultespecificaciones.setEspecificoid(defaultEspecificoId);
-                    defaultespecificaciones.setNombreespecifico(""); // You can set other properties if necessary
-
+                    Especificaciones defaultespecificaciones = new Especificaciones();
+                    defaultespecificaciones.setEspecificacionid(defaultEspecificacionId);
+                    defaultespecificaciones.setNombreatributo(""); // You can set other properties if necessary
+                    defaultespecificaciones.setDescripcionatributo("");
                     // Add the default especificaciones object to especificacionesList
                     especificacionesListaInicial.add(defaultespecificaciones);
-                    */
-                    // Set the especificacionesList to the especificaciones property of especifico
-                    /*EspecificacionTecnica especificacionTecnica=new EspecificacionTecnica();
-                    List<EspecificacionTecnica> especificacionTecnicaList = new ArrayList<>();
-                    List<EspecificacionTecnica> especificaciones = jsonNode.get("especificaciones").asLong();
-                    especifico.setEspecificaciones(especificacionTecnicaList);*/
-                    //especificaciones(especificacionesListaInicial);
-                    /*
-                    for (EspecificacionTecnica especificacion : activo.getEspecificaciones()) {
-                        // Aquí puedes hacer cualquier ajuste necesario en los atributos de EspecificacionTecnica
-                        especificacionesList.add(especificacion);
-                    }*/
+
+                    activo.setEspecificaciones(especificacionesListaInicial);
 
                     logger.log("especifico = "+ activo);
 
@@ -110,20 +99,20 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
                     Proveedor proveedor=new Proveedor();
                     proveedor.setId(proveedorId);
 
-                    activo.setResponsable(custodio);
+                    activo.setCustodio(custodio);
                     activo.setArticulo(articulo);
                     activo.setTipo(tipo);
-                    activo.setGrupo(categoria);
+                    activo.setCategoria(categoria);
                     activo.setProveedor(proveedor);
 
-                    activo.getResponsable().setId(custodioId);
+                    activo.getCustodio().setId(custodioId);
                     activo.getArticulo().setId(articuloId);
                     activo.getTipo().setId(tipoId);
-                    activo.getGrupo().setId(categoriaId);
+                    activo.getCategoria().setId(categoriaId);
                     activo.getProveedor().setId(proveedorId);
 
-                    long especificoID = getEspecificoID(activo);
-                    activo.setId(especificoID);
+                    long especificacionID = getEspecificacionID(activo);
+                    activo.setId(especificacionID);
 
                     JsonNode especificacionesNode = jsonNode.get("especificaciones");
                     if (especificacionesNode != null && especificacionesNode.isArray()) {
@@ -134,7 +123,7 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
                             especificacionesList.add(especificaciones);
                         }
                     }
-                    activo.setEspecificaciones(especificacionesList);//setespecificaciones(especificacionesList);
+                    activo.setEspecificaciones(especificacionesList);
                     logger.log(":::::::::::::::::::::::::::::::::: PREPARANDO PARA INSERTAR ::::::::::::::::::::::::::::::::::");
                     save(activo, especificacionesList);
                     logger.log(":::::::::::::::::::::::::::::::::: INSERCIÓN COMPLETA ::::::::::::::::::::::::::::::::::");

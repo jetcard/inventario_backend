@@ -6,7 +6,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -29,7 +28,7 @@ public class RDSConexion {
     config.setJdbcUrl("jdbc:postgresql://" + rdsEndpoint() + "/" + rdsDatabase());
     config.setUsername(rdsUserDB());
     config.setPassword(rdsPassDB());
-    config.setMaximumPoolSize(20);  // Ajusta según tus necesidades
+    config.setMaximumPoolSize(20);
 
     dataSource = new HikariDataSource(config);
   }
@@ -44,12 +43,12 @@ public class RDSConexion {
   }
 
   public static String rdsSecretArn() {
-    return "arn:aws:secretsmanager:ap-southeast-2:545200407638:secret:RDSSecret-QCP8RFftCJZI-KfyWz6";
+    return "arn:aws:secretsmanager:ap-southeast-2:905418357889:secret:RDSSecret-uqOCo0I9XlBR-55BBqD";
     //return System.getenv(POSTGRES_SECRET_ARN_ENV);
   }
 
   public static String rdsEndpoint() {
-    return "sam-app-rdsinstance-qg1yxdoaag0n.cfhln4djpnvd.ap-southeast-2.rds.amazonaws.com";
+    return "sam-app-rdsinstance-mm9dqyrryioj.ctcosak24j76.ap-southeast-2.rds.amazonaws.com";
     //return System.getenv(DB_ENDPOINT);
   }
 
@@ -68,75 +67,7 @@ public class RDSConexion {
   }
 }
 
-/*
-import com.amazonaws.secretsmanager.sql.AWSSecretsManagerPostgreSQLDriver;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
 
-public class RDSConexion {
-  public static final String DATABASE_NAME_ENV = "DBName";
-  public static final String POSTGRES_SECRET_ARN_ENV = "RDSSecretArn";
-  public static final String DB_ENDPOINT = "DBEnpoint";
-  public static final String DB_USER = "user";
-  public static final String DB_PASS = "pass";
-
-  static final Properties info;
-
-  static {
-    System.setProperty("software.amazon.awssdk.http.service.impl",
-            "software.amazon.awssdk.http.urlconnection.UrlConnectionSdkHttpService");
-    var driver = new AWSSecretsManagerPostgreSQLDriver();
-    info = new Properties();
-    info.put("user", rdsSecretArn());
-  }
-
-  public static Connection getConnection() {
-    try {
-      final String dbURL = "jdbc-secretsmanager:postgresql://" + rdsEndpoint() + "/" + rdsDatabase();
-      return DriverManager.getConnection(dbURL, info);
-    } catch (SQLException se) {
-      System.err.println(se.getMessage());
-      return null;
-    }
-  }
-
-  public static String rdsDatabase() {
-    //return "basededatos";
-    return System.getenv(DATABASE_NAME_ENV);
-  }
-
-  public static String rdsSecretArn() {
-    //return "arn:aws:secretsmanager:ap-southeast-2:905418357889:secret:RDSSecret-t7Q7BprKVCCl-2HD3ka";
-    return System.getenv(POSTGRES_SECRET_ARN_ENV);
-  }
-
-  public static String rdsEndpoint() {
-    //return "sam-app-rdsinstance-w4uvinapafee.ctcosak24j76.ap-southeast-2.rds.amazonaws.com";
-    return System.getenv(DB_ENDPOINT);
-  }
-
-  public static String rdsUserDB() {
-    //return "postgres";
-    return System.getenv(DB_USER);
-  }
-
-  public static String rdsPassDB() {
-    //return "1234567890";
-    return System.getenv(DB_PASS);
-  }
-
-  public static DSLContext getDSL() {
-    return (DSL.using(getConnection(), SQLDialect.POSTGRES));
-  }
-
-}*/
 /*Pruebas
 public class RDSConexion {
   public static final String DATABASE_NAME_ENV = "DBName";

@@ -60,11 +60,11 @@ public abstract class UpdateArticuloAbstractHandler implements RequestHandler<AP
                        .fetchOptionalInto(Articulo.class);
                if (articuloSearch.isPresent()) {
                  Articulo articulo = articuloSearch.get();
-                 articulo.setNombrearticulo(articulo.getNombrearticulo());
-                 articulo.setDescriparticulo(articulo.getDescriparticulo());
+                 articulo.setNombrearticulo(articulo.getNombrearticulo().toUpperCase());
+                 articulo.setDescriparticulo(articulo.getDescriparticulo().toUpperCase());
                  dsl.update(ARTICULO_TABLE)
-                         .set(DSL.field("nombrearticulo"), articuloFromBody .getNombrearticulo())
-                         .set(DSL.field("descriparticulo"), articuloFromBody .getDescriparticulo())
+                         .set(DSL.field("nombrearticulo"), articuloFromBody .getNombrearticulo().toUpperCase())
+                         .set(DSL.field("descriparticulo"), articuloFromBody .getDescriparticulo().toUpperCase())
                          .where(DSL.field("id").eq(articulo.getId()))
                          .execute();
                  list.add(articulo);

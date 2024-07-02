@@ -4231,9 +4231,7 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -4258,7 +4256,7 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{  \"statusCode\": 200 }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true

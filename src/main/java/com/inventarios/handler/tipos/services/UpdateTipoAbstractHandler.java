@@ -63,8 +63,8 @@ public abstract class UpdateTipoAbstractHandler implements RequestHandler<APIGat
                  tipo.setNombretipo(tipo.getNombretipo());
                  tipo.setDescriptipo(tipo.getDescriptipo());
                  dsl.update(TIPO_TABLE)
-                         .set(DSL.field("nombretipo"), tipoFromBody .getNombretipo())
-                         .set(DSL.field("descriptipo"), tipoFromBody .getDescriptipo())
+                         .set(DSL.field("nombretipo"), tipoFromBody .getNombretipo().toUpperCase())
+                         .set(DSL.field("descriptipo"), tipoFromBody .getDescriptipo().toUpperCase())
                          .where(DSL.field("id").eq(tipo.getId()))
                          .execute();
                  list.add(tipo);

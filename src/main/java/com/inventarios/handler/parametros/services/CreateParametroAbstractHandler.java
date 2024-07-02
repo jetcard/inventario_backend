@@ -8,6 +8,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.inventarios.handler.parametros.response.ParametroResponseRest;
+import com.inventarios.model.Activo;
 import com.inventarios.model.Parametro;
 import java.sql.SQLException;
 import java.util.*;
@@ -30,11 +31,11 @@ public abstract class CreateParametroAbstractHandler implements RequestHandler<A
         headers.put("Access-Control-Allow-Methods", "POST");
     }
 
-    protected abstract void save(Parametro parametro) throws SQLException;
+    protected abstract void save(String nombre, String descripcion) throws SQLException;
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
-        input.setHeaders(headers);
+        //input.setHeaders(headers);
         LambdaLogger logger = context.getLogger();
         ParametroResponseRest responseRest = new ParametroResponseRest();
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
@@ -43,43 +44,36 @@ public abstract class CreateParametroAbstractHandler implements RequestHandler<A
         String contentTypeHeader = input.getHeaders().get("Content-Type");
         logger.log("Content-Type: " + contentTypeHeader);
         try {
-            String body = input.getBody();
-            //String body = "{\"modelo\":\"AS\",\"marca\":\"AS\",\"nroserie\":\"1\",\"fechacompra\":\"1\",\"importe\":777,\"categoriaId\":1,\"account\":55555}";
+            //String body = input.getBody();
+            String body = "{\"nombre\":\"ALTo\",\"descripcion\":\"ALTURa\"}";
             logger.log("##################### BODY PARAMETRO ######################");
             logger.log(body);
             logger.log("#######################################################");
+            if (body != null && !body.isEmpty()) {
+                Parametro parametro = GsonFactory.createGson().fromJson(body, Parametro.class);
 
-            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-            //Parametro parametro = GsonFactory.createGson().fromJson(body, Parametro.class);
-            Parametro parametro = gson.fromJson(body, Parametro.class);
+                logger.log("debe llegar aquí 1 ya tenemos Parametro");
+                if (parametro == null) {
+                    return response
+                            .withBody("El cuerpo de la solicitud no contiene datos válidos para un parametro")
+                            .withStatusCode(400);
+                }
+                logger.log("debe llegar aquí 2");
 
-            logger.log("debe llegar aquí 1 ya tenemos Parametro");
-            if (parametro == null) {
-                return response
-                        .withBody("El cuerpo de la solicitud no contiene datos válidos para un parametro")
-                        .withStatusCode(400);
+                logger.log("Parametro: ");
+                logger.log("Parametro.getId() = " + parametro.getId());
+                logger.log("Parametro.getDescripcion() = " + parametro.getDescripcion());
+
+                logger.log(":::::::::::::::::::::::::::::::::: PREPARANDO PARA INSERTAR ::::::::::::::::::::::::::::::::::");
+                if (parametro != null) {
+                    save(parametro.getNombre().toUpperCase(), parametro.getDescripcion().toUpperCase());
+                    logger.log(":::::::::::::::::::::::::::::::::: INSERCIÓN COMPLETA ::::::::::::::::::::::::::::::::::");
+                    responseRest.setMetadata("Respuesta ok", "00", "Grupo guardado");
+                }
+                output = GsonFactory.createGson().toJson(responseRest);
             }
-            logger.log("debe llegar aquí 2");
-            // Obtener el ID del grupo del objeto Parametro
-            //Long categoriaId = parametro.getGrupo().getId();
-            logger.log("Parametro: ");
-
-            //if (parametro != null) {
-            logger.log("Parametro.getId() = " + parametro.getId());
-            logger.log("Parametro.getDescripcion() = " + parametro.getDescripcion());
-
-            logger.log(":::::::::::::::::::::::::::::::::: PREPARANDO PARA INSERTAR ::::::::::::::::::::::::::::::::::");
-
-            save(parametro);
-            logger.log(":::::::::::::::::::::::::::::::::: INSERCIÓN COMPLETA ::::::::::::::::::::::::::::::::::");
-            list.add(parametro);
-            responseRest.getParametroResponse().setListaparametros(list);
-            responseRest.setMetadata("Respuesta ok", "00", "Parámetro guardado");
-
-            output = GsonFactory.createGson().toJson(responseRest);
             return response.withStatusCode(200)
                     .withBody(output);
-
         } catch (Exception e) {
             responseRest.setMetadata("Respuesta nok", "-1", "Error al insertar Parámetro");
             return response
