@@ -2,6 +2,7 @@ package com.inventarios.model;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
+
 @Entity
   @Table(name="categoria")
   public class Categoria implements Serializable{
@@ -10,8 +11,6 @@ import jakarta.persistence.*;
     private Long id;
     private String nombregrupo;
     private String descripgrupo;
-    //@Transient
-    //private String idAlfanumerico;
 
   public Long getId() {
     return id;

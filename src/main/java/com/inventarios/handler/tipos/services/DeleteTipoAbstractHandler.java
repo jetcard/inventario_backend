@@ -7,7 +7,6 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import com.google.gson.Gson;
 import com.inventarios.handler.tipos.response.TipoResponseRest;
 import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
@@ -37,7 +36,7 @@ public abstract class DeleteTipoAbstractHandler implements RequestHandler<APIGat
             .withHeaders(headers);
     Map<String, String> pathParameters = input.getPathParameters();
     String idString = pathParameters.get("id");
-    context.getLogger().log("id from path: " + idString);
+    context.getLogger().log("Eliminando: " + idString);
 
     Long id = null;
     String output ="";

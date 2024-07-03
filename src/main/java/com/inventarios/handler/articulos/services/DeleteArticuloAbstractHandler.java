@@ -7,7 +7,6 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import com.google.gson.Gson;
 import com.inventarios.handler.articulos.response.ArticuloResponseRest;
 import com.inventarios.util.GsonFactory;
 import org.jooq.Record;

@@ -196,9 +196,7 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -696,7 +694,7 @@ Resources:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'PUT,DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,PUT,DELETE,OPTIONS'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             StatusCode: '200'
         Type: MOCK
@@ -1176,9 +1174,7 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -1198,7 +1194,7 @@ Resources:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'PUT,DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,PUT,DELETE,OPTIONS'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             StatusCode: '200'
         Type: MOCK
@@ -1667,9 +1663,7 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -1689,14 +1683,12 @@ Resources:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'PUT,DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,PUT,DELETE,OPTIONS'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -1715,9 +1707,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -1746,9 +1736,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -2162,9 +2150,7 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -2184,14 +2170,12 @@ Resources:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'PUT,DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,PUT,DELETE,OPTIONS'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -2210,9 +2194,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -2241,9 +2223,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -2657,9 +2637,7 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -2679,14 +2657,12 @@ Resources:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'PUT,DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,PUT,DELETE,OPTIONS'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -2705,9 +2681,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -2736,9 +2710,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -3163,9 +3135,7 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -3185,12 +3155,12 @@ Resources:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'PUT,DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,PUT,DELETE,OPTIONS'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{  \"statusCode\": 200   }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -3209,7 +3179,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{  \"statusCode\": 200  }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -3238,7 +3208,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{  \"statusCode\": 200  }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -3740,9 +3710,7 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -3762,12 +3730,12 @@ Resources:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'PUT,DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,PUT,DELETE,OPTIONS'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{  \"statusCode\": 200  }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -3815,7 +3783,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{  \"statusCode\": 200   }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -4718,9 +4686,7 @@ Resources:
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{
-            \"statusCode\": 200
-            }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -4740,12 +4706,12 @@ Resources:
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              method.response.header.Access-Control-Allow-Methods: "'PUT,DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,PUT,DELETE,OPTIONS'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             StatusCode: '200'
         Type: MOCK
         RequestTemplates:
-          "application/json": "{  \"statusCode\": 200  }"
+          "application/json": "{ \"statusCode\": 200 }"
       MethodResponses:
         - ResponseParameters:
             method.response.header.Access-Control-Allow-Headers: true
@@ -4793,7 +4759,7 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         RequestTemplates:
-          "application/json": "{  \"statusCode\": 200   }"
+          "application/json": "{ \"statusCode\": 200 }"
         IntegrationResponses:
           - ResponseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"

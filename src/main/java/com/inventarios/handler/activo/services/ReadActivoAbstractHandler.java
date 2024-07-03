@@ -2,7 +2,6 @@ package com.inventarios.handler.activo.services;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
@@ -11,16 +10,21 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import com.inventarios.handler.activo.CreateActivoHandler;
+import com.inventarios.handler.activo.ReadActivoHandler;
+import com.inventarios.handler.activo.UpdateActivoHandler;
 import com.inventarios.handler.activo.response.ActivoResponseRest;
-///import com.inventarios.handler.keycloak.service.AuthorizerKeycloakAbstractHandler;
+import com.inventarios.handler.keycloak.service.AuthorizerKeycloakAbstractHandler;
 import com.inventarios.model.*;
 import com.inventarios.util.GsonFactory;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
 import static org.jooq.impl.DSL.*;
-public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-  // extends AuthorizerKeycloakAbstractHandler {
+
+public abstract class ReadActivoAbstractHandler //implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+   extends AuthorizerKeycloakAbstractHandler {
   //
   protected final static Table<Record> ACTIVO_TABLE = table("activo");
   protected final static Table<Record> ESPECIFICACIONES_TABLE = table("especificaciones");
@@ -57,7 +61,6 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
 
   protected final static Field<Long> ACTIVO_TIPO_ID = field(name("activo", "tipoid"), Long.class);
 
-
   final static Map<String, String> headers = new HashMap<>();
 
   static {
@@ -84,42 +87,50 @@ public abstract class ReadActivoAbstractHandler implements RequestHandler<APIGat
             .withHeaders(headers);
     String output ="";
     try {
-      /*String authToken = extractAuthToken(request);
+      String authToken = extractAuthToken(request);
       logger.log("authToken utilizada en Activo : ");
       logger.log(authToken);
       AuthorizationInfo authInfo = validateAuthToken(authToken);
-      //logger.log("authInfo = "+authInfo);
-      addAuthorizationHeaders(authInfo, request);
-      if (authInfo.isAdmin()) {
-        logger.log("###########");
-        logger.log(" ROL ADMIN");
-        logger.log("###########");
+      if(authInfo!=null){
+        logger.log("authInfo = "+authInfo);
+        addAuthorizationHeaders(authInfo, request);
+        if (authInfo.isAdmin()) {
+          logger.log("###########");
+          logger.log(" ROL ADMIN");
+          logger.log("###########");
 
-        // Aquí se maneja la lógica para crear o actualizar activos
-        if (request.getHttpMethod().equalsIgnoreCase("GET")) {
-          ReadActivoHandler readActivoHandler = new ReadActivoHandler();
-          response = readActivoHandler.handleRequest(request, context);
-        } else if (request.getHttpMethod().equalsIgnoreCase("POST")) {
-          CreateActivoHandler createEspecificoHandler = new CreateActivoHandler();
-          response = createEspecificoHandler.handleRequest(request, context);
-        } else if (request.getHttpMethod().equalsIgnoreCase("PUT")) {
-          UpdateActivoHandler updateEspecificoHandler = new UpdateActivoHandler();
-          response = updateEspecificoHandler.handleRequest(request, context);
+          // Aquí se maneja la lógica para crear o actualizar activos
+          if (request.getHttpMethod().equalsIgnoreCase("GET")) {
+            ReadActivoHandler readActivoHandler = new ReadActivoHandler();
+            response = readActivoHandler.handleRequest(request, context);
+          } else if (request.getHttpMethod().equalsIgnoreCase("POST")) {
+            CreateActivoHandler createEspecificoHandler = new CreateActivoHandler();
+            response = createEspecificoHandler.handleRequest(request, context);
+          } else if (request.getHttpMethod().equalsIgnoreCase("PUT")) {
+            UpdateActivoHandler updateEspecificoHandler = new UpdateActivoHandler();
+            response = updateEspecificoHandler.handleRequest(request, context);
+          } else {
+            responseRest.setMetadata("No autorizado", "-1", "No autorizado para leer, crear o actualizar activos.");
+            return response
+                    .withBody(new Gson().toJson(responseRest))
+                    .withStatusCode(405); // Código HTTP 405 - Método no permitido
+          }
+        } else if (authInfo.isUser()) {
+          logger.log("##########");
+          logger.log(" ROL USER ");
+          logger.log("##########");
+          //CreateespecificacionesHandler createespecificacionesHandler = new CreateespecificacionesHandler();
+          //response = createespecificacionesHandler.handleRequest(request, context);
         } else {
-          responseRest.setMetadata("No autorizado", "-1", "No autorizado para leer, crear o actualizar activos.");
-          return response
-                  .withBody(new Gson().toJson(responseRest))
-                  .withStatusCode(405); // Código HTTP 405 - Método no permitido
+          logger.log("##########");
+          logger.log(" OTRO ROL ");
+          logger.log("##########");
         }
-      } else if (authInfo.isUser()) {
-        logger.log("##########");
-        logger.log(" ROL USER");
-        logger.log("##########");
-        //CreateespecificacionesHandler createespecificacionesHandler = new CreateespecificacionesHandler();
-        //response = createespecificacionesHandler.handleRequest(request, context);
-      } else {
-        logger.log("OTRO ROL");
-      }*/
+
+      }else{
+        logger.log("authInfo is null");
+      }
+
       Result<Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String>> result = read();
       responseRest.getActivoResponse().setListaactivos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");

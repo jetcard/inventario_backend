@@ -7,7 +7,6 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import com.google.gson.Gson;
 import com.inventarios.handler.categoria.response.CategoriaResponseRest;
 import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
@@ -17,6 +16,7 @@ import org.jooq.impl.DSL;
 public abstract class DeleteCategoriaAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   protected final static Table<Record> GRUPO_TABLE = DSL.table("categoria");
+
   final static Map<String, String> headers = new HashMap<>();
 
   static {
@@ -49,7 +49,7 @@ public abstract class DeleteCategoriaAbstractHandler implements RequestHandler<A
     }
     try {
       delete(id);
-      responseRest.setMetadata("Respuesta ok", "00", "Grupo eliminado");
+      responseRest.setMetadata("Respuesta ok", "00", "Categoría eliminada");
       output = GsonFactory.createGson().toJson(responseRest);
       return response
               .withBody(output)

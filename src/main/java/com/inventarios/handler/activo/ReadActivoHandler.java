@@ -1,15 +1,32 @@
 package com.inventarios.handler.activo;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.auth0.jwk.Jwk;
+import com.auth0.jwk.JwkProvider;
+import com.auth0.jwk.JwkProviderBuilder;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+/*
+import com.auth0.jwt.JWTVerificationException;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
+//import com.auth0.jwt.interfaces.JWTVerifier;
+import com.auth0.jwt.jwk.Jwk;
+import com.auth0.jwt.jwk.JwkProvider;
+import com.auth0.jwt.jwk.JwkProviderBuilder;
+import com.auth0.jwt.jwk.SigningKeyNotFoundException;*/
+
+
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inventarios.core.RDSConexion;
 import java.math.BigInteger;
+import java.net.URL;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
@@ -17,11 +34,14 @@ import java.security.spec.RSAPublicKeySpec;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import com.inventarios.handler.activo.services.ReadActivoAbstractHandler;
 import com.inventarios.model.AuthorizationInfo;
+import com.inventarios.util.JWTUtils;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
+
 public class ReadActivoHandler extends ReadActivoAbstractHandler {
   protected Result<Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String>> read() throws SQLException {
     var dsl = RDSConexion.getDSL();
@@ -120,7 +140,7 @@ public class ReadActivoHandler extends ReadActivoAbstractHandler {
     return record != null ? record.getValue(PROVEEDOR_TABLE_COLUMNA) : null;
   }
 
-  ///@Override
+  @Override
   protected String extractAuthToken(APIGatewayProxyRequestEvent input) {
     Map<String, String> headers = input.getHeaders();
     ////logger.log("headers = "+headers);
@@ -136,24 +156,79 @@ public class ReadActivoHandler extends ReadActivoAbstractHandler {
     return null;
   }
 
-  ///@Override
+  public static void main(String[] args) {
+    try {
+      String token = "your-jwt-token-here";
+      String keyId = JWTUtils.getKeyIdFromToken(token);
+
+      if (keyId == null) {
+        System.err.println("No Key ID found in the token");
+        return;
+      }
+
+      URL url = new URL("https://examensolucion-u8698.vm.elestio.app/realms/Inventario/protocol/openid-connect/certs");
+      JwkProvider provider = new JwkProviderBuilder(url)
+              .cached(10, 24, TimeUnit.HOURS) // cache up to 10 jwks for 24 hours
+              .rateLimited(10, 1, TimeUnit.MINUTES) // if not cached, only allow 10 requests per minute
+              .build();
+
+      Jwk jwk = provider.get(keyId);
+      RSAPublicKey publicKey = (RSAPublicKey) jwk.getPublicKey();
+
+      Algorithm algorithm = Algorithm.RSA256(publicKey, null);
+      JWTVerifier verifier = JWT.require(algorithm)
+              .withIssuer("https://examensolucion-u8698.vm.elestio.app/realms/Inventario")
+              .build();
+
+      DecodedJWT jwt = verifier.verify(token);
+      System.out.println("Token is valid!");
+      System.out.println("Subject: " + jwt.getSubject());
+
+    } catch (JWTVerificationException e) {
+      e.printStackTrace();
+      System.err.println("Invalid token: " + e.getMessage());
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.err.println("Error: " + e.getMessage());
+    }
+  }
+
+
+  @Override
   protected AuthorizationInfo validateAuthToken(String authToken) {
     if (authToken != null) {
       try {
+        // JwkProvider para obtener el JWK de Keycloak
+        /*JwkProvider provider = new JwkProviderBuilder("https://examensolucion-u8698.vm.elestio.app/realms/Inventario/protocol/openid-connect/certs")
+                .cached(10, 24, TimeUnit.HOURS) // cache hasta 10 JWKs durante 24 horas
+                .build();*/
+        // Decodificar el JWT sin verificar para obtener el ID de clave (kid)
+        ///DecodedJWT jwt = JWT.decode(authToken);
+        ///String kid = jwt.getKeyId();
+        // Obtener el JWK del proveedor
+        ///Jwk jwk = provider.get(kid);
+        //Funciona:
         String jwkJson = "{\n" +
                 "  \"e\": \"AQAB\",\n" +
                 "  \"kty\": \"RSA\",\n" +
-                "  \"n\": \"tf1f25bAtZMGbwXkD_UNZ1z9eH91rNeZ-MIWeiGpE-g0u1Y6lBKi-vI6O0nFGTcilCTR6tcqXu9Ah6cwxPC6n0ORCUFd_VXRzjGHzrU5_Kofhb8_yPYFaAp3JAuvrj7PJNnY7RUZZibBuBpGIesrdwuDdBDprR4VzKuSKl7HZCMcAkhqNQjaSNt1UhwDb1mV22uu4NfjqaGSfp2LnRWnpUYTGZobTRE2S5kAw73kefewPCHiooryCZK_69NK5TAZWXWf-YPpFtdwmf7mFggonpWWrCuTWikEKicwdL6xn6oWYeuVlM80M2hUhNJNUSLB7fDHYli5NRqky315bsjvhw\"\n" +
+                "  \"n\": \"2QeQWgy8P5LeEmCO45V_CajWeKqsCmCCzVRNcOet-NC_smqelugLYlUYLXWFowqJzOcBb3Xt1B-of8MeMd-wOtiRdj2XCwLY6D3seZHp22gr9kcdXqU0S-eplVfdlW9e_xeRQyS8sqPfuNzQGDOiUSfOEpyMgErahUec5DHdACMGiYw9UWBvR6Y2sthfm8K2H3Pc8ymIyzSrDYrobzI4g7Hu1YmXFEZI7mB51rkFEO5HXV4r78IkYKvUXYuxnHN3s4fnuyzDhMucht99Eun6qI5Fk-NyDvZ62NNaSmxpL5HldiFLPH_skzCOpxSeB-qBAUasHCQXXdcl5xFAZPb8iw\"\n" +
                 "}";
-                //"2QeQWgy8P5LeEmCO45V_CajWeKqsCmCCzVRNcOet-NC_smqelugLYlUYLXWFowqJzOcBb3Xt1B-of8MeMd-wOtiRdj2XCwLY6D3seZHp22gr9kcdXqU0S-eplVfdlW9e_xeRQyS8sqPfuNzQGDOiUSfOEpyMgErahUec5DHdACMGiYw9UWBvR6Y2sthfm8K2H3Pc8ymIyzSrDYrobzI4g7Hu1YmXFEZI7mB51rkFEO5HXV4r78IkYKvUXYuxnHN3s4fnuyzDhMucht99Eun6qI5Fk-NyDvZ62NNaSmxpL5HldiFLPH_skzCOpxSeB-qBAUasHCQXXdcl5xFAZPb8iw";
+
         try {
-          PublicKey publicKey = getPublicKeyFromJWK(jwkJson);
-          Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) publicKey, null);
+          RSAPublicKey publicKey = getPublicKeyFromJWK(jwkJson);
+          ///PublicKey publicKey = getPublicKeyFromJWK(jwkJson);
+          ///PublicKey publicKey = jwk.getPublicKey();
+          Algorithm algorithm0 = Algorithm.RSA256((RSAPublicKey) publicKey, null);
+
+          Algorithm algorithm = Algorithm.RSA256(publicKey, null);
+
+
           JWTVerifier verifier = JWT.require(algorithm)
                   .withIssuer("https://examensolucion-u8698.vm.elestio.app/realms/Inventario")
                   .build();
-          DecodedJWT jwt = verifier.verify(authToken);
 
+          DecodedJWT jwt = verifier.verify(authToken);
+          ///jwt = verifier.verify(authToken);
           // Extraer y utilizar reclamaciones
           String subject = jwt.getSubject();
           String issuer = jwt.getIssuer();
@@ -214,7 +289,7 @@ public class ReadActivoHandler extends ReadActivoAbstractHandler {
     return null;
   }
 
-  private static PublicKey getPublicKeyFromJWK(String jwkJson) throws Exception {
+  private static PublicKey getPublicKeyFromJWKOriginal(String jwkJson) throws Exception {
     ObjectMapper mapper = new ObjectMapper();
     Map<String, String> jwk = mapper.readValue(jwkJson, Map.class);
     BigInteger modulus = new BigInteger(1, Base64.getUrlDecoder().decode(jwk.get("n")));
@@ -225,7 +300,25 @@ public class ReadActivoHandler extends ReadActivoAbstractHandler {
     return factory.generatePublic(spec);
   }
 
-  ///@Override
+  private static RSAPublicKey getPublicKeyFromJWK(String jwkJson) throws Exception {
+    ObjectMapper mapper = new ObjectMapper();
+    JsonNode jwkNode = mapper.readTree(jwkJson);
+    String n = jwkNode.get("n").asText();
+    String e = jwkNode.get("e").asText();
+
+    byte[] nBytes = Base64.getUrlDecoder().decode(n);
+    byte[] eBytes = Base64.getUrlDecoder().decode(e);
+
+    RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(
+            new java.math.BigInteger(1, nBytes),
+            new java.math.BigInteger(1, eBytes)
+    );
+
+    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+    return (RSAPublicKey) keyFactory.generatePublic(publicKeySpec);
+  }
+
+  @Override
   protected void addAuthorizationHeaders(AuthorizationInfo authInfo, APIGatewayProxyRequestEvent request) {
     if (authInfo != null) {
       ////logger.log("authInfo = "+authInfo);

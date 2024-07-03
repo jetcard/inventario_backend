@@ -2,10 +2,10 @@ package com.inventarios.model;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
+
 @Entity
 @Table(name="tipo")
 public class Tipo implements Serializable {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
