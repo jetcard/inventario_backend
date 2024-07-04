@@ -40,7 +40,7 @@ public abstract class BusquedaPorIdEspecificacionesAbstractHandler implements Re
     try {
       Result<Record> result = busquedaPorNombreespecificaciones(idString);
       responseRest.getEspecificacionesResponse().setListaespecificaciones(convertResultToList(result));
-      responseRest.setMetadata("Respuesta ok", "00", "especificacioness encontrados");
+      responseRest.setMetadata("Respuesta ok", "00", "especificaciones encontradas");
       output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
                     .withBody(output);

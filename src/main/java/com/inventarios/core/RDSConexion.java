@@ -8,7 +8,6 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import java.sql.Connection;
 import java.sql.SQLException;
-
 public class RDSConexion {
 
   public static final String DATABASE_NAME_ENV = "DBName";
@@ -31,9 +30,9 @@ public class RDSConexion {
     config.setMaximumPoolSize(50);
     config.setUsername(rdsUserDB());
     config.setPassword(rdsPassDB());
-    config.setMinimumIdle(5); // NÃºmero mÃ­nimo de conexiones inactivas en el pool
-    config.setIdleTimeout(30000); // Tiempo mÃ¡ximo de inactividad antes de cerrar una conexiÃ³n
-    config.setConnectionTimeout(30000); // Tiempo mÃ¡ximo de espera para obtener una conexiÃ³n del pool
+    config.setMinimumIdle(5); // Número máximo de conexiones inactivas en el pool
+    config.setIdleTimeout(30000); // Tiempo máximo de inactividad antes de cerrar una conexión
+    config.setConnectionTimeout(30000); // Tiempo máximo de espera para obtener una conexión del pool
     config.setMaxLifetime(1800000);
 
     dataSource = new HikariDataSource(config);
