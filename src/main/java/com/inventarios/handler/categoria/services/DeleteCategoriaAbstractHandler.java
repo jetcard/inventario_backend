@@ -39,7 +39,6 @@ public abstract class DeleteCategoriaAbstractHandler implements RequestHandler<A
     context.getLogger().log("Eliminando: " + idString);
 
     Long id = null;
-    String output ="";
     try {
       id = Long.parseLong(idString);
     } catch (NumberFormatException e) {
@@ -50,7 +49,7 @@ public abstract class DeleteCategoriaAbstractHandler implements RequestHandler<A
     try {
       delete(id);
       responseRest.setMetadata("Respuesta ok", "00", "Categoría eliminada");
-      output = GsonFactory.createGson().toJson(responseRest);
+      String output = GsonFactory.createGson().toJson(responseRest);
       return response
               .withBody(output)
               .withStatusCode(200);

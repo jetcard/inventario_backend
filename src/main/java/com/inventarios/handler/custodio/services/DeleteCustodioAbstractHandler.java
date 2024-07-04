@@ -7,7 +7,6 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import com.google.gson.Gson;
 import com.inventarios.handler.custodio.response.CustodioResponseRest;
 import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
@@ -39,7 +38,6 @@ public abstract class DeleteCustodioAbstractHandler implements RequestHandler<AP
     context.getLogger().log("Eliminando: " + idString);
 
     Long id = null;
-    String output ="";
     try {
       id = Long.parseLong(idString);
     } catch (NumberFormatException e) {
@@ -49,8 +47,8 @@ public abstract class DeleteCustodioAbstractHandler implements RequestHandler<AP
     }
     try {
       delete(id);
-      responseRest.setMetadata("Respuesta ok", "00", "Responsable eliminado");
-      output = GsonFactory.createGson().toJson(responseRest);
+      responseRest.setMetadata("Respuesta ok", "00", "Custodio eliminado");
+      String output = GsonFactory.createGson().toJson(responseRest);
       return response
               .withBody(output)
               .withStatusCode(200);

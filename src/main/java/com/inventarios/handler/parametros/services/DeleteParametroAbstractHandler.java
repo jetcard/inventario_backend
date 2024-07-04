@@ -4,7 +4,6 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.google.gson.Gson;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +40,6 @@ public abstract class DeleteParametroAbstractHandler implements RequestHandler<A
     context.getLogger().log("...eliminando: " + idString);
 
     Long id = null;
-    String output ="";
     try {
       id = Long.parseLong(idString);
     } catch (NumberFormatException e) {
@@ -51,8 +49,8 @@ public abstract class DeleteParametroAbstractHandler implements RequestHandler<A
     }
     try {
       delete(id);
-      responseRest.setMetadata("Respuesta ok", "00", "Común eliminado");
-      output = GsonFactory.createGson().toJson(responseRest);
+      responseRest.setMetadata("Respuesta ok", "00", "Parámetro eliminado");
+      String output = GsonFactory.createGson().toJson(responseRest);
       return response
               .withBody(output)
               .withStatusCode(200);

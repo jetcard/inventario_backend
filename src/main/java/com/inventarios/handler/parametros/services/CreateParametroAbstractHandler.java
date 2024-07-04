@@ -39,13 +39,12 @@ public abstract class CreateParametroAbstractHandler implements RequestHandler<A
         LambdaLogger logger = context.getLogger();
         ParametroResponseRest responseRest = new ParametroResponseRest();
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
-        List<Parametro> list = new ArrayList<>();
         String output = "";
         String contentTypeHeader = input.getHeaders().get("Content-Type");
         logger.log("Content-Type: " + contentTypeHeader);
         try {
-            //String body = input.getBody();
-            String body = "{\"nombre\":\"ALTo\",\"descripcion\":\"ALTURa\"}";
+            String body = input.getBody();
+            //String body = "{\"nombre\":\"ALTo\",\"descripcion\":\"ALTURa\"}";
             logger.log("##################### BODY PARAMETRO ######################");
             logger.log(body);
             logger.log("#######################################################");
