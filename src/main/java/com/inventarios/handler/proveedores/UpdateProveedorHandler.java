@@ -13,7 +13,10 @@ public class UpdateProveedorHandler extends UpdateProveedorAbstractHandler {
     dsl.update(PROVEEDOR_TABLE)
       .set(DSL.field("ruc"), proveedor.getRuc())
       .set(DSL.field("razonsocial"), proveedor.getRazonsocial())
-      .set(DSL.field("contacto"), proveedor.getRazonsocial())
+      .set(DSL.field("direccionfiscal"), proveedor.getDireccionfiscal())
+      .set(DSL.field("contacto"), proveedor.getContacto())
+      .set(DSL.field("telefono"), proveedor.getTelefono())
+      .set(DSL.field("correo"), proveedor.getCorreo())
       .where(DSL.field("id", Long.class).eq(id))
       .execute();
   }

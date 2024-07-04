@@ -94,6 +94,7 @@ public class ReadActivoHandler extends ReadActivoAbstractHandler {
             .on(ACTIVO_ID.eq(ESPECIFICACIONES_ESPECIFICOID))
             .fetch();
   }
+
   @Override
   protected String mostrarCustodio(Long id) throws SQLException {
     var dsl = RDSConexion.getDSL();
@@ -288,6 +289,7 @@ public class ReadActivoHandler extends ReadActivoAbstractHandler {
     }
     return null;
   }*/
+  // "  \"n\": \"tf1f25bAtZMGbwXkD_UNZ1z9eH91rNeZ-MIWeiGpE-g0u1Y6lBKi-vI6O0nFGTcilCTR6tcqXu9Ah6cwxPC6n0ORCUFd_VXRzjGHzrU5_Kofhb8_yPYFaAp3JAuvrj7PJNnY7RUZZibBuBpGIesrdwuDdBDprR4VzKuSKl7HZCMcAkhqNQjaSNt1UhwDb1mV22uu4NfjqaGSfp2LnRWnpUYTGZobTRE2S5kAw73kefewPCHiooryCZK_69NK5TAZWXWf-YPpFtdwmf7mFggonpWWrCuTWikEKicwdL6xn6oWYeuVlM80M2hUhNJNUSLB7fDHYli5NRqky315bsjvhw\"\n" +
 
   @Override
   protected AuthorizationInfo validateAuthToken(String authToken) {
@@ -296,13 +298,13 @@ public class ReadActivoHandler extends ReadActivoAbstractHandler {
         String jwkJson = "{\n" +
                 "  \"e\": \"AQAB\",\n" +
                 "  \"kty\": \"RSA\",\n" +
-                "  \"n\": \"tf1f25bAtZMGbwXkD_UNZ1z9eH91rNeZ-MIWeiGpE-g0u1Y6lBKi-vI6O0nFGTcilCTR6tcqXu9Ah6cwxPC6n0ORCUFd_VXRzjGHzrU5_Kofhb8_yPYFaAp3JAuvrj7PJNnY7RUZZibBuBpGIesrdwuDdBDprR4VzKuSKl7HZCMcAkhqNQjaSNt1UhwDb1mV22uu4NfjqaGSfp2LnRWnpUYTGZobTRE2S5kAw73kefewPCHiooryCZK_69NK5TAZWXWf-YPpFtdwmf7mFggonpWWrCuTWikEKicwdL6xn6oWYeuVlM80M2hUhNJNUSLB7fDHYli5NRqky315bsjvhw\"\n" +
+                "  \"n\": \"2QeQWgy8P5LeEmCO45V_CajWeKqsCmCCzVRNcOet-NC_smqelugLYlUYLXWFowqJzOcBb3Xt1B-of8MeMd-wOtiRdj2XCwLY6D3seZHp22gr9kcdXqU0S-eplVfdlW9e_xeRQyS8sqPfuNzQGDOiUSfOEpyMgErahUec5DHdACMGiYw9UWBvR6Y2sthfm8K2H3Pc8ymIyzSrDYrobzI4g7Hu1YmXFEZI7mB51rkFEO5HXV4r78IkYKvUXYuxnHN3s4fnuyzDhMucht99Eun6qI5Fk-NyDvZ62NNaSmxpL5HldiFLPH_skzCOpxSeB-qBAUasHCQXXdcl5xFAZPb8iw\"\n" +
                 "}";
         try {
           PublicKey publicKey = getPublicKeyFromJWK(jwkJson);
           Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) publicKey, null);
           JWTVerifier verifier = JWT.require(algorithm)
-                  .withIssuer("https://examensolucion-u8698.vm.elestio.app/realms/ExamenSolucion")
+                  .withIssuer("https://examensolucion-u8698.vm.elestio.app/realms/Inventario")
                   .build();
           DecodedJWT jwt = verifier.verify(authToken);
 

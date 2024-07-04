@@ -27,7 +27,7 @@ public class RDSConexion {
     config.setJdbcUrl("jdbc:postgresql://" + rdsEndpoint() + "/" + rdsDatabase());
     config.setUsername(rdsUserDB());
     config.setPassword(rdsPassDB());
-    config.setMaximumPoolSize(50);
+    config.setMaximumPoolSize(100);
     config.setUsername(rdsUserDB());
     config.setPassword(rdsPassDB());
     config.setMinimumIdle(5); // Número máximo de conexiones inactivas en el pool

@@ -17,6 +17,7 @@ import org.jooq.impl.DSL;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class CreateActivoAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+
     protected final static Table<Record> ACTIVO_TABLE = DSL.table("activo");
     protected final static Table<Record> ESPECIFICACIONES_TABLE = DSL.table("especificaciones");
     final static Map<String, String> headers = new HashMap<>();
@@ -28,6 +29,7 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
         headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
         headers.put("Access-Control-Allow-Methods", "POST");
     }
+
     protected abstract int getEspecificacionID(Activo activo) throws SQLException;
     protected abstract void save(Activo activo, List<Especificaciones> especificacionesList) throws SQLException;
 

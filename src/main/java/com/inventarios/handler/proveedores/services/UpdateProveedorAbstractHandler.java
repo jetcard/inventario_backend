@@ -4,13 +4,11 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.google.gson.Gson;
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.proveedores.response.ProveedorResponseRest;
 import com.inventarios.model.Proveedor;
 import java.sql.SQLException;
 import java.util.*;
-
 import com.inventarios.util.GsonFactory;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -61,10 +59,17 @@ public abstract class UpdateProveedorAbstractHandler implements RequestHandler<A
                  Proveedor proveedor = proveedoresearch.get();
                  proveedor.setRuc(proveedor.getRuc());
                  proveedor.setRazonsocial(proveedor.getRazonsocial());
+                 proveedor.setDireccionfiscal(proveedor.getDireccionfiscal());
+                 proveedor.setContacto(proveedor.getContacto());
+                 proveedor.setTelefono(proveedor.getTelefono());
+                 proveedor.setCorreo(proveedor.getCorreo());
                  dsl.update(PROVEEDOR_TABLE)
                          .set(DSL.field("ruc"), proveedorFromBody.getRuc())
-                         .set(DSL.field("razonsocial"), proveedorFromBody.getRazonsocial())
-                         .set(DSL.field("contacto"), proveedorFromBody.getContacto())
+                         .set(DSL.field("razonsocial"), proveedorFromBody.getRazonsocial().toUpperCase())
+                         .set(DSL.field("direccionfiscal"), proveedorFromBody.getDireccionfiscal().toUpperCase())
+                         .set(DSL.field("contacto"), proveedorFromBody.getContacto().toUpperCase())
+                         .set(DSL.field("telefono"), proveedorFromBody.getTelefono())
+                         .set(DSL.field("correo"), proveedorFromBody.getCorreo().toLowerCase())
                          .where(DSL.field("id").eq(proveedor.getId()))
                          .execute();
                  list.add(proveedor);
