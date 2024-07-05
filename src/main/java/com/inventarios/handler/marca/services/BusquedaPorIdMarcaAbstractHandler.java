@@ -1,13 +1,12 @@
-package com.inventarios.handler.comunes.services;
+package com.inventarios.handler.marca.services;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.google.gson.Gson;
-import com.inventarios.handler.comunes.response.ComunResponseRest;
-import com.inventarios.model.Comun;
+import com.inventarios.handler.marca.response.MarcaResponseRest;
+import com.inventarios.model.Marca;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -16,7 +15,7 @@ import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
 
-public abstract class BusquedaPorIdComunAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public abstract class BusquedaPorIdMarcaAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   final static Map<String, String> headers = new HashMap<>();
   static {
@@ -27,24 +26,24 @@ public abstract class BusquedaPorIdComunAbstractHandler implements RequestHandle
     headers.put("Access-Control-Allow-Methods", "GET");
   }
 
-  protected static final org.jooq.Table<?> COMUN_TABLE = DSL.table("comun");
-  protected static final org.jooq.Field<String> COMUN_TABLE_COLUMNA = DSL.field("nombrecomun", String.class);
-  protected abstract Result<Record> busquedaPorNombreComun(String argv) throws SQLException;
+  protected static final org.jooq.Table<?> MARCA_TABLE = DSL.table("marca");
+  protected static final org.jooq.Field<String> MARCA_TABLE_COLUMNA = DSL.field("nombremarca", String.class);
+  protected abstract Result<Record> busquedaPorNombreMarca(String argv) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
     input.setHeaders(headers);
     LambdaLogger logger = context.getLogger();
-    ComunResponseRest responseRest = new ComunResponseRest();
+    MarcaResponseRest responseRest = new MarcaResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
     Map<String, String> pathParameters = input.getPathParameters();
     String idString = pathParameters.get("id");
     logger.log("buscar: " + idString);
     String output = "";
     try {
-      Result<Record> result = busquedaPorNombreComun(idString);
-      responseRest.getComunResponse().setListacomunes(convertResultToList(result));
-      responseRest.setMetadata("Respuesta ok", "00", "Comuns encontrados");
+      Result<Record> result = busquedaPorNombreMarca(idString);
+      responseRest.getMarcaResponse().setListamarcaes(convertResultToList(result));
+      responseRest.setMetadata("Respuesta ok", "00", "Marcas encontrados");
       output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
                     .withBody(output);
@@ -56,14 +55,14 @@ public abstract class BusquedaPorIdComunAbstractHandler implements RequestHandle
         }
   }
 
-  protected List<Comun> convertResultToList(Result<Record> result) {
-    List<Comun> listaComuns = new ArrayList<>();
+  protected List<Marca> convertResultToList(Result<Record> result) {
+    List<Marca> listaMarcas = new ArrayList<>();
     for (Record record : result) {
-      Comun comun = new Comun();
-      comun.setId(record.getValue("id", Long.class));
-      comun.setDescripcomun(record.getValue("descripcomun", String.class));
-      listaComuns.add(comun);
+      Marca marca = new Marca();
+      marca.setId(record.getValue("id", Long.class));
+      marca.setDescripmarca(record.getValue("descripmarca", String.class));
+      listaMarcas.add(marca);
     }
-    return listaComuns;
+    return listaMarcas;
   }
 }

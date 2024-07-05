@@ -45,30 +45,6 @@ import org.jooq.impl.DSL;
 public class ReadActivoHandler extends ReadActivoAbstractHandler {
   protected Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> read() throws SQLException {
     var dsl = RDSConexion.getDSL();
-    /*return dsl.select(
-                    ACTIVO_ID,
-                    ACTIVO_RESPONSABLE_ID,
-                    ACTIVO_ARTICULO_ID,
-                    ACTIVO_TIPO_ID,
-                    ACTIVO_GRUPO_ID,
-                    ACTIVO_PROVEEDOR_ID,
-                    ESPECIFICACIONES_ID,
-                    ESPECIFICACIONES_ESPECIFICOID,
-                    ESPECIFICACIONES_NOMBREESPECIFICO,
-                    ACTIVO_CODINVENTARIO,
-                    ACTIVO_MODELO,
-                    ACTIVO_MARCA,
-                    ACTIVO_NROSERIE,
-                    ACTIVO_FECHAINGRESO,
-                    ACTIVO_FECHAINGRESOSTR,
-                    ACTIVO_MONEDA,
-                    ACTIVO_IMPORTE,
-                    ACTIVO_DESCRIPCION
-            )
-            .from(ACTIVO_TABLE)
-            .leftJoin(ESPECIFICACIONES_TABLE).on(ACTIVO_ID.eq(ESPECIFICACIONES_ESPECIFICOID))
-            .leftJoin(PROVEEDOR_TABLE).on(ACTIVO_PROVEEDOR_ID.eq(PROVEEDOR_ID))
-            .fetch();*/
     return dsl.select(
                     ACTIVO_ID,
                     ACTIVO_RESPONSABLE_ID,
@@ -78,7 +54,8 @@ public class ReadActivoHandler extends ReadActivoAbstractHandler {
                     ACTIVO_PROVEEDOR_ID,
                     ESPECIFICACIONES_ID,
                     ESPECIFICACIONES_ESPECIFICOID,
-                    ESPECIFICACIONES_NOMBREESPECIFICO,ESPECIFICACIONES_DESCRIPESPECIFICO,
+                    ESPECIFICACIONES_NOMBREESPECIFICO,
+                    ESPECIFICACIONES_DESCRIPESPECIFICO,
                     ACTIVO_CODINVENTARIO,
                     ACTIVO_MODELO,
                     ACTIVO_MARCA,

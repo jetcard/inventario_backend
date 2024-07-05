@@ -11,7 +11,7 @@ import static org.jooq.impl.DSL.field;
 
 public class BusquedaPorIdActivoHandler extends BusquedaPorIdActivoAbstractHandler {
 
-  protected Result<Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String>> busquedaActivo(String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta) throws SQLException {
+  protected Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> busquedaActivo(String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta) throws SQLException {
     DSLContext dsl = RDSConexion.getDSL();
     Condition condition = DSL.trueCondition();
     if (codinventario != null && !codinventario.isEmpty()) {
@@ -39,6 +39,7 @@ public class BusquedaPorIdActivoHandler extends BusquedaPorIdActivoAbstractHandl
                     ESPECIFICACIONES_ID,
                     ESPECIFICACIONES_ESPECIFICOID,
                     ESPECIFICACIONES_NOMBREESPECIFICO,
+                    ESPECIFICACIONES_DESCRIPESPECIFICO,
                     ACTIVO_CODINVENTARIO,
                     ACTIVO_MODELO,
                     ACTIVO_MARCA,

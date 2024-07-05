@@ -1,22 +1,22 @@
-package com.inventarios.handler.comunes.services;
+package com.inventarios.handler.marca.services;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.google.gson.Gson;
+
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import com.inventarios.handler.comunes.response.ComunResponseRest;
+import com.inventarios.handler.marca.response.MarcaResponseRest;
 import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
 
-public abstract class DeleteComunAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public abstract class DeleteMarcaAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-  protected final static Table<Record> COMUN_TABLE = DSL.table("comun");
+  protected final static Table<Record> MARCA_TABLE = DSL.table("marca");
 
   final static Map<String, String> headers = new HashMap<>();
 
@@ -33,7 +33,7 @@ public abstract class DeleteComunAbstractHandler implements RequestHandler<APIGa
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
     input.setHeaders(headers);
-    ComunResponseRest responseRest = new ComunResponseRest();
+    MarcaResponseRest responseRest = new MarcaResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
             .withHeaders(headers);
     Map<String, String> pathParameters = input.getPathParameters();
@@ -74,10 +74,10 @@ public abstract class DeleteComunAbstractHandler implements RequestHandler<APIGa
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Comun comun = GsonFactory.createGson().fromJson(body, Comun.class);
-        if (comun != null) {
+        Marca marca = GsonFactory.createGson().fromJson(body, Marca.class);
+        if (marca != null) {
           //delete(2);
-          delete(comun.getId());
+          delete(marca.getId());
         }
       }
       return response;

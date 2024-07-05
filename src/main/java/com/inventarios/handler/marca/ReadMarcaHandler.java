@@ -1,16 +1,17 @@
-package com.inventarios.handler.comunes;
+package com.inventarios.handler.marca;
 
 import com.inventarios.core.RDSConexion;
-import com.inventarios.handler.comunes.services.ReadComunAbstractHandler;
+import com.inventarios.handler.marca.services.ReadMarcaAbstractHandler;
 import java.sql.SQLException;
 import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 
-public class ReadComunHandler extends ReadComunAbstractHandler {
+public class ReadMarcaHandler extends ReadMarcaAbstractHandler {
+
   protected Result<Record> read() throws SQLException {
     var dsl = RDSConexion.getDSL();
-    return dsl.select().from(COMUN_TABLE).fetch();
+    return dsl.select().from(MARCA_TABLE).fetch();
   }
 
   @Override
@@ -42,5 +43,4 @@ public class ReadComunHandler extends ReadComunAbstractHandler {
             .fetchOne();
     return record != null ? record.getValue(GRUPO_TABLE_COLUMNA) : null;
   }
-
 }

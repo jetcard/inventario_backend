@@ -1,4 +1,4 @@
-package com.inventarios.handler.comunes.services;
+package com.inventarios.handler.marca.services;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -9,8 +9,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.inventarios.core.RDSConexion;
-import com.inventarios.handler.comunes.response.ComunResponseRest;
-import com.inventarios.model.Comun;
+import com.inventarios.handler.marca.response.MarcaResponseRest;
+import com.inventarios.model.Marca;
 import com.inventarios.model.Categoria;
 import com.inventarios.model.Custodio;
 import com.inventarios.model.Tipo;
@@ -24,9 +24,9 @@ import org.jooq.Table;
 import org.jooq.impl.DSL;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public abstract class CreateComunAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public abstract class CreateMarcaAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-    protected final static Table<Record> COMUN_TABLE = DSL.table("comun");
+    protected final static Table<Record> MARCA_TABLE = DSL.table("marca");
     protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("custodio");
     protected final static Table<Record> TIPO_TABLE = DSL.table("tipo");
     protected final static Table<Record> GRUPO_TABLE = DSL.table("categoria");
@@ -42,15 +42,15 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
         headers.put("Access-Control-Allow-Methods", "POST");
     }
 
-    protected abstract void save(Comun comun, Long custodioId, Long tipoID, Long categoriaId) throws SQLException;
+    protected abstract void save(Marca marca, Long custodioId, Long tipoID, Long categoriaId) throws SQLException;
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
         input.setHeaders(headers);
         LambdaLogger logger = context.getLogger();
-        ComunResponseRest responseRest = new ComunResponseRest();
+        MarcaResponseRest responseRest = new MarcaResponseRest();
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
-        List<Comun> list = new ArrayList<>();
+        List<Marca> list = new ArrayList<>();
         String output = "";
         String contentTypeHeader = input.getHeaders().get("Content-Type");
         logger.log("Content-Type: " + contentTypeHeader);
@@ -59,30 +59,30 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
 
             String body = input.getBody();
             //String body = "{\"modelo\":\"AS\",\"marca\":\"AS\",\"nroserie\":\"1\",\"fechacompra\":\"1\",\"importe\":777,\"categoriaId\":1,\"account\":55555}";
-            logger.log("##################### BODY COMUN ######################");
+            logger.log("##################### BODY MARCA ######################");
             logger.log(body);
             logger.log("#######################################################");
 
             Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-            //Comun comun = GsonFactory.createGson().fromJson(body, Comun.class);
-            Comun comun = gson.fromJson(body, Comun.class);
+            //Marca marca = GsonFactory.createGson().fromJson(body, Marca.class);
+            Marca marca = gson.fromJson(body, Marca.class);
 
-            logger.log("debe llegar aquí 1 ya tenemos Comun");
-            if (comun == null) {
+            logger.log("debe llegar aquí 1 ya tenemos Marca");
+            if (marca == null) {
                 return response
-                        .withBody("El cuerpo de la solicitud no contiene datos válidos para un comun")
+                        .withBody("El cuerpo de la solicitud no contiene datos válidos para un marca")
                         .withStatusCode(400);
             }
             logger.log("debe llegar aquí 2");
-            // Obtener el ID del grupo del objeto Comun
-            //Long categoriaId = comun.getGrupo().getId();
+            // Obtener el ID del grupo del objeto Marca
+            //Long categoriaId = marca.getGrupo().getId();
 
 
-            logger.log("Comun: ");
+            logger.log("Marca: ");
 
-            //if (comun != null) {
-            logger.log("Comun.getId() = " + comun.getId());
-            logger.log("Comun.getDescripcomun() = " + comun.getDescripcomun());
+            //if (marca != null) {
+            logger.log("Marca.getId() = " + marca.getId());
+            logger.log("Marca.getDescripmarca() = " + marca.getDescripmarca());
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(body);
@@ -101,9 +101,9 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
             }
 
 
-            /*String bodyparaque = "{\"modelo\":\"+comun.getModelo()+\",\"marca\":\"+comun.getMarca()+" +
-                    "\",\"nroserie\":\"+comun.getNroserie()+\",\"fechacompra\":\"+comun.getFechacompra()+" +
-                    "\",\"importe\":+comun.getImporte()+,\"categoriaId\":1,\"account\":+comun.getAccount()}";
+            /*String bodyparaque = "{\"modelo\":\"+marca.getModelo()+\",\"marca\":\"+marca.getMarca()+" +
+                    "\",\"nroserie\":\"+marca.getNroserie()+\",\"fechacompra\":\"+marca.getFechacompra()+" +
+                    "\",\"importe\":+marca.getImporte()+,\"categoriaId\":1,\"account\":+marca.getAccount()}";
             logger.log("bodyparaque: ");
             logger.log(bodyparaque);*/
             DSLContext dsl = RDSConexion.getDSL();
@@ -139,22 +139,22 @@ public abstract class CreateComunAbstractHandler implements RequestHandler<APIGa
             }
             //if (grupoSearch.isPresent()) {
             logger.log("grupoSearch.isPresent()");
-            logger.log("Comun.getGrupo I  : "+comun.getGrupo());
+            logger.log("Marca.getGrupo I  : "+marca.getGrupo());
           /*byte[] compressedPicture = null;
-          if (comun.getPicture() != null) {
-            compressedPicture = Util.compressZLib(comun.getPicture());
+          if (marca.getPicture() != null) {
+            compressedPicture = Util.compressZLib(marca.getPicture());
           }*/
             logger.log(":::::::::::::::::::::::::::::::::: PREPARANDO PARA INSERTAR ::::::::::::::::::::::::::::::::::");
 
-            comun.setResponsable(responsableSearch.get());
-            comun.setTipo(tipoSearch.get());
-            comun.setGrupo(grupoSearch.get());
-            logger.log("Comun.getGrupo II : "+comun.getGrupo());
+            marca.setResponsable(responsableSearch.get());
+            marca.setTipo(tipoSearch.get());
+            marca.setGrupo(grupoSearch.get());
+            logger.log("Marca.getGrupo II : "+marca.getGrupo());
 
-            save(comun, custodioId, tipoID, categoriaId);
+            save(marca, custodioId, tipoID, categoriaId);
             logger.log(":::::::::::::::::::::::::::::::::: INSERCIÓN COMPLETA ::::::::::::::::::::::::::::::::::");
-            list.add(comun);
-            responseRest.getComunResponse().setListacomunes(list);
+            list.add(marca);
+            responseRest.getMarcaResponse().setListamarcaes(list);
             responseRest.setMetadata("Respuesta ok", "00", "Común guardado");
 
             output = GsonFactory.createGson().toJson(responseRest);

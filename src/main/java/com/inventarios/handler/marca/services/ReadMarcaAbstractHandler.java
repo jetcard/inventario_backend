@@ -1,14 +1,14 @@
-package com.inventarios.handler.comunes.services;
+package com.inventarios.handler.marca.services;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.google.gson.Gson;
+
 import java.sql.SQLException;
 import java.util.*;
 
-import com.inventarios.handler.comunes.response.ComunResponseRest;
+import com.inventarios.handler.marca.response.MarcaResponseRest;
 import com.inventarios.model.*;
 import com.inventarios.util.GsonFactory;
 import org.jooq.Field;
@@ -17,9 +17,9 @@ import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 
-public abstract class ReadComunAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public abstract class ReadMarcaAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-  protected final static Table<Record> COMUN_TABLE = DSL.table("comun");
+  protected final static Table<Record> MARCA_TABLE = DSL.table("marca");
   protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("custodio");
   protected static final Field<String> RESPONSABLE_TABLE_COLUMNA = DSL.field("arearesponsable", String.class);
   protected final static Table<Record> TIPO_TABLE = DSL.table("tipo");
@@ -45,14 +45,14 @@ public abstract class ReadComunAbstractHandler implements RequestHandler<APIGate
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
     input.setHeaders(headers);
-    ComunResponseRest responseRest = new ComunResponseRest();
+    MarcaResponseRest responseRest = new MarcaResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
             .withHeaders(headers);
     String output ="";
     try {
       Result<Record> result = read();
-      responseRest.getComunResponse().setListacomunes(convertResultToList(result));
-      responseRest.setMetadata("Respuesta ok", "00", "Comunes listados");
+      responseRest.getMarcaResponse().setListamarcaes(convertResultToList(result));
+      responseRest.setMetadata("Respuesta ok", "00", "Marcaes listados");
       output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
               .withBody(output);
@@ -78,34 +78,34 @@ public abstract class ReadComunAbstractHandler implements RequestHandler<APIGate
     return new Gson().toJson(resultList);
   }*/
 
-  protected List<Comun> convertResultToList(Result<Record> result) throws SQLException {
-    List<Comun> listaComunes = new ArrayList<>();
+  protected List<Marca> convertResultToList(Result<Record> result) throws SQLException {
+    List<Marca> listaMarcaes = new ArrayList<>();
     for (Record record : result) {
-      Comun comun = new Comun();
-      comun.setId(record.getValue("id", Long.class));
-      comun.setDescripcomun(record.getValue("descripcomun", String.class));
-      //comun.setDescripcortacomun(record.getValue("descripcortacomun", String.class));
+      Marca marca = new Marca();
+      marca.setId(record.getValue("id", Long.class));
+      marca.setDescripmarca(record.getValue("descripmarca", String.class));
+      //marca.setDescripcortamarca(record.getValue("descripcortamarca", String.class));
 
-      //comun.setGrupo(record.getValue("categoriaId", Grupo.class));
-      ///comun.setPicture(record.getValue("picture", byte[].class));
+      //marca.setGrupo(record.getValue("categoriaId", Grupo.class));
+      ///marca.setPicture(record.getValue("picture", byte[].class));
       Custodio custodio = new Custodio();
       custodio.setId(record.getValue("custodioid", Long.class));
       custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
-      comun.setResponsable(custodio);
+      marca.setResponsable(custodio);
 
       Tipo tipo = new Tipo();
       tipo.setId(record.getValue("tipoid", Long.class));
       tipo.setNombretipo(mostrarTipoBien(tipo.getId()));
-      comun.setTipo(tipo);
+      marca.setTipo(tipo);
 
       Categoria categoria =new Categoria();
       categoria.setId(record.getValue("categoriaid", Long.class));
       categoria.setNombregrupo(mostrarCategoria(categoria.getId()));
-      comun.setGrupo(categoria);
+      marca.setGrupo(categoria);
 
-      listaComunes.add(comun);
+      listaMarcaes.add(marca);
     }
-    return listaComunes;
+    return listaMarcaes;
   }
 
 }

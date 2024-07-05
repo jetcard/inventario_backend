@@ -1,11 +1,10 @@
-package com.inventarios.handler.comunes.services;
+package com.inventarios.handler.marca.services;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.google.gson.Gson;
-import com.inventarios.model.Comun;
+import com.inventarios.model.Marca;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,9 +14,9 @@ import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
 
-public abstract class UpdateComunAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public abstract class UpdateMarcaAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-  protected final static Table<Record> COMUN_TABLE = DSL.table("comun");
+  protected final static Table<Record> MARCA_TABLE = DSL.table("marca");
 
   final static Map<String, String> headers = new HashMap<>();
 
@@ -29,7 +28,7 @@ public abstract class UpdateComunAbstractHandler implements RequestHandler<APIGa
     headers.put("Access-Control-Allow-Methods", "PUT");
   }
 
-  protected abstract void update(Long id, String descripcomun) throws SQLException;
+  protected abstract void update(Long id, String descripmarca) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -53,10 +52,10 @@ public abstract class UpdateComunAbstractHandler implements RequestHandler<APIGa
     try {
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
-        Comun comun = GsonFactory.createGson().fromJson(body, Comun.class);
-        if (comun != null) {
-          if (id.equals(comun.getId())) {
-            update(comun.getId(), comun.getDescripcomun());
+        Marca marca = GsonFactory.createGson().fromJson(body, Marca.class);
+        if (marca != null) {
+          if (id.equals(marca.getId())) {
+            update(marca.getId(), marca.getDescripmarca());
           } else {
             return response
                     .withBody("Id in path does not match id in body")
