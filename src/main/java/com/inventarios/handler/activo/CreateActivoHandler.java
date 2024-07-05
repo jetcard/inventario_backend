@@ -8,9 +8,7 @@ import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import java.sql.SQLException;
 import java.util.List;
-
 public class CreateActivoHandler extends CreateActivoAbstractHandler {
-
   @Override
   public int getEspecificacionID(Activo activo) throws SQLException {
     DSLContext dsl = RDSConexion.getDSL();
@@ -122,7 +120,7 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
     dsl.insertInto(ESPECIFICACIONES_TABLE)
             //.set(DSL.field("especificoid"), especificaciones.getEspecifico().getId())
             .set(DSL.field("especificacionid"), especificaciones.getEspecificacionid())
-            .set(DSL.field("nombreespecifico"), especificaciones.getNombreatributo().toUpperCase())
+            .set(DSL.field("nombreatributo"), especificaciones.getNombreatributo().toUpperCase())
             .set(DSL.field("descripcionatributo"), especificaciones.getDescripcionatributo().toUpperCase())
             .execute();
   }
