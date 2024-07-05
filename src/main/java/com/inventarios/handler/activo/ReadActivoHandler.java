@@ -43,7 +43,7 @@ import org.jooq.Record;
 import org.jooq.impl.DSL;
 
 public class ReadActivoHandler extends ReadActivoAbstractHandler {
-  protected Result<Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String>> read() throws SQLException {
+  protected Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> read() throws SQLException {
     var dsl = RDSConexion.getDSL();
     /*return dsl.select(
                     ACTIVO_ID,
@@ -78,7 +78,7 @@ public class ReadActivoHandler extends ReadActivoAbstractHandler {
                     ACTIVO_PROVEEDOR_ID,
                     ESPECIFICACIONES_ID,
                     ESPECIFICACIONES_ESPECIFICOID,
-                    ESPECIFICACIONES_NOMBREESPECIFICO,
+                    ESPECIFICACIONES_NOMBREESPECIFICO,ESPECIFICACIONES_DESCRIPESPECIFICO,
                     ACTIVO_CODINVENTARIO,
                     ACTIVO_MODELO,
                     ACTIVO_MARCA,
@@ -332,9 +332,9 @@ public class ReadActivoHandler extends ReadActivoAbstractHandler {
             System.out.println("Issuer: " + issuer);
             // Mostrar roles si están presentes
             if (roles != null) {
-              System.out.println("Roles: ");
+              //System.out.println("Roles: ");
               for (String role : roles) {
-                System.out.println(role);
+                //System.out.println(role);
                 // Ejemplo de verificación de rol específico
                 if ("user".equals(role)) {
                   System.out.println("El usuario tiene el rol 'user'.");

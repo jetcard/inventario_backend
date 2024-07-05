@@ -71,7 +71,7 @@ public abstract class ReadActivoAbstractHandler //implements RequestHandler<APIG
     headers.put("Access-Control-Allow-Methods", "GET");
   }
 
-  protected abstract Result<Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String>> read() throws SQLException;
+  protected abstract Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> read() throws SQLException;
   protected abstract String mostrarCustodio(Long id) throws SQLException;
   protected abstract String mostrarArticulo(Long id) throws SQLException;
   protected abstract String mostrarTipoBien(Long id) throws SQLException;
@@ -133,7 +133,7 @@ public abstract class ReadActivoAbstractHandler //implements RequestHandler<APIG
         logger.log("authInfo is null");
       }
 
-      Result<Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String>> result = read();
+      Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result = read();
       responseRest.getActivoResponse().setListaactivos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");
       Gson gson = GsonFactory.createGson();
@@ -147,10 +147,10 @@ public abstract class ReadActivoAbstractHandler //implements RequestHandler<APIG
     }
   }
 
-  protected List<Activo> convertResultToList(Result<Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String>> result) throws SQLException {
+  protected List<Activo> convertResultToList(Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result) throws SQLException {
       Map<Long, Activo> especificoMap = new HashMap<>();
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-      for (Record18<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, LocalDate, String, String, String, String> record : result) {
+      for (Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String> record : result) {
         Long especificoId = record.get(ACTIVO_ID);
         Activo activo = especificoMap.get(especificoId);
         if (activo == null) {
