@@ -100,10 +100,12 @@ public abstract class ReadActivoAbstractHandler //implements RequestHandler<APIG
           logger.log("###########");
 
           // Aquí se maneja la lógica para crear o actualizar activos
-          if (request.getHttpMethod().equalsIgnoreCase("GET")) {
+          /*if (request.getHttpMethod().equalsIgnoreCase("GET")) {
             ReadActivoHandler readActivoHandler = new ReadActivoHandler();
             response = readActivoHandler.handleRequest(request, context);
-          } else if (request.getHttpMethod().equalsIgnoreCase("POST")) {
+          } else
+            */
+          if (request.getHttpMethod().equalsIgnoreCase("POST")) {
             CreateActivoHandler createEspecificoHandler = new CreateActivoHandler();
             response = createEspecificoHandler.handleRequest(request, context);
           } else if (request.getHttpMethod().equalsIgnoreCase("PUT")) {
@@ -212,7 +214,4 @@ public abstract class ReadActivoAbstractHandler //implements RequestHandler<APIG
       }
       return new ArrayList<>(especificoMap.values());
     }
-/*
-*/
-
 }
