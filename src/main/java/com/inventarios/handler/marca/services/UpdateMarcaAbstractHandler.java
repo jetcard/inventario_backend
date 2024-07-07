@@ -53,7 +53,7 @@ public abstract class UpdateMarcaAbstractHandler implements RequestHandler<APIGa
       if (body != null && !body.isEmpty()) {
         context.getLogger().log("body " + body);
         Marca marca = GsonFactory.createGson().fromJson(body, Marca.class);
-        if (marca != null) {
+        /*if (marca != null) {
           if (id.equals(marca.getId())) {
             update(marca.getId(), marca.getDescripmarca());
           } else {
@@ -61,7 +61,7 @@ public abstract class UpdateMarcaAbstractHandler implements RequestHandler<APIGa
                     .withBody("Id in path does not match id in body")
                     .withStatusCode(400);
           }
-        }
+        }*/
         output =String.format("{ \"message\": \"%s\" }", body);
       }
       return response.withStatusCode(200)

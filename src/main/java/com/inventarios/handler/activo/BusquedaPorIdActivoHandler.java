@@ -14,6 +14,9 @@ public class BusquedaPorIdActivoHandler extends BusquedaPorIdActivoAbstractHandl
   protected Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> busquedaActivo(String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta) throws SQLException {
     DSLContext dsl = RDSConexion.getDSL();
     Condition condition = DSL.trueCondition();
+    if (custodioId != null && !custodioId.isEmpty()) {
+      condition = condition.and(field("custodioId").likeIgnoreCase("%" + custodioId + "%"));
+    }
     if (codinventario != null && !codinventario.isEmpty()) {
       condition = condition.and(field("codinventario").likeIgnoreCase("%" + codinventario + "%"));
     }
@@ -28,6 +31,9 @@ public class BusquedaPorIdActivoHandler extends BusquedaPorIdActivoAbstractHandl
     }
     if (fechaCompraDesde != null && fechaCompraHasta != null) {
       condition = condition.and(field("fechaingreso").between(fechaCompraDesde).and(fechaCompraHasta));
+    }
+    if (proveedorId != null && !proveedorId.isEmpty()) {
+      condition = condition.and(field("proveedorId").likeIgnoreCase("%" + proveedorId + "%"));
     }
     return dsl.select(
                     ACTIVO_ID,

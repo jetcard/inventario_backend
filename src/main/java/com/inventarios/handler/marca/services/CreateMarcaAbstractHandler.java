@@ -82,7 +82,7 @@ public abstract class CreateMarcaAbstractHandler implements RequestHandler<APIGa
 
             //if (marca != null) {
             logger.log("Marca.getId() = " + marca.getId());
-            logger.log("Marca.getDescripmarca() = " + marca.getDescripmarca());
+            //logger.log("Marca.getDescripmarca() = " + marca.getDescripmarca());
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(body);
@@ -139,17 +139,17 @@ public abstract class CreateMarcaAbstractHandler implements RequestHandler<APIGa
             }
             //if (grupoSearch.isPresent()) {
             logger.log("grupoSearch.isPresent()");
-            logger.log("Marca.getGrupo I  : "+marca.getGrupo());
+            ///logger.log("Marca.getGrupo I  : "+marca.getGrupo());
           /*byte[] compressedPicture = null;
           if (marca.getPicture() != null) {
             compressedPicture = Util.compressZLib(marca.getPicture());
           }*/
             logger.log(":::::::::::::::::::::::::::::::::: PREPARANDO PARA INSERTAR ::::::::::::::::::::::::::::::::::");
 
-            marca.setResponsable(responsableSearch.get());
+            /*marca.setResponsable(responsableSearch.get());
             marca.setTipo(tipoSearch.get());
             marca.setGrupo(grupoSearch.get());
-            logger.log("Marca.getGrupo II : "+marca.getGrupo());
+            logger.log("Marca.getGrupo II : "+marca.getGrupo());*/
 
             save(marca, custodioId, tipoID, categoriaId);
             logger.log(":::::::::::::::::::::::::::::::::: INSERCIÓN COMPLETA ::::::::::::::::::::::::::::::::::");

@@ -1,4 +1,4 @@
--- Tabla 'parametros'
+--- Tabla 'parametros'
 DELETE FROM parametros;
 
 -- Tabla 'activo'

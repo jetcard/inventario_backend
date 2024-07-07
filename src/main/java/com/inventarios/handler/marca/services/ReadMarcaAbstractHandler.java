@@ -83,7 +83,7 @@ public abstract class ReadMarcaAbstractHandler implements RequestHandler<APIGate
     for (Record record : result) {
       Marca marca = new Marca();
       marca.setId(record.getValue("id", Long.class));
-      marca.setDescripmarca(record.getValue("descripmarca", String.class));
+      ///marca.setDescripmarca(record.getValue("descripmarca", String.class));
       //marca.setDescripcortamarca(record.getValue("descripcortamarca", String.class));
 
       //marca.setGrupo(record.getValue("categoriaId", Grupo.class));
@@ -91,17 +91,17 @@ public abstract class ReadMarcaAbstractHandler implements RequestHandler<APIGate
       Custodio custodio = new Custodio();
       custodio.setId(record.getValue("custodioid", Long.class));
       custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
-      marca.setResponsable(custodio);
+      ///marca.setResponsable(custodio);
 
       Tipo tipo = new Tipo();
       tipo.setId(record.getValue("tipoid", Long.class));
       tipo.setNombretipo(mostrarTipoBien(tipo.getId()));
-      marca.setTipo(tipo);
+      ///marca.setTipo(tipo);
 
       Categoria categoria =new Categoria();
       categoria.setId(record.getValue("categoriaid", Long.class));
       categoria.setNombregrupo(mostrarCategoria(categoria.getId()));
-      marca.setGrupo(categoria);
+      ///marca.setGrupo(categoria);
 
       listaMarcaes.add(marca);
     }

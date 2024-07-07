@@ -8,13 +8,20 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 public class LocalDateAdapter extends TypeAdapter<LocalDate> {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     @Override
     public void write(JsonWriter jsonWriter, LocalDate localDate) throws IOException {
         jsonWriter.value(localDate != null ? localDate.format(formatter) : null);
     }
+
     @Override
+    public LocalDate read(JsonReader jsonReader) throws IOException {
+        return LocalDate.parse(jsonReader.nextString(), formatter);
+    }
+
+    /*@Override
     public LocalDate read(JsonReader jsonReader) throws IOException {
         String date = jsonReader.nextString();
         return date != null ? LocalDate.parse(date, formatter) : null;
-    }
+    }*/
 }

@@ -99,7 +99,9 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
     logger.log("fechahasta: " + fechaCompraHasta);
     String output = "";
     LocalDate fechaDesde = new Conversiones().convertirALocalDate(fechaCompraDesde);
+    logger.log("fechadesde: " + fechaCompraDesde);
     LocalDate fechaHasta = new Conversiones().convertirALocalDate(fechaCompraHasta);
+    logger.log("fechahasta: " + fechaCompraHasta);
     try {
       Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result = busquedaActivo(codinventario, modelo, marca, nroSerie, fechaDesde, fechaHasta);
       responseRest.getActivoResponse().setListaactivos(convertResultToList(result));

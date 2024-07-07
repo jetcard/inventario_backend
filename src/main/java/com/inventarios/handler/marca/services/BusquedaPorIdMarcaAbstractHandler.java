@@ -60,7 +60,7 @@ public abstract class BusquedaPorIdMarcaAbstractHandler implements RequestHandle
     for (Record record : result) {
       Marca marca = new Marca();
       marca.setId(record.getValue("id", Long.class));
-      marca.setDescripmarca(record.getValue("descripmarca", String.class));
+      //marca.setDescripmarca(record.getValue("descripmarca", String.class));
       listaMarcas.add(marca);
     }
     return listaMarcas;

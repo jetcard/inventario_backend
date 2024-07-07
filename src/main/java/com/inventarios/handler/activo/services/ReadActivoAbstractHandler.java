@@ -85,69 +85,67 @@ public abstract class ReadActivoAbstractHandler //implements RequestHandler<APIG
     ActivoResponseRest responseRest = new ActivoResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
             .withHeaders(headers);
-    String output ="";
+    String output = "";
     try {
       String authToken = extractAuthToken(request);
-      logger.log("authToken utilizada en Activo : ");
+      logger.log("authToken utilizado en Activo : ");
       logger.log(authToken);
       AuthorizationInfo authInfo = validateAuthToken(authToken);
-      if(authInfo!=null){
-        logger.log("authInfo = "+authInfo);
-        addAuthorizationHeaders(authInfo, request);
-        if (authInfo.isAdmin()) {
-          logger.log("###########");
-          logger.log(" ROL ADMIN");
-          logger.log("###########");
+      if (authInfo == null) {
+        responseRest.setMetadata("Token inválido", "-1", "Token inválido o expirado.");
+        return response.withBody(GsonFactory.createGson().toJson(responseRest)).withStatusCode(401);
+      }
+      logger.log("authInfo = " + authInfo);
+      addAuthorizationHeaders(authInfo, request);
+      if (request.getHttpMethod().equalsIgnoreCase("GET")) {
+        logger.log("########### SOLICITUD GET ###########");
+        Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result = read();
+        List<Activo> activosList = convertResultToLista(result);
+        responseRest.getActivoResponse().setListaactivos(activosList);
+        responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");
+        Gson gson = GsonFactory.createGson();
+        output = gson.toJson(responseRest);
+        return response.withStatusCode(200).withBody(output);
+      }
 
-          // Aquí se maneja la lógica para crear o actualizar activos
-          /*if (request.getHttpMethod().equalsIgnoreCase("GET")) {
-            ReadActivoHandler readActivoHandler = new ReadActivoHandler();
-            response = readActivoHandler.handleRequest(request, context);
-          } else
-            */
-          if (request.getHttpMethod().equalsIgnoreCase("POST")) {
-            CreateActivoHandler createEspecificoHandler = new CreateActivoHandler();
-            response = createEspecificoHandler.handleRequest(request, context);
-          } else if (request.getHttpMethod().equalsIgnoreCase("PUT")) {
-            UpdateActivoHandler updateEspecificoHandler = new UpdateActivoHandler();
-            response = updateEspecificoHandler.handleRequest(request, context);
-          } else {
-            responseRest.setMetadata("No autorizado", "-1", "No autorizado para leer, crear o actualizar activos.");
-            return response
-                    .withBody(new Gson().toJson(responseRest))
-                    .withStatusCode(405); // Código HTTP 405 - Método no permitido
-          }
-        } else if (authInfo.isUser()) {
+      if (authInfo.isAdmin()) {
+        logger.log("###########");
+        logger.log(" ROL ADMIN");
+        logger.log("###########");
+        if (request.getHttpMethod().equalsIgnoreCase("POST")) {
+          CreateActivoHandler createEspecificoHandler = new CreateActivoHandler();
+          response = createEspecificoHandler.handleRequest(request, context);
+        } else if (request.getHttpMethod().equalsIgnoreCase("PUT")) {
+          UpdateActivoHandler updateEspecificoHandler = new UpdateActivoHandler();
+          response = updateEspecificoHandler.handleRequest(request, context);
+        } else {
+          responseRest.setMetadata("No autorizado", "-1", "No autorizado para crear o actualizar activos.");
+          return response.withBody(GsonFactory.createGson().toJson(responseRest)).withStatusCode(403);
+        }
+      } else if (authInfo.isUser()) {
           logger.log("##########");
           logger.log(" ROL USER ");
           logger.log("##########");
-          //CreateespecificacionesHandler createespecificacionesHandler = new CreateespecificacionesHandler();
-          //response = createespecificacionesHandler.handleRequest(request, context);
-        } else {
-          logger.log("##########");
-          logger.log(" OTRO ROL ");
-          logger.log("##########");
-        }
-
-      }else{
-        logger.log("authInfo is null");
+          // Lógica específica para usuarios no administradores
+          responseRest.setMetadata("No autorizado", "-1", "No autorizado para esta acción.");
+          return response.withBody(GsonFactory.createGson().toJson(responseRest)).withStatusCode(403);
+      } else {
+          logger.log("########## OTRO ROL ##########");
+          responseRest.setMetadata("No autorizado", "-1", "No autorizado.");
+          return response.withBody(GsonFactory.createGson().toJson(responseRest)).withStatusCode(403);
       }
-
-      Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result = read();
-      responseRest.getActivoResponse().setListaactivos(convertResultToList(result));
-      responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");
-      Gson gson = GsonFactory.createGson();
-      output = gson.toJson(responseRest);
-      return response.withStatusCode(200).withBody(output);
-    } catch (Exception e) {
-      responseRest.setMetadata("Respuesta nok", "-1", "Error al consultar");
-      return response
-        .withBody(e.toString())
-        .withStatusCode(500);
+    } catch (Exception ex) {
+      logger.log("Error: " + ex.getMessage());
+      responseRest.setMetadata("Error", "-1", "Error en la solicitud: " + ex.getMessage());
+      return response.withBody(GsonFactory.createGson().toJson(responseRest)).withStatusCode(500);
     }
+    // No debería llegar aquí, pero en caso de que llegue, devolvemos un error interno del servidor
+    responseRest.setMetadata("Error", "-1", "Error inesperado en el servidor.");
+    return response.withBody(GsonFactory.createGson().toJson(responseRest)).withStatusCode(500);
   }
 
-  protected List<Activo> convertResultToList(Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result) throws SQLException {
+
+      protected List<Activo> convertResultToLista(Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result) throws SQLException {
       Map<Long, Activo> especificoMap = new HashMap<>();
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
       for (Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String> record : result) {
