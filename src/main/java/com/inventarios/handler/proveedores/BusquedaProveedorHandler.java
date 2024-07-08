@@ -5,7 +5,6 @@ import com.inventarios.handler.proveedores.services.BusquedaProveedorAbstractHan
 import java.sql.SQLException;
 import org.jooq.Record;
 import org.jooq.Result;
-
 public class BusquedaProveedorHandler extends BusquedaProveedorAbstractHandler {
 
   @Override

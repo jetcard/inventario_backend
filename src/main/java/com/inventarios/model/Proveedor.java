@@ -1,11 +1,10 @@
 package com.inventarios.model;
 
 import java.io.Serializable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="proveedor")
@@ -19,7 +18,9 @@ public class Proveedor  implements Serializable{
     private String contacto;
     private String telefono;
     private String correo;
-
+    @OneToMany(mappedBy = "custodio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Custodio> custodios;
     public Long getId() {
         return id;
     }
@@ -74,5 +75,13 @@ public class Proveedor  implements Serializable{
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    public List<Custodio> getCustodios() {
+        return custodios;
+    }
+
+    public void setCustodios(List<Custodio> custodios) {
+        this.custodios = custodios;
     }
 }

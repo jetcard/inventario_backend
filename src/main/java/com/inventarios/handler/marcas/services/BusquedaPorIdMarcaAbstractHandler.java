@@ -1,11 +1,11 @@
-package com.inventarios.handler.marca.services;
+package com.inventarios.handler.marcas.services;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.inventarios.handler.marca.response.MarcaResponseRest;
+import com.inventarios.handler.marcas.response.MarcaResponseRest;
 import com.inventarios.model.Marca;
 import java.sql.SQLException;
 import java.util.*;
@@ -42,7 +42,7 @@ public abstract class BusquedaPorIdMarcaAbstractHandler implements RequestHandle
     String output = "";
     try {
       Result<Record> result = busquedaPorNombreMarca(idString);
-      responseRest.getMarcaResponse().setListamarcaes(convertResultToList(result));
+      responseRest.getMarcaResponse().setListamarcas(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Marcas encontrados");
       output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)

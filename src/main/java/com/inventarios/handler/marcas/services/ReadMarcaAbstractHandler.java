@@ -1,4 +1,4 @@
-package com.inventarios.handler.marca.services;
+package com.inventarios.handler.marcas.services;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -8,10 +8,9 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import java.sql.SQLException;
 import java.util.*;
 
-import com.inventarios.handler.marca.response.MarcaResponseRest;
+import com.inventarios.handler.marcas.response.MarcaResponseRest;
 import com.inventarios.model.*;
 import com.inventarios.util.GsonFactory;
-import org.jooq.Field;
 import org.jooq.Table;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -20,12 +19,6 @@ import org.jooq.impl.DSL;
 public abstract class ReadMarcaAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   protected final static Table<Record> MARCA_TABLE = DSL.table("marca");
-  protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("custodio");
-  protected static final Field<String> RESPONSABLE_TABLE_COLUMNA = DSL.field("arearesponsable", String.class);
-  protected final static Table<Record> TIPO_TABLE = DSL.table("tipo");
-  protected static final Field<String> TIPO_TABLE_COLUMNA = DSL.field("nombretipo", String.class);
-  protected final static Table<Record> GRUPO_TABLE = DSL.table("categoria");
-  protected static final Field<String> GRUPO_TABLE_COLUMNA = DSL.field("nombregrupo", String.class);
 
   final static Map<String, String> headers = new HashMap<>();
 
@@ -38,9 +31,6 @@ public abstract class ReadMarcaAbstractHandler implements RequestHandler<APIGate
   }
 
   protected abstract Result<Record> read() throws SQLException;
-  protected abstract String mostrarCustodio(Long id) throws SQLException;
-  protected abstract String mostrarTipoBien(Long id) throws SQLException;
-  protected abstract String mostrarCategoria(Long id) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -51,8 +41,8 @@ public abstract class ReadMarcaAbstractHandler implements RequestHandler<APIGate
     String output ="";
     try {
       Result<Record> result = read();
-      responseRest.getMarcaResponse().setListamarcaes(convertResultToList(result));
-      responseRest.setMetadata("Respuesta ok", "00", "Marcaes listados");
+      responseRest.getMarcaResponse().setListamarcas(convertResultToList(result));
+      responseRest.setMetadata("Respuesta ok", "00", "Marcas listadas");
       output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
               .withBody(output);
@@ -83,26 +73,8 @@ public abstract class ReadMarcaAbstractHandler implements RequestHandler<APIGate
     for (Record record : result) {
       Marca marca = new Marca();
       marca.setId(record.getValue("id", Long.class));
-      ///marca.setDescripmarca(record.getValue("descripmarca", String.class));
-      //marca.setDescripcortamarca(record.getValue("descripcortamarca", String.class));
-
-      //marca.setGrupo(record.getValue("categoriaId", Grupo.class));
-      ///marca.setPicture(record.getValue("picture", byte[].class));
-      Custodio custodio = new Custodio();
-      custodio.setId(record.getValue("custodioid", Long.class));
-      custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
-      ///marca.setResponsable(custodio);
-
-      Tipo tipo = new Tipo();
-      tipo.setId(record.getValue("tipoid", Long.class));
-      tipo.setNombretipo(mostrarTipoBien(tipo.getId()));
-      ///marca.setTipo(tipo);
-
-      Categoria categoria =new Categoria();
-      categoria.setId(record.getValue("categoriaid", Long.class));
-      categoria.setNombregrupo(mostrarCategoria(categoria.getId()));
-      ///marca.setGrupo(categoria);
-
+      marca.setNombre(record.getValue("nombre", String.class));
+      marca.setDescripcion(record.getValue("descripcion", String.class));
       listaMarcaes.add(marca);
     }
     return listaMarcaes;

@@ -71,7 +71,8 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
     headers.put("Access-Control-Allow-Methods", "GET");
   }
 
-  protected abstract Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> busquedaActivo(String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta) throws SQLException;
+  protected abstract Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>>
+  busquedaActivo(long custodioId, String codinventario, String modelo, String marca, String nroSerie, LocalDate fechaCompraDesde, LocalDate fechaCompraHasta, long proveedorId) throws SQLException;
   protected abstract String mostrarCustodio(Long id) throws SQLException;
   protected abstract String mostrarArticulo(Long id) throws SQLException;
   protected abstract String mostrarTipoBien(Long id) throws SQLException;
@@ -83,8 +84,28 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
     LambdaLogger logger = context.getLogger();
     ActivoResponseRest responseRest = new ActivoResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
-    // Obtener los parámetros de consulta
+
     Map<String, String> queryParameters = input.getQueryStringParameters();
+    long custodioId = 0;
+    long proveedorId = 0;
+
+    // Verificar y convertir parámetros de consulta a long
+    try {
+      if (queryParameters != null && queryParameters.get("custodioId") != null) {
+        custodioId = Long.parseLong(queryParameters.get("custodioId"));
+      }
+      if (queryParameters != null && queryParameters.get("proveedorId") != null) {
+        proveedorId = Long.parseLong(queryParameters.get("proveedorId"));
+      }
+    } catch (NumberFormatException e) {
+      logger.log("Error al convertir parámetros de consulta a long: " + e.getMessage());
+      responseRest.setMetadata("Respuesta nok", "-1", "Error al convertir parámetros de consulta a long");
+      String output = GsonFactory.createGson().toJson(responseRest);
+      return response.withStatusCode(400).withBody(output);
+    }
+    logger.log("custodioId: " + custodioId);
+    logger.log("proveedorId: " + proveedorId);
+
     String codinventario = queryParameters != null ? queryParameters.get("codinventario") : null;
     logger.log("codinventario: " + codinventario);
     String modelo = queryParameters != null ? queryParameters.get("modelo") : null;
@@ -103,7 +124,8 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
     LocalDate fechaHasta = new Conversiones().convertirALocalDate(fechaCompraHasta);
     logger.log("fechahasta: " + fechaCompraHasta);
     try {
-      Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result = busquedaActivo(codinventario, modelo, marca, nroSerie, fechaDesde, fechaHasta);
+      Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result =
+              busquedaActivo(custodioId, codinventario, modelo, marca, nroSerie, fechaDesde, fechaHasta, proveedorId);
       responseRest.getActivoResponse().setListaactivos(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");
       output = GsonFactory.createGson().toJson(responseRest);
@@ -115,53 +137,6 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
               .withBody(e.toString())
               .withStatusCode(500);
     }
-  }
-
-
-  /*@Override
-  public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
-    input.setHeaders(headers);
-    LambdaLogger logger = context.getLogger();
-    ActivoResponseRest responseRest = new ActivoResponseRest();
-    APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
-    Map<String, String> pathParameters = input.getPathParameters();
-    String idString = pathParameters.get("id");
-    logger.log("buscar: " + idString);
-    String output = "";
-    try {
-      Result<Record> result = busquedaPorNombreEspecifico(idString);
-      responseRest.getActivoResponse().setListaactivos(convertResultToList(result));
-      responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");
-      output = GsonFactory.createGson().toJson(responseRest);
-      return response.withStatusCode(200)
-                    .withBody(output);
-  } catch (Exception e) {
-        responseRest.setMetadata("Respuesta nok", "-1", "Error al guardar");
-            return response
-                    .withBody(e.toString())
-        .withStatusCode(500);
-        }
-  }*/
-
-  protected List<Activo> convertResultToListY(Result<Record> result) {
-    List<Activo> listaActivos = new ArrayList<>();
-    for (Record record : result) {
-      Activo activo = new Activo();
-      activo.setId(record.getValue("id", Long.class));
-      activo.setCodinventario(record.getValue("codinventario", String.class));
-      activo.setModelo(record.getValue("modelo", String.class));
-      activo.setMarca(record.getValue("marca", String.class));
-      activo.setNroserie(record.getValue("nroserie", String.class));
-      activo.setFechaingreso(record.getValue("fechaingreso", LocalDate.class));
-      activo.setMoneda(record.getValue( "nroserie", String.class));
-      activo.setImporte(record.getValue("importe", BigDecimal.class));
-      //Responsable responsable = new Responsable();
-      //activo.setResponsable(responsable);
-      ///activo.setResponsable(record.getValue("responsableId", Responsable.class));
-      ///activo.setGrupo(record.getValue("grupoId", Grupo.class));
-      listaActivos.add(activo);
-    }
-    return listaActivos;
   }
 
   protected List<Activo> convertResultToList(Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result) throws SQLException {
@@ -230,6 +205,54 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
       }
     }
     return new ArrayList<>(especificoMap.values());
+  }
+
+
+
+  /*@Override
+  public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
+    input.setHeaders(headers);
+    LambdaLogger logger = context.getLogger();
+    ActivoResponseRest responseRest = new ActivoResponseRest();
+    APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
+    Map<String, String> pathParameters = input.getPathParameters();
+    String idString = pathParameters.get("id");
+    logger.log("buscar: " + idString);
+    String output = "";
+    try {
+      Result<Record> result = busquedaPorNombreEspecifico(idString);
+      responseRest.getActivoResponse().setListaactivos(convertResultToList(result));
+      responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");
+      output = GsonFactory.createGson().toJson(responseRest);
+      return response.withStatusCode(200)
+                    .withBody(output);
+  } catch (Exception e) {
+        responseRest.setMetadata("Respuesta nok", "-1", "Error al guardar");
+            return response
+                    .withBody(e.toString())
+        .withStatusCode(500);
+        }
+  }*/
+
+  protected List<Activo> convertResultToListY(Result<Record> result) {
+    List<Activo> listaActivos = new ArrayList<>();
+    for (Record record : result) {
+      Activo activo = new Activo();
+      activo.setId(record.getValue("id", Long.class));
+      activo.setCodinventario(record.getValue("codinventario", String.class));
+      activo.setModelo(record.getValue("modelo", String.class));
+      activo.setMarca(record.getValue("marca", String.class));
+      activo.setNroserie(record.getValue("nroserie", String.class));
+      activo.setFechaingreso(record.getValue("fechaingreso", LocalDate.class));
+      activo.setMoneda(record.getValue( "nroserie", String.class));
+      activo.setImporte(record.getValue("importe", BigDecimal.class));
+      //Responsable responsable = new Responsable();
+      //activo.setResponsable(responsable);
+      ///activo.setResponsable(record.getValue("responsableId", Responsable.class));
+      ///activo.setGrupo(record.getValue("grupoId", Grupo.class));
+      listaActivos.add(activo);
+    }
+    return listaActivos;
   }
 
 

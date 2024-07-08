@@ -1,4 +1,4 @@
-package com.inventarios.handler.marca.services;
+package com.inventarios.handler.marcas.services;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -7,13 +7,10 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.inventarios.core.RDSConexion;
-import com.inventarios.handler.marca.response.MarcaResponseRest;
+import com.inventarios.handler.marcas.response.MarcaResponseRest;
 import com.inventarios.model.Marca;
-import com.inventarios.model.Categoria;
-import com.inventarios.model.Custodio;
-import com.inventarios.model.Tipo;
+
 import java.sql.SQLException;
 import java.util.*;
 
@@ -27,9 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public abstract class CreateMarcaAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     protected final static Table<Record> MARCA_TABLE = DSL.table("marca");
-    protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("custodio");
-    protected final static Table<Record> TIPO_TABLE = DSL.table("tipo");
-    protected final static Table<Record> GRUPO_TABLE = DSL.table("categoria");
     final static Map<String, String> headers = new HashMap<>();
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -42,7 +36,7 @@ public abstract class CreateMarcaAbstractHandler implements RequestHandler<APIGa
         headers.put("Access-Control-Allow-Methods", "POST");
     }
 
-    protected abstract void save(Marca marca, Long custodioId, Long tipoID, Long categoriaId) throws SQLException;
+    protected abstract void save(Marca marca) throws SQLException;
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -63,9 +57,9 @@ public abstract class CreateMarcaAbstractHandler implements RequestHandler<APIGa
             logger.log(body);
             logger.log("#######################################################");
 
-            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-            //Marca marca = GsonFactory.createGson().fromJson(body, Marca.class);
-            Marca marca = gson.fromJson(body, Marca.class);
+            //Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+            Marca marca = GsonFactory.createGson().fromJson(body, Marca.class);
+            //Marca marca = gson.fromJson(body, Marca.class);
 
             logger.log("debe llegar aquí 1 ya tenemos Marca");
             if (marca == null) {
@@ -87,76 +81,15 @@ public abstract class CreateMarcaAbstractHandler implements RequestHandler<APIGa
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(body);
 
-            Long custodioId = null;
-            Long tipoID = null;
-            Long categoriaId = null;
-            try {
-                custodioId = Long.parseLong(jsonNode.get("custodioId").asText());
-                tipoID = Long.parseLong(jsonNode.get("tipoId").asText());
-                categoriaId = Long.parseLong(jsonNode.get("categoriaId").asText());
-            } catch (NumberFormatException e) {
-                return response
-                        .withBody("Invalid id in path")
-                        .withStatusCode(400);
-            }
-
-
-            /*String bodyparaque = "{\"modelo\":\"+marca.getModelo()+\",\"marca\":\"+marca.getMarca()+" +
-                    "\",\"nroserie\":\"+marca.getNroserie()+\",\"fechacompra\":\"+marca.getFechacompra()+" +
-                    "\",\"importe\":+marca.getImporte()+,\"categoriaId\":1,\"account\":+marca.getAccount()}";
-            logger.log("bodyparaque: ");
-            logger.log(bodyparaque);*/
             DSLContext dsl = RDSConexion.getDSL();
 
-            Optional<Custodio> responsableSearch = dsl.select()
-                    .from(RESPONSABLE_TABLE)
-                    .where(DSL.field("id", Long.class).eq(custodioId))
-                    .fetchOptionalInto(Custodio.class);
-            if (!responsableSearch.isPresent()) {
-                return response
-                        .withBody("El responsable especificado no existe")
-                        .withStatusCode(404);
-            }
-
-            Optional<Tipo> tipoSearch = dsl.select()
-                    .from(TIPO_TABLE)
-                    .where(DSL.field("id", Long.class).eq(tipoID))
-                    .fetchOptionalInto(Tipo.class);
-            if (!tipoSearch.isPresent()) {
-                return response
-                        .withBody("El tipo especificado no existe")
-                        .withStatusCode(404);
-            }
-
-            Optional<Categoria> grupoSearch = dsl.select()
-                    .from(GRUPO_TABLE)
-                    .where(DSL.field("id", Long.class).eq(categoriaId))
-                    .fetchOptionalInto(Categoria.class);
-            if (!grupoSearch.isPresent()) {
-                return response
-                        .withBody("El grupo especificado no existe")
-                        .withStatusCode(404);
-            }
-            //if (grupoSearch.isPresent()) {
-            logger.log("grupoSearch.isPresent()");
-            ///logger.log("Marca.getGrupo I  : "+marca.getGrupo());
-          /*byte[] compressedPicture = null;
-          if (marca.getPicture() != null) {
-            compressedPicture = Util.compressZLib(marca.getPicture());
-          }*/
             logger.log(":::::::::::::::::::::::::::::::::: PREPARANDO PARA INSERTAR ::::::::::::::::::::::::::::::::::");
 
-            /*marca.setResponsable(responsableSearch.get());
-            marca.setTipo(tipoSearch.get());
-            marca.setGrupo(grupoSearch.get());
-            logger.log("Marca.getGrupo II : "+marca.getGrupo());*/
-
-            save(marca, custodioId, tipoID, categoriaId);
+            save(marca);
             logger.log(":::::::::::::::::::::::::::::::::: INSERCIÓN COMPLETA ::::::::::::::::::::::::::::::::::");
             list.add(marca);
-            responseRest.getMarcaResponse().setListamarcaes(list);
+            responseRest.getMarcaResponse().setListamarcas(list);
             responseRest.setMetadata("Respuesta ok", "00", "Común guardado");
-
             output = GsonFactory.createGson().toJson(responseRest);
             return response.withStatusCode(200)
                     .withBody(output);

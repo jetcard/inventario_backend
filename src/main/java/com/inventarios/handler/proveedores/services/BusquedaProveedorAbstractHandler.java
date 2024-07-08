@@ -36,6 +36,7 @@ public abstract class BusquedaProveedorAbstractHandler implements RequestHandler
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
     input.setHeaders(headers);
+    System.out.println("========================AUTOCOMPLETAR==========================");
     LambdaLogger logger = context.getLogger();
     ProveedorResponseRest responseRest = new ProveedorResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);

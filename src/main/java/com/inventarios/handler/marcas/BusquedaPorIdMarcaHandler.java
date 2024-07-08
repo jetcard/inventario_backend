@@ -1,7 +1,7 @@
-package com.inventarios.handler.marca;
+package com.inventarios.handler.marcas;
 
 import com.inventarios.core.RDSConexion;
-import com.inventarios.handler.marca.services.BusquedaPorIdMarcaAbstractHandler;
+import com.inventarios.handler.marcas.services.BusquedaPorIdMarcaAbstractHandler;
 import java.sql.SQLException;
 import org.jooq.Record;
 import org.jooq.Result;

@@ -1,4 +1,4 @@
-package com.inventarios.handler.marca.response;
+package com.inventarios.handler.marcas.response;
 
 import com.inventarios.handler.ResponseRest;
 

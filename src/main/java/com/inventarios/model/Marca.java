@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="comun")
+@Table(name="marca")
 public class Marca implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

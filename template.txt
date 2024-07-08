@@ -5778,6 +5778,7 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/especificos/{id}
 
+
   RDSInstance:
     Type: AWS::RDS::DBInstance
     Properties:

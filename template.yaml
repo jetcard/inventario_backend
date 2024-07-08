@@ -5145,6 +5145,501 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/especificaciones/{id}
 
+  ############################## MARCAS #######################################
+  ResourceMarca:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt MyApi.RootResourceId
+      PathPart: marcas
+      RestApiId: !Ref MyApi
+
+  ResourceMarcaId:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !Ref ResourceMarca
+      PathPart: "{id}"
+      RestApiId: !Ref MyApi
+
+  MarcaOptionsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: OPTIONS
+      Integration:
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: MOCK
+        RequestTemplates:
+          "application/json": "{
+            \"statusCode\": 200
+            }"
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: marcas
+      ResourceId: !Ref ResourceMarca
+      RestApiId: !Ref MyApi
+
+  MarcaIdOptionsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: OPTIONS
+      Integration:
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'PUT,DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: MOCK
+        RequestTemplates:
+          "application/json": "{
+            \"statusCode\": 200
+            }"
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: marcas
+      ResourceId: !Ref ResourceMarcaId
+      RestApiId: !Ref MyApi
+
+  MarcaGetMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        RequestTemplates:
+          "application/json": "{
+            \"statusCode\": 200
+            }"
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
+          - Arn: !GetAtt ReadMarcaFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: marcas
+      ResourceId: !Ref ResourceMarca
+      RestApiId: !Ref MyApi
+
+  MarcaGetByIdMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        RequestTemplates:
+          "application/json": "{
+            \"statusCode\": 200
+            }"
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
+          - Arn: !GetAtt BusquedaPorIdMarcaFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: marcas
+      ResourceId: !Ref ResourceMarcaId
+      RestApiId: !Ref MyApi
+
+  MarcaPostMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations"
+          - lambdaArn: !GetAtt CrearMarcaFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: marcas
+      ResourceId: !Ref ResourceMarca
+      RestApiId: !Ref MyApi
+
+  MarcaUpdateMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: PUT
+      Integration:
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'PUT,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambArn}/invocations"
+          - lambArn: !GetAtt UpdateMarcaFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: marcas
+      ResourceId: !Ref ResourceMarcaId
+      RestApiId: !Ref MyApi
+
+  MarcaDeleteMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: DELETE
+      Integration:
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdarn}/invocations"
+          - lambdarn: !GetAtt DeleteMarcaFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: marcas
+      ResourceId: !Ref ResourceMarcaId
+      RestApiId: !Ref MyApi
+
+  ReadMarcaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ReadMarca
+      Handler: com.inventarios.handler.marcas.ReadMarcaHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        ReadRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /marcas
+            Method: get
+
+  ReadMarcaFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${ReadMarcaFunction}"
+      RetentionInDays: 7
+
+  BusquedaPorIdMarcaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.inventarios.handler.marcas.BusquedaPorIdMarcaHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        BusquedaPorIdRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /marcas/{id}
+            Method: get
+
+  BusquedaPorIdMarcaFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${BusquedaPorIdMarcaFunction}"
+      RetentionInDays: 7
+
+  CrearMarcaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CrearMarca
+      Handler: com.inventarios.handler.marcas.CreateMarcaHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        CrearRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /marcas
+            Method: post
+
+  CrearMarcaFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${CrearMarcaFunction}"
+      RetentionInDays: 7
+
+  UpdateMarcaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateMarca
+      Handler: com.inventarios.handler.marcas.UpdateMarcaHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        PutRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /marcas/{id}
+            Method: put
+
+  UpdateMarcaFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${UpdateMarcaFunction}"
+      RetentionInDays: 7
+
+  DeleteMarcaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DeleteMarca
+      Handler: com.inventarios.handler.marcas.DeleteMarcaHandler
+      Runtime: java21
+      Environment:
+        Variables:
+          DBName: !Ref PostgresDatabaseName
+          DBEnpoint: !GetAtt RDSInstance.Endpoint.Address
+          user: !Ref PostgresUsername
+          pass: !Ref PostgresPassword
+          RDSSecretArn: !Ref RDSSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - !Ref SecretsPolicy
+        - AWSLambdaExecute
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - rds:DescribeDBClusters
+                - rds:DescribeDBInstances
+                - rds:DescribeDBClusterEndpoints
+                - rds-db:Connect
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - 'secretsmanager:GetSecretValue'
+                - 'secretsmanager:DescribeSecret'
+              Resource: !Ref RDSSecret
+      Events:
+        DeleteRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /marcas/{id}
+            Method: delete
+
+  DeleteMarcaFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${DeleteMarcaFunction}"
+      RetentionInDays: 7
+
+  MarcaGetApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - ReadMarcaFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt ReadMarcaFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/marcas
+
+  MarcaPostApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - CrearMarcaFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt CrearMarcaFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/marcas
+
+  MarcaUpdateApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - UpdateMarcaFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt UpdateMarcaFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/PUT/marcas/{id}
+
+  MarcaDeleteApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - DeleteMarcaFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt DeleteMarcaFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/marcas/{id}
+
   RDSInstance:
     Type: AWS::RDS::DBInstance
     Properties:
@@ -5218,6 +5713,11 @@ Resources:
       - TipobienPostMethod
       - TipobienUpdateMethod
       - TipobienDeleteMethod
+      - MarcaGetMethod
+      - MarcaGetByIdMethod
+      - MarcaPostMethod
+      - MarcaUpdateMethod
+      - MarcaDeleteMethod
       - ProveedorGetMethod
       - ProveedorGetByIdMethod
       - ProveedorPostMethod

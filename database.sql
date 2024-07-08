@@ -146,6 +146,13 @@ CREATE TABLE parametros (
     descripcion VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE marca (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    descripcion VARCHAR(255) NOT NULL
+);
+
+
 SELECT pg_terminate_backend(pid)
 FROM pg_stat_activity
 WHERE datname = 'basededatos'
