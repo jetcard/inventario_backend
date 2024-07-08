@@ -37,15 +37,7 @@ DELETE FROM categoria;
 -- Tabla 'proveedor'
 DELETE FROM proveedor;
 
-CREATE TABLE proveedor (
-    id SERIAL PRIMARY KEY,
-    razonsocial VARCHAR(255) NOT NULL,
-    ruc VARCHAR(18) NOT NULL,
-    direccionfiscal VARCHAR(255) NOT NULL,
-    contacto VARCHAR(255) NOT NULL,
-    telefono VARCHAR(255) NOT NULL,
-    correo VARCHAR(255) NOT NULL
-);
+
 
 CREATE TABLE categoria (
     id SERIAL PRIMARY KEY,
@@ -67,6 +59,20 @@ CREATE TABLE custodio (
     nombreusuario VARCHAR(255) NULL
 );
 
+CREATE TABLE proveedor (
+    id SERIAL PRIMARY KEY,
+    --custodioId INTEGER NOT NULL,--
+    custodioId INTEGER NOT NULL,
+    razonsocial VARCHAR(255) NOT NULL,
+    ruc VARCHAR(18) NOT NULL,
+    direccionfiscal VARCHAR(255) NOT NULL,
+    contacto VARCHAR(255) NOT NULL,
+    telefono VARCHAR(255) NOT NULL,
+    correo VARCHAR(255) NOT NULL
+    --,
+    --FOREIGN KEY (custodioId) REFERENCES custodio(id)
+);
+
 CREATE TABLE tipo (
     id SERIAL PRIMARY KEY,
     nombretipo VARCHAR(255) NOT NULL,
@@ -79,16 +85,16 @@ CREATE TABLE dependencia (
     descripdependencia VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE comun (
-    id SERIAL PRIMARY KEY,
-    custodioId INTEGER NOT NULL,
-    tipoId INTEGER NOT NULL,
-    categoriaId INTEGER NOT NULL,
-    descripcomun VARCHAR(255) NOT NULL,
-    FOREIGN KEY (custodioId) REFERENCES responsable(id),
-    FOREIGN KEY (tipoId) REFERENCES tipo(id),
-    FOREIGN KEY (categoriaId) REFERENCES grupo(id)
-);
+--CREATE TABLE comun (
+--    id SERIAL PRIMARY KEY,
+--    custodioId INTEGER NOT NULL,
+--    tipoId INTEGER NOT NULL,
+--    categoriaId INTEGER NOT NULL,
+--    descripcomun VARCHAR(255) NOT NULL,
+--    FOREIGN KEY (custodioId) REFERENCES responsable(id),
+--    FOREIGN KEY (tipoId) REFERENCES tipo(id),
+--    FOREIGN KEY (categoriaId) REFERENCES grupo(id)
+--);
 
 CREATE TABLE atributo (
     id SERIAL PRIMARY KEY,

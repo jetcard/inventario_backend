@@ -130,12 +130,14 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
                     save(activo, especificacionesList);
                     logger.log(":::::::::::::::::::::::::::::::::: INSERCIÓN COMPLETA ::::::::::::::::::::::::::::::::::");
                     list.add(activo);
-                    responseRest.getActivoResponse().setListaactivos(list);
-                    responseRest.setMetadata("Respuesta ok", "00", "Especifico guardado");
+
                 }
-                output = GsonFactory.createGson().toJson(responseRest);
-                logger.log(output);
             }
+            responseRest.getActivoResponse().setListaactivos(list);
+            //responseRest.getActivoResponse().setListaactivos(convertResultToLista(result));
+            responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");
+            output = GsonFactory.createGson().toJson(responseRest);
+            logger.log(output);
             return response.withStatusCode(200)
                     .withBody(output);
         } catch (Exception e) {

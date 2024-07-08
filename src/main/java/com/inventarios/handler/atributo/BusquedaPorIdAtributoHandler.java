@@ -3,7 +3,8 @@ package com.inventarios.handler.atributo;
 import com.inventarios.core.RDSConexion;
 import com.inventarios.handler.atributo.services.BusquedaPorIdAtributoAbstractHandler;
 import java.sql.SQLException;
-
+import java.util.List;
+import com.inventarios.model.Proveedor;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
@@ -11,13 +12,6 @@ import org.jooq.impl.DSL;
 public class BusquedaPorIdAtributoHandler extends BusquedaPorIdAtributoAbstractHandler {
 
   @Override
-  /*protected Result<Record> busquedaPorArticuloId(String articuloId) throws SQLException {
-    var dsl = RDSConexion.getDSL();
-    return dsl.select()
-            .from(ATRIBUTO_TABLE)
-            .where(ATRIBUTO_ARTICULO_ID.eq(Long.parseLong(articuloId)))
-            .fetch();
-  }*/
   protected Result<Record5<Long, Long, Long, Long, Long>> busquedaPorArticuloId(String articuloId)
           throws SQLException {
     var dsl = RDSConexion.getDSL();
@@ -29,6 +23,30 @@ public class BusquedaPorIdAtributoHandler extends BusquedaPorIdAtributoAbstractH
             .where(ATRIBUTO_ARTICULO_ID.eq(Long.parseLong(articuloId)))
             .fetch();
   }
+
+  @Override
+  protected List<Proveedor> listaCustodioProveedores(Long id) throws SQLException {
+    DSLContext dsl = RDSConexion.getDSL();
+    Result<Record2<Long, String>> result = dsl.select(PROVEEDOR_TABLE.ID, PROVEEDOR_TABLE.COLUMN)
+            .from(PROVEEDOR_TABLE)
+            .leftJoin(RESPONSABLE_TABLE)
+            .on(PROVEEDOR_TABLE.CUSTODIOID.eq(RESPONSABLE_TABLE.ID))
+            .where(PROVEEDOR_TABLE.ID.eq(PROVEEDOR_TABLE.CUSTODIOID))
+            .fetch();
+
+    return result.into(Proveedor.class);
+  }
+
+  /*protected List<Proveedor> listaCustodioProveedores(Long id) throws SQLException {
+    DSLContext dsl = RDSConexion.getDSL();
+    Result<Record2<Long, String>> result = dsl.select(PROVEEDOR_TABLE_ID, PROVEEDOR_TABLE_COLUMNA)
+            .from(PROVEEDOR_TABLE)
+            .leftJoin(RESPONSABLE_TABLE)
+            .on(CUSTODIOID_PROVEEDOR_TABLE.eq(id))
+            .fetch();
+
+    return result.into(Proveedor.class);
+  }*/
 
   @Override
   protected String mostrarCustodio(Long id) throws SQLException {

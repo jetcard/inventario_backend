@@ -1,14 +1,14 @@
 package com.inventarios.model;
 
 import java.io.Serializable;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name="proveedor")
 public class Proveedor  implements Serializable{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,9 +18,14 @@ public class Proveedor  implements Serializable{
     private String contacto;
     private String telefono;
     private String correo;
-    @OneToMany(mappedBy = "custodio", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Custodio> custodios;
+
+    private Custodio custodio;
+    /*@ManyToOne(fetch= FetchType.LAZY)
+    @JsonIgnoreProperties( {"hibernateLazyInitializer", "handler"})*/
+
+    /*@Column(name = "custodioid")
+    private Long custodioid;*/
+
     public Long getId() {
         return id;
     }
@@ -77,11 +82,11 @@ public class Proveedor  implements Serializable{
         this.correo = correo;
     }
 
-    public List<Custodio> getCustodios() {
-        return custodios;
+    public Custodio getCustodio() {
+        return custodio;
     }
 
-    public void setCustodios(List<Custodio> custodios) {
-        this.custodios = custodios;
+    public void setCustodio(Custodio custodio) {
+        this.custodio = custodio;
     }
 }

@@ -90,13 +90,13 @@ public abstract class ReadActivoAbstractHandler //implements RequestHandler<APIG
       String authToken = extractAuthToken(request);
       logger.log("authToken utilizado en Activo : ");
       logger.log(authToken);
-      /*AuthorizationInfo authInfo = validateAuthToken(authToken);
+      AuthorizationInfo authInfo = validateAuthToken(authToken);
       if (authInfo == null) {
         responseRest.setMetadata("Token inválido", "-1", "Token inválido o expirado.");
         return response.withBody(GsonFactory.createGson().toJson(responseRest)).withStatusCode(401);
       }
       logger.log("authInfo = " + authInfo);
-      addAuthorizationHeaders(authInfo, request);*/
+      addAuthorizationHeaders(authInfo, request);
       if (request.getHttpMethod().equalsIgnoreCase("GET")) {
         logger.log("########### SOLICITUD GET ###########");
         Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result = read();
@@ -108,7 +108,7 @@ public abstract class ReadActivoAbstractHandler //implements RequestHandler<APIG
         return response.withStatusCode(200).withBody(output);
       }
 
-      /*if (authInfo.isAdmin()) {
+      if (authInfo.isAdmin()) {
         logger.log("###########");
         logger.log(" ROL ADMIN");
         logger.log("###########");
@@ -133,7 +133,7 @@ public abstract class ReadActivoAbstractHandler //implements RequestHandler<APIG
           logger.log("########## OTRO ROL ##########");
           responseRest.setMetadata("No autorizado", "-1", "No autorizado.");
           return response.withBody(GsonFactory.createGson().toJson(responseRest)).withStatusCode(403);
-      }*/
+      }
     } catch (Exception ex) {
       logger.log("Error: " + ex.getMessage());
       responseRest.setMetadata("Error", "-1", "Error en la solicitud: " + ex.getMessage());
@@ -145,7 +145,7 @@ public abstract class ReadActivoAbstractHandler //implements RequestHandler<APIG
   }
 
 
-      protected List<Activo> convertResultToLista(Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result) throws SQLException {
+  protected List<Activo> convertResultToLista(Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result) throws SQLException {
       Map<Long, Activo> activoMap = new HashMap<>();
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
       for (Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String> record : result) {
@@ -197,7 +197,6 @@ public abstract class ReadActivoAbstractHandler //implements RequestHandler<APIG
           activo.setImporte(record.getValue("importe", BigDecimal.class));
           activo.setDescripcion(record.getValue("descripcion", String.class));
 
-          ///especifico.setespecificaciones(new ArrayList<>());
           activoMap.put(especificoId, activo);
         }
         Long especificacionesId = record.get(ESPECIFICACIONES_ID);

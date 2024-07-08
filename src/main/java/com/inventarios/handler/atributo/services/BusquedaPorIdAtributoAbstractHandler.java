@@ -44,6 +44,11 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
   protected final static Field<Long> ATRIBUTO_TIPO_ID = field(name("atributo", "tipoid"), Long.class);
   protected final static Field<Long> ATRIBUTO_GRUPO_ID = field(name("atributo", "categoriaid"), Long.class);
 
+  protected final static Field<Long> PROVEEDOR_TABLE_ID = field(name("proveedor", "id"), Long.class);
+  protected static final Field<String> PROVEEDOR_TABLE_COLUMNA = DSL.field("razonsocial", String.class);
+  protected final static Table<Record> PROVEEDOR_TABLE = DSL.table("proveedor");
+  protected static final Field<Long> CUSTODIOID_PROVEEDOR_TABLE =  field(name("proveedor", "custodioid"), Long.class);
+
   final static Map<String, String> headers = new HashMap<>();
 
   static {
@@ -59,8 +64,8 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
   protected abstract String mostrarArticulo(Long id) throws SQLException;
   protected abstract String mostrarTipoBien(Long id) throws SQLException;
   protected abstract String mostrarCategoria(Long id) throws SQLException;
+  protected abstract List<Proveedor> listaCustodioProveedores(Long id) throws SQLException;
 
-  @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
     LambdaLogger logger = context.getLogger();
     AtributoResponseRest responseRest = new AtributoResponseRest();
@@ -70,7 +75,7 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
     //logger.log("articuloId: " + articuloId);
 
     Map<String, String> pathParameters = input.getPathParameters();
-    String articuloId = pathParameters.get("id");
+    String articuloId = "3";//pathParameters.get("id");
     logger.log("articuloId: " + articuloId);
 
     try {
@@ -96,6 +101,8 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
       Custodio custodio = new Custodio();
       custodio.setId(record.get(ATRIBUTO_RESPONSABLE_ID));
       custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
+      List<Proveedor> proveedoresLista = listaCustodioProveedores(custodio.getId());
+      custodio.setProveedores(proveedoresLista);
       atributo.setCustodio(custodio);
 
       Articulo articulo = new Articulo();

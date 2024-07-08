@@ -118,7 +118,6 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
     logger.log("fechadesde: " + fechaCompraDesde);
     String fechaCompraHasta = queryParameters != null ? queryParameters.get("fechahasta") : null;
     logger.log("fechahasta: " + fechaCompraHasta);
-    String output = "";
     LocalDate fechaDesde = new Conversiones().convertirALocalDate(fechaCompraDesde);
     logger.log("fechadesde: " + fechaCompraDesde);
     LocalDate fechaHasta = new Conversiones().convertirALocalDate(fechaCompraHasta);
@@ -126,9 +125,9 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
     try {
       Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result =
               busquedaActivo(custodioId, codinventario, modelo, marca, nroSerie, fechaDesde, fechaHasta, proveedorId);
-      responseRest.getActivoResponse().setListaactivos(convertResultToList(result));
+      responseRest.getActivoResponse().setListaactivos(convertResultToLista(result));
       responseRest.setMetadata("Respuesta ok", "00", "Activos encontrados");
-      output = GsonFactory.createGson().toJson(responseRest);
+      String output = GsonFactory.createGson().toJson(responseRest);
       return response.withStatusCode(200)
               .withBody(output);
     } catch (Exception e) {
@@ -139,6 +138,77 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
     }
   }
 
+  protected List<Activo> convertResultToLista(Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result) throws SQLException {
+    Map<Long, Activo> activoMap = new HashMap<>();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    for (Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String> record : result) {
+      Long especificoId = record.get(ACTIVO_ID);
+      Activo activo = activoMap.get(especificoId);
+      if (activo == null) {
+        activo = new Activo();
+        activo.setId(especificoId);
+        // Aquí deberías asignar los valores correspondientes a responsable y articulo
+        // Consultas adicionales o mapeos deben ser implementados para Responsable y Articulo
+        Custodio custodio = new Custodio();
+        custodio.setId(record.get(ACTIVO_RESPONSABLE_ID));
+        custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
+        activo.setCustodio(custodio);
+        //especifico.setResponsable(findResponsableById(record.get(ACTIVO_RESPONSABLE_ID)));
+        Articulo articulo = new Articulo();
+        articulo.setId(record.get(ACTIVO_ARTICULO_ID));
+        articulo.setNombrearticulo(mostrarArticulo(articulo.getId()));
+        activo.setArticulo(articulo);
+        //especifico.setArticulo(findArticuloById(record.get(ACTIVO_ARTICULO_ID)));
+
+        Tipo tipo = new Tipo();
+        tipo.setId(record.get(ACTIVO_TIPO_ID));
+        tipo.setNombretipo(mostrarTipoBien(tipo.getId()));
+        activo.setTipo(tipo);
+
+        Categoria categoria =new Categoria();
+        categoria.setId(record.get(ACTIVO_GRUPO_ID));
+        categoria.setNombregrupo(mostrarCategoria(categoria.getId()));
+        activo.setCategoria(categoria);
+
+        //
+        Proveedor proveedor=new Proveedor();
+        proveedor.setId(record.get(ACTIVO_PROVEEDOR_ID));
+        proveedor.setRazonsocial(mostrarProveedor(proveedor.getId()));
+        activo.setProveedor(proveedor);
+
+        activo.setCodinventario(record.getValue("codinventario", String.class));
+        activo.setModelo(record.getValue("modelo", String.class));
+        activo.setMarca(record.getValue("marca", String.class));
+        activo.setNroserie(record.getValue("nroserie", String.class));
+        LocalDate fechaIngreso = record.getValue("fechaingreso", LocalDate.class);
+        activo.setFechaingreso(fechaIngreso);
+        if (fechaIngreso != null) {
+          String formattedDate = fechaIngreso.format(formatter);
+          activo.setFechaingresostr(formattedDate);
+        }
+        activo.setMoneda(record.getValue("moneda", String.class));
+        activo.setImporte(record.getValue("importe", BigDecimal.class));
+        activo.setDescripcion(record.getValue("descripcion", String.class));
+
+        activoMap.put(especificoId, activo);
+      }
+      Long especificacionesId = record.get(ESPECIFICACIONES_ID);
+      List<Especificaciones> listaEspecificaciones = new ArrayList<>();
+      if (especificacionesId != null) {
+        Especificaciones especificaciones = new Especificaciones();
+        especificaciones.setId(especificacionesId);
+        especificaciones.setEspecificacionid(record.get(ESPECIFICACIONES_ESPECIFICOID));
+        especificaciones.setNombreatributo(record.get(ESPECIFICACIONES_NOMBREESPECIFICO));
+        especificaciones.setDescripcionatributo(record.get(ESPECIFICACIONES_DESCRIPESPECIFICO));
+        listaEspecificaciones.add(especificaciones);
+        activo.setEspecificaciones(listaEspecificaciones);
+      }
+    }
+    return new ArrayList<>(activoMap.values());
+  }
+
+
+/*
   protected List<Activo> convertResultToList(Result<Record19<Long, Long, Long, Long, Long, Long, Long, Long, String, String, String, String, String, String, LocalDate, String, String, String, String>> result) throws SQLException {
     Map<Long, Activo> especificoMap = new HashMap<>();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -205,7 +275,7 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
       }
     }
     return new ArrayList<>(especificoMap.values());
-  }
+  }*/
 
 
 
