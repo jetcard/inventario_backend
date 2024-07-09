@@ -8,7 +8,7 @@ import org.jooq.Result;
 public class ReadCustodioHandler extends ReadCustodioAbstractHandler {
   protected Result<Record> read() throws SQLException {
     var dsl = RDSConexion.getDSL();
-    return dsl.select().from(RESPONSABLE_TABLE).fetch();
+    return dsl.select().from(CUSTODIO_TABLE).fetch();
   }
 
 }

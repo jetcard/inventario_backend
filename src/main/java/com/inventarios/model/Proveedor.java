@@ -17,7 +17,8 @@ public class Proveedor  implements Serializable{
     private String contacto;
     private String telefono;
     private String correo;
-
+    private Custodio custodio;
+    @OneToMany(mappedBy = "custodio", cascade = CascadeType.ALL, orphanRemoval = true)
     //private Custodio custodio;
     /*@ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties( {"hibernateLazyInitializer", "handler"})*/
@@ -79,6 +80,14 @@ public class Proveedor  implements Serializable{
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    public Custodio getCustodio() {
+        return custodio;
+    }
+
+    public void setCustodio(Custodio custodio) {
+        this.custodio = custodio;
     }
 
     public Long getCustodioid() {

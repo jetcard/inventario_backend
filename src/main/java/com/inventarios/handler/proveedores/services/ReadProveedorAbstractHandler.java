@@ -6,16 +6,33 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import java.sql.SQLException;
 import java.util.*;
+import com.inventarios.model.Custodio;
 import com.inventarios.model.Proveedor;
 import com.inventarios.handler.proveedores.response.ProveedorResponseRest;
 import com.inventarios.util.GsonFactory;
-import org.jooq.Table;
+import org.jooq.*;
 import org.jooq.Record;
-import org.jooq.Result;
 import org.jooq.impl.DSL;
 
+import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.name;
+
 public abstract class ReadProveedorAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+
+
+  protected final static Field<Long> PROVEEDOR_TABLE_ID = field(name("proveedor", "id"), Long.class);
+  protected static final Field<String> PROVEEDOR_TABLE_RAZONSOCIAL = field(name("proveedor", "razonsocial"), String.class);
+  protected static final Field<String> PROVEEDOR_TABLE_RUC = field(name("proveedor", "ruc"), String.class);
+  protected static final Field<String> PROVEEDOR_TABLE_DIRECCIONFISCAL = field(name("proveedor", "direccionfiscal"), String.class);
+  protected static final Field<String> PROVEEDOR_TABLE_CONTACTO = field(name("proveedor", "contacto"), String.class);
+  protected static final Field<String> PROVEEDOR_TABLE_TELEFONO = field(name("proveedor", "telefono"), String.class);
+  protected static final Field<String> PROVEEDOR_TABLE_CORREO = field(name("proveedor", "correo"), String.class);
   protected final static Table<Record> PROVEEDOR_TABLE = DSL.table("proveedor");
+  protected final static Table<Record> CUSTODIO_TABLE = DSL.table("custodio");
+  protected final static Field<Long> CUSTODIO_TABLE_ID = field(name("custodio", "id"), Long.class);
+  protected static final Field<Long> CUSTODIOID_PROVEEDOR_TABLE = field(name("proveedor", "custodioid"), Long.class);
+  protected static final Field<String> CUSTODIO_AREA_RESPONSABLE = field(name("custodio", "arearesponsable"), String.class);
+
   final static Map<String, String> headers = new HashMap<>();
 
   static {
@@ -26,7 +43,7 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
     headers.put("Access-Control-Allow-Methods", "GET");
   }
 
-  protected abstract Result<Record> read() throws SQLException;
+  protected abstract Result<Record9<Long, String, String, String, String, String, String, Long, String>> read() throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -36,7 +53,7 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
       .withHeaders(headers);
     String output ="";
     try {
-      Result<Record> result = read();
+      Result<Record9<Long, String, String, String, String, String, String, Long, String>> result = read();
       responseRest.getProveedorResponse().setListaproveedores(convertResultToList(result));
       responseRest.setMetadata("Respuesta ok", "00", "Proveedores encontrados");
       output = GsonFactory.createGson().toJson(responseRest);
@@ -50,20 +67,36 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
     }
   }
 
-  protected List<Proveedor> convertResultToList(Result<Record> result) {
-    List<Proveedor> listaProveedores = new ArrayList<>();
-    for (Record record : result) {
-      Proveedor proveedor = new Proveedor();
-      proveedor.setId(record.getValue("id", Long.class));
-      proveedor.setRuc(record.getValue("ruc", String.class));
-      proveedor.setRazonsocial(record.getValue("razonsocial", String.class));
-      proveedor.setDireccionfiscal(record.getValue("direccionfiscal", String.class));
-      proveedor.setContacto(record.getValue("contacto", String.class));
-      proveedor.setTelefono(record.getValue("telefono", String.class));
-      proveedor.setCorreo(record.getValue("correo", String.class));
-      listaProveedores.add(proveedor);
+  protected List<Proveedor> convertResultToList(Result<Record9<Long, String, String, String, String, String, String, Long, String>> result) {
+    Map<Long, Proveedor> proveedorMap = new HashMap<>();
+    for (Record9<Long, String, String, String, String, String, String, Long, String> record : result) {
+      Long proveedorId = record.get(PROVEEDOR_TABLE_ID);
+      Proveedor proveedor = proveedorMap.get(proveedorId);
+      if (proveedor == null) {
+        proveedor = new Proveedor();
+        proveedor.setId(proveedorId);
+        proveedor.setRuc(record.get(PROVEEDOR_TABLE_RUC));
+        proveedor.setRazonsocial(record.get(PROVEEDOR_TABLE_RAZONSOCIAL));
+        proveedor.setDireccionfiscal(record.get(PROVEEDOR_TABLE_DIRECCIONFISCAL));
+        proveedor.setContacto(record.get(PROVEEDOR_TABLE_CONTACTO));
+        proveedor.setTelefono(record.get(PROVEEDOR_TABLE_TELEFONO));
+        proveedor.setCorreo(record.get(PROVEEDOR_TABLE_CORREO));
+        //proveedor.setCustodio(record.get(PROVEEDOR_TABLE_CORREO));
+        ///proveedor.setAtributos(new ArrayList<>());
+        proveedorMap.put(proveedorId, proveedor);
+      }
+      Long custodioId = record.get(CUSTODIO_TABLE_ID);
+      if (custodioId != null) {
+        Custodio custodio = new Custodio();
+        custodio.setId(custodioId);
+        custodio.setArearesponsable(record.get(CUSTODIO_AREA_RESPONSABLE));
+        //atributos.setNombresyapellidos(record.get(ATRIBUTOS_NOMBREATRIBUTO));
+        //proveedor.getCustodio().add(atributos);
+        proveedor.setCustodio(custodio);
+      }
     }
-    return listaProveedores;
+    return new ArrayList<>(proveedorMap.values());
+
   }
 
 }

@@ -15,7 +15,7 @@ import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 public abstract class ReadCustodioAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-  protected final static Table<Record> RESPONSABLE_TABLE = DSL.table("custodio");
+  protected final static Table<Record> CUSTODIO_TABLE = DSL.table("custodio");
   final static Map<String, String> headers = new HashMap<>();
 
   static {
