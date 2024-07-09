@@ -71,8 +71,8 @@ public abstract class CreateProveedorAbstractHandler implements RequestHandler<A
           Custodio custodio =new Custodio();
           custodio.setId(custodioId);
 
-          proveedor.setCustodio(custodio);
-          proveedor.getCustodio().setId(custodioId);
+//          proveedor.setCustodio(custodio);
+//          proveedor.getCustodio().setId(custodioId);
 
           save(proveedor.getRuc(),
               proveedor.getRazonsocial().toUpperCase(),
@@ -80,7 +80,8 @@ public abstract class CreateProveedorAbstractHandler implements RequestHandler<A
               proveedor.getContacto().toUpperCase(),
               proveedor.getTelefono().toUpperCase(),
               proveedor.getCorreo().toLowerCase(),
-              proveedor.getCustodio().getId()
+                  proveedor.getCustodioid()
+//              proveedor.getCustodio().getId()
           );
           responseRest.setMetadata("Respuesta ok", "00", "Proveedor guardado");
         }

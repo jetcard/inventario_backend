@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 @Entity
 @Table(name="proveedor")
 public class Proveedor  implements Serializable{
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,12 +18,12 @@ public class Proveedor  implements Serializable{
     private String telefono;
     private String correo;
 
-    private Custodio custodio;
+    //private Custodio custodio;
     /*@ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties( {"hibernateLazyInitializer", "handler"})*/
 
-    /*@Column(name = "custodioid")
-    private Long custodioid;*/
+    //@Column(name = "custodioid")
+    private Long custodioid;
 
     public Long getId() {
         return id;
@@ -82,11 +81,11 @@ public class Proveedor  implements Serializable{
         this.correo = correo;
     }
 
-    public Custodio getCustodio() {
-        return custodio;
+    public Long getCustodioid() {
+        return custodioid;
     }
 
-    public void setCustodio(Custodio custodio) {
-        this.custodio = custodio;
+    public void setCustodioid(Long custodioid) {
+        this.custodioid = custodioid;
     }
 }

@@ -44,10 +44,22 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
   protected final static Field<Long> ATRIBUTO_TIPO_ID = field(name("atributo", "tipoid"), Long.class);
   protected final static Field<Long> ATRIBUTO_GRUPO_ID = field(name("atributo", "categoriaid"), Long.class);
 
-  protected final static Field<Long> PROVEEDOR_TABLE_ID = field(name("proveedor", "id"), Long.class);
-  protected static final Field<String> PROVEEDOR_TABLE_COLUMNA = DSL.field("razonsocial", String.class);
+  /*protected final static Field<Long> PROVEEDOR_TABLE_ID = field(name("proveedor", "id"), Long.class);
+  //protected static final Field<String> PROVEEDOR_TABLE_COLUMNA = DSL.field("razonsocial", String.class);
+  protected static final Field<String> PROVEEDOR_TABLE_COLUMNA =  field(name("proveedor", "ruc"), String.class);
+
   protected final static Table<Record> PROVEEDOR_TABLE = DSL.table("proveedor");
-  protected static final Field<Long> CUSTODIOID_PROVEEDOR_TABLE =  field(name("proveedor", "custodioid"), Long.class);
+  protected static final Field<Long> CUSTODIOID_PROVEEDOR_TABLE =  field(name("proveedor", "custodioid"), Long.class);*/
+  protected final static Field<Long> PROVEEDOR_TABLE_ID = field(name("proveedor", "id"), Long.class);
+  protected static final Field<String> PROVEEDOR_TABLE_RAZONSOCIAL = field(name("proveedor", "razonsocial"), String.class);
+  protected static final Field<String> PROVEEDOR_TABLE_RUC = field(name("proveedor", "ruc"), String.class);
+  protected static final Field<String> PROVEEDOR_TABLE_DIRECCIONFISCAL = field(name("proveedor", "direccionfiscal"), String.class);
+  protected static final Field<String> PROVEEDOR_TABLE_CONTACTO = field(name("proveedor", "contacto"), String.class);
+  protected static final Field<String> PROVEEDOR_TABLE_TELEFONO = field(name("proveedor", "telefono"), String.class);
+  protected static final Field<String> PROVEEDOR_TABLE_CORREO = field(name("proveedor", "correo"), String.class);
+  protected final static Table<Record> PROVEEDOR_TABLE = DSL.table("proveedor");
+  protected static final Field<Long> CUSTODIOID_PROVEEDOR_TABLE = field(name("proveedor", "custodioid"), Long.class);
+
 
   final static Map<String, String> headers = new HashMap<>();
 
@@ -59,7 +71,7 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
     headers.put("Access-Control-Allow-Methods", "GET");
   }
 
-  protected abstract Result<Record5<Long, Long, Long, Long, Long>> busquedaPorArticuloId(String articuloId) throws SQLException;
+  protected abstract Result<Record6<Long, Long, Long, Long, Long, String>> busquedaPorArticuloId(String articuloId) throws SQLException;
   protected abstract String mostrarCustodio(Long id) throws SQLException;
   protected abstract String mostrarArticulo(Long id) throws SQLException;
   protected abstract String mostrarTipoBien(Long id) throws SQLException;
@@ -70,12 +82,9 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
     LambdaLogger logger = context.getLogger();
     AtributoResponseRest responseRest = new AtributoResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
-
-    //String articuloId = input.getPathParameters().get("articuloId");
-    //logger.log("articuloId: " + articuloId);
-
+/*
     Map<String, String> pathParameters = input.getPathParameters();
-    String articuloId = "3";//pathParameters.get("id");
+    String articuloId = pathParameters.get("id");
     logger.log("articuloId: " + articuloId);
 
     try {
@@ -90,9 +99,62 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
       responseRest.setMetadata("Respuesta nok", "-1", "Error al consultar");
       return response.withBody(e.toString()).withStatusCode(500);
     }
+  }*/
+    Map<String, String> pathParameters = input.getPathParameters();
+    String articuloId = pathParameters.get("id");
+    logger.log("articuloId: " + articuloId);
+
+    try {
+      Result<Record6<Long, Long, Long, Long, Long, String>> result = busquedaPorArticuloId(articuloId);
+      responseRest.getAtributoResponse().setListaatributos(convertResultToList(result));
+      responseRest.setMetadata("Respuesta ok", "00", "Atributos encontrados");
+      Gson gson = GsonFactory.createGson();
+      String output = gson.toJson(responseRest);
+      logger.log(output);
+      return response.withStatusCode(200).withBody(output);
+    } catch (Exception e) {
+      responseRest.setMetadata("Respuesta nok", "-1", "Error al consultar");
+      return response.withBody(e.toString()).withStatusCode(500);
+    }
   }
 
-  protected List<Atributo> convertResultToList(Result<Record5<Long, Long, Long, Long, Long>> result) throws SQLException {
+  protected List<Atributo> convertResultToList(Result<Record6<Long, Long, Long, Long, Long, String>> result) throws SQLException {
+    List<Atributo> listaAtributos = new ArrayList<>();
+    for (Record record : result) {
+      Atributo atributo = new Atributo();
+      atributo.setId(record.getValue("id", Long.class));
+
+      Custodio custodio = new Custodio();
+      custodio.setId(record.get(ATRIBUTO_RESPONSABLE_ID));
+      custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
+      List<Proveedor> proveedoresLista = listaCustodioProveedores(custodio.getId());
+      for (Proveedor proveedor : proveedoresLista) {
+        proveedor.setCustodioid(custodio.getId());
+        proveedor.setRazonsocial(record.getValue(PROVEEDOR_TABLE_RAZONSOCIAL, String.class));
+      }
+      custodio.setProveedores(proveedoresLista);
+      atributo.setCustodio(custodio);
+
+      Articulo articulo = new Articulo();
+      articulo.setId(record.get(ATRIBUTO_ARTICULO_ID));
+      articulo.setNombrearticulo(mostrarArticulo(articulo.getId()));
+      atributo.setArticulo(articulo);
+
+      Tipo tipo = new Tipo();
+      tipo.setId(record.get(ATRIBUTO_TIPO_ID));
+      tipo.setNombretipo(mostrarTipoBien(tipo.getId()));
+      atributo.setTipo(tipo);
+
+      Categoria categoria = new Categoria();
+      categoria.setId(record.get(ATRIBUTO_GRUPO_ID));
+      categoria.setNombregrupo(mostrarCategoria(categoria.getId()));
+      atributo.setCategoria(categoria);
+      listaAtributos.add(atributo);
+    }
+    return listaAtributos;
+  }
+
+  protected List<Atributo> convertResultToList0(Result<Record5<Long, Long, Long, Long, Long>> result) throws SQLException {
     List<Atributo> listaAtributos = new ArrayList<>();
     for (Record record : result) {
       Atributo atributo = new Atributo();
