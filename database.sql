@@ -158,13 +158,13 @@ CREATE TABLE marca (
     descripcion VARCHAR(255) NOT NULL
 );
 
-
-SELECT pg_terminate_backend(pid)
-FROM pg_stat_activity
-WHERE datname = 'basededatos'
-  AND pid <> pg_backend_pid();
+SELECT pid, usename, application_name, client_addr, query FROM pg_stat_activity WHERE datname = 'basededatos';
+--termina todas las conexiones activas que no sean la conexión actual desde la que estás ejecutando la consulta
+SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'basededatos' AND pid <> pg_backend_pid();
 
 
+SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'basededatos' AND pid <> pg_backend_pid();
+SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'basededatos' AND pid = '12884';
 SELECT pg_terminate_backend(pid)
 FROM pg_stat_activity
 WHERE datname = 'basededatos'

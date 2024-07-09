@@ -60,12 +60,11 @@ public abstract class UpdateParametroAbstractHandler implements RequestHandler<A
         if (parametroFromBody != null) {
           if(parametroSearch(id).isPresent()){
             Parametro parametro = parametroSearch(id).get();
-            parametro.setNombre(parametroFromBody.getDescripcion().toUpperCase());
+            parametro.setNombre(parametroFromBody.getNombre().toUpperCase());
             parametro.setDescripcion(parametroFromBody.getDescripcion().toUpperCase());
             update(parametro.getId(),
                     parametro.getNombre(),
                     parametro.getDescripcion());
-
             listaParametros.add(parametro);
             parametroResponseRest.getParametroResponse().setListaparametros(listaParametros);
             parametroResponseRest.setMetadata("Respuesta ok", "00", "Parámetro actualizado");

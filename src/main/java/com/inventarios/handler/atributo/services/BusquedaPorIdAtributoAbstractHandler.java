@@ -82,28 +82,9 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
     LambdaLogger logger = context.getLogger();
     AtributoResponseRest responseRest = new AtributoResponseRest();
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
-/*
     Map<String, String> pathParameters = input.getPathParameters();
     String articuloId = pathParameters.get("id");
     logger.log("articuloId: " + articuloId);
-
-    try {
-      Result<Record5<Long, Long, Long, Long, Long>> result = busquedaPorArticuloId(articuloId);
-      responseRest.getAtributoResponse().setListaatributos(convertResultToList(result));
-      responseRest.setMetadata("Respuesta ok", "00", "Atributos encontrados");
-      Gson gson = GsonFactory.createGson();
-      String output = gson.toJson(responseRest);
-      logger.log(output);
-      return response.withStatusCode(200).withBody(output);
-    } catch (Exception e) {
-      responseRest.setMetadata("Respuesta nok", "-1", "Error al consultar");
-      return response.withBody(e.toString()).withStatusCode(500);
-    }
-  }*/
-    Map<String, String> pathParameters = input.getPathParameters();
-    String articuloId = pathParameters.get("id");
-    logger.log("articuloId: " + articuloId);
-
     try {
       Result<Record6<Long, Long, Long, Long, Long, String>> result = busquedaPorArticuloId(articuloId);
       responseRest.getAtributoResponse().setListaatributos(convertResultToList(result));
@@ -119,6 +100,57 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
   }
 
   protected List<Atributo> convertResultToList(Result<Record6<Long, Long, Long, Long, Long, String>> result) throws SQLException {
+    List<Atributo> listaAtributos = new ArrayList<>();
+    Map<Long, Atributo> atributosMap = new HashMap<>(); // Usamos un mapa para agrupar por atributoId
+
+    for (Record record : result) {
+      Long atributoId = record.getValue(ATRIBUTO_ID);
+
+      if (!atributosMap.containsKey(atributoId)) {
+        Atributo atributo = new Atributo();
+        atributo.setId(atributoId);
+
+        Custodio custodio = new Custodio();
+        custodio.setId(record.get(ATRIBUTO_RESPONSABLE_ID));
+        custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
+        atributo.setCustodio(custodio);
+
+        Articulo articulo = new Articulo();
+        articulo.setId(record.get(ATRIBUTO_ARTICULO_ID));
+        articulo.setNombrearticulo(mostrarArticulo(articulo.getId()));
+        atributo.setArticulo(articulo);
+
+        Tipo tipo = new Tipo();
+        tipo.setId(record.get(ATRIBUTO_TIPO_ID));
+        tipo.setNombretipo(mostrarTipoBien(tipo.getId()));
+        atributo.setTipo(tipo);
+
+        Categoria categoria = new Categoria();
+        categoria.setId(record.get(ATRIBUTO_GRUPO_ID));
+        categoria.setNombregrupo(mostrarCategoria(categoria.getId()));
+        atributo.setCategoria(categoria);
+
+        atributosMap.put(atributoId, atributo);
+      }
+
+      // Proveedores
+      Proveedor proveedor = new Proveedor();
+      proveedor.setId(record.get(PROVEEDOR_TABLE_ID));
+      proveedor.setRazonsocial(record.getValue(PROVEEDOR_TABLE_RAZONSOCIAL));
+      proveedor.setCustodioid(record.get(CUSTODIOID_PROVEEDOR_TABLE));
+
+      Atributo atributoExistente = atributosMap.get(atributoId);
+      atributoExistente.getCustodio().getProveedores().add(proveedor);
+    }
+
+    // Convertir el mapa de atributos a lista
+    listaAtributos.addAll(atributosMap.values());
+
+    return listaAtributos;
+  }
+
+
+  protected List<Atributo> convertResultToList2(Result<Record6<Long, Long, Long, Long, Long, String>> result) throws SQLException {
     List<Atributo> listaAtributos = new ArrayList<>();
     for (Record record : result) {
       Atributo atributo = new Atributo();

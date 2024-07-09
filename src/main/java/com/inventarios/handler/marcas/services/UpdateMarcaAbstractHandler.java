@@ -53,7 +53,7 @@ public abstract class UpdateMarcaAbstractHandler implements RequestHandler<APIGa
       if (marcaFromBody != null) {
         if(marcaSearch(id).isPresent()){
           Marca marca = marcaSearch(id).get();
-          marca.setNombre(marcaFromBody.getDescripcion().toUpperCase());
+          marca.setNombre(marcaFromBody.getNombre().toUpperCase());
           marca.setDescripcion(marcaFromBody.getDescripcion().toUpperCase());
           update(marca.getId(),
                   marca.getNombre(),

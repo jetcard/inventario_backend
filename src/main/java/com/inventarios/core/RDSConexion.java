@@ -7,6 +7,8 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
+
 public class RDSConexion {
   public static final String DATABASE_NAME_ENV = "DBName";
   public static final String POSTGRES_SECRET_ARN_ENV = "RDSSecretArn";
@@ -58,5 +60,38 @@ public class RDSConexion {
   }
   public static DSLContext getDSL() throws SQLException {
     return DSL.using(getConnection(), SQLDialect.POSTGRES);
+  }
+
+  public static void terminateActiveConnections() {
+    Connection conn = null;
+    Statement stmt = null;
+
+    try {
+      conn = getConnection();
+      stmt = conn.createStatement();
+
+      String sql = "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '" + rdsDatabase() + "' AND pid <> pg_backend_pid();";
+      stmt.execute(sql);
+
+      System.out.println("Consultas para terminar conexiones ejecutadas correctamente.");
+    } catch (SQLException e) {
+      System.out.println("Error al ejecutar la consulta para terminar conexiones: " + e.getMessage());
+    } finally {
+      try {
+        if (stmt != null) {
+          stmt.close();
+        }
+      } catch (SQLException e) {
+        System.out.println("Error al cerrar Statement: " + e.getMessage());
+      }
+
+      try {
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (SQLException e) {
+        System.out.println("Error al cerrar conexión: " + e.getMessage());
+      }
+    }
   }
 }

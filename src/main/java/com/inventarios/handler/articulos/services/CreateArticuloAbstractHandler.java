@@ -42,6 +42,20 @@ public abstract class CreateArticuloAbstractHandler implements RequestHandler<AP
         context.getLogger().log("body " + body);
         Articulo articulo = GsonFactory.createGson().fromJson(body, Articulo.class);
         if (articulo != null) {
+          /*
+          * Could not initialize class com.inventarios.core.RDSConexion: java.lang.NoClassDefFoundError
+java.lang.NoClassDefFoundError: Could not initialize class com.inventarios.core.RDSConexion
+	at com.inventarios.handler.articulos.CreateArticuloHandler.save(CreateArticuloHandler.java:10)
+	at com.inventarios.handler.articulos.services.CreateArticuloAbstractHandler.handleRequest(CreateArticuloAbstractHandler.java:45)
+	at com.inventarios.handler.articulos.services.CreateArticuloAbstractHandler.handleRequest(CreateArticuloAbstractHandler.java:18)
+Caused by: java.lang.ExceptionInInitializerError: Exception com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: FATAL: remaining connection slots are reserved for roles with the SUPERUSER attribute [in thread "main"]
+	at com.zaxxer.hikari.pool.HikariPool.throwPoolInitializationException(HikariPool.java:584)
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:571)
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:98)
+	at com.zaxxer.hikari.HikariDataSource.<init>(HikariDataSource.java:80)
+	at com.inventarios.core.RDSConexion.initDataSource(RDSConexion.java:34)
+	at com.inventarios.core.RDSConexion.<clinit>(RDSConexion.java:19)
+	* */
           save(articulo.getNombrearticulo().toUpperCase(), articulo.getDescriparticulo().toUpperCase());
           responseRest.setMetadata("Respuesta ok", "00", "Articulo guardado");
         }

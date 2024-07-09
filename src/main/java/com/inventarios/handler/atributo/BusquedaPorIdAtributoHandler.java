@@ -44,59 +44,6 @@ public class BusquedaPorIdAtributoHandler extends BusquedaPorIdAtributoAbstractH
     return result.into(Proveedor.class);
   }
 
-  protected List<Proveedor> listaCustodioProveedores1(Long id) throws SQLException {
-    DSLContext dsl = RDSConexion.getDSL();
-    Result<Record7<Long, String, String, String, String, String, String>> result = dsl.select(
-                    PROVEEDOR_TABLE_ID,
-                    PROVEEDOR_TABLE_RAZONSOCIAL,
-                    PROVEEDOR_TABLE_RUC,
-                    PROVEEDOR_TABLE_DIRECCIONFISCAL,
-                    PROVEEDOR_TABLE_CONTACTO,
-                    PROVEEDOR_TABLE_TELEFONO,
-                    PROVEEDOR_TABLE_CORREO
-            )
-            .from(PROVEEDOR_TABLE)
-            .where(CUSTODIOID_PROVEEDOR_TABLE.eq(id))
-            .fetch();
-
-    return result.into(Proveedor.class);
-  }
-  protected List<Proveedor> listaCustodioProveedores0(Long id) throws SQLException {
-    DSLContext dsl = RDSConexion.getDSL();
-    Result<Record> result = dsl.select(
-
-            )
-            .from(PROVEEDOR_TABLE)
-            //.where(CUSTODIOID_PROVEEDOR_TABLE.eq(id))
-            .where(DSL.field("id", Long.class).eq(id))
-            .fetch();
-    return result.into(Proveedor.class);
-  }
-
-
-  /*@Override
-  protected List<Proveedor> listaCustodioProveedores(Long id) throws SQLException {
-    DSLContext dsl = RDSConexion.getDSL();
-    Result<Record2<Long, String>> result = dsl.select(PROVEEDOR_TABLE.ID, PROVEEDOR_TABLE.COLUMN)
-            .from(PROVEEDOR_TABLE)
-            .leftJoin(RESPONSABLE_TABLE)
-            .on(PROVEEDOR_TABLE.CUSTODIOID.eq(RESPONSABLE_TABLE.ID))
-            .where(PROVEEDOR_TABLE.ID.eq(PROVEEDOR_TABLE.CUSTODIOID))
-            .fetch();
-    return result.into(Proveedor.class);
-  }*/
-
-  /*protected List<Proveedor> listaCustodioProveedores(Long id) throws SQLException {
-    DSLContext dsl = RDSConexion.getDSL();
-    Result<Record2<Long, String>> result = dsl.select(PROVEEDOR_TABLE_ID, PROVEEDOR_TABLE_COLUMNA)
-            .from(PROVEEDOR_TABLE)
-            .leftJoin(RESPONSABLE_TABLE)
-            .on(CUSTODIOID_PROVEEDOR_TABLE.eq(id))
-            .fetch();
-
-    return result.into(Proveedor.class);
-  }*/
-
   @Override
   protected String mostrarCustodio(Long id) throws SQLException {
     var dsl = RDSConexion.getDSL();
@@ -137,3 +84,57 @@ public class BusquedaPorIdAtributoHandler extends BusquedaPorIdAtributoAbstractH
     return record != null ? record.getValue(GRUPO_TABLE_COLUMNA) : null;
   }
 }
+
+/*
+  protected List<Proveedor> listaCustodioProveedores1(Long id) throws SQLException {
+    DSLContext dsl = RDSConexion.getDSL();
+    Result<Record7<Long, String, String, String, String, String, String>> result = dsl.select(
+                    PROVEEDOR_TABLE_ID,
+                    PROVEEDOR_TABLE_RAZONSOCIAL,
+                    PROVEEDOR_TABLE_RUC,
+                    PROVEEDOR_TABLE_DIRECCIONFISCAL,
+                    PROVEEDOR_TABLE_CONTACTO,
+                    PROVEEDOR_TABLE_TELEFONO,
+                    PROVEEDOR_TABLE_CORREO
+            )
+            .from(PROVEEDOR_TABLE)
+            .where(CUSTODIOID_PROVEEDOR_TABLE.eq(id))
+            .fetch();
+
+    return result.into(Proveedor.class);
+  }
+  protected List<Proveedor> listaCustodioProveedores0(Long id) throws SQLException {
+    DSLContext dsl = RDSConexion.getDSL();
+    Result<Record> result = dsl.select(
+
+            )
+            .from(PROVEEDOR_TABLE)
+            //.where(CUSTODIOID_PROVEEDOR_TABLE.eq(id))
+            .where(DSL.field("id", Long.class).eq(id))
+            .fetch();
+    return result.into(Proveedor.class);
+  }*/
+
+
+  /*@Override
+  protected List<Proveedor> listaCustodioProveedores(Long id) throws SQLException {
+    DSLContext dsl = RDSConexion.getDSL();
+    Result<Record2<Long, String>> result = dsl.select(PROVEEDOR_TABLE.ID, PROVEEDOR_TABLE.COLUMN)
+            .from(PROVEEDOR_TABLE)
+            .leftJoin(RESPONSABLE_TABLE)
+            .on(PROVEEDOR_TABLE.CUSTODIOID.eq(RESPONSABLE_TABLE.ID))
+            .where(PROVEEDOR_TABLE.ID.eq(PROVEEDOR_TABLE.CUSTODIOID))
+            .fetch();
+    return result.into(Proveedor.class);
+  }*/
+
+  /*protected List<Proveedor> listaCustodioProveedores(Long id) throws SQLException {
+    DSLContext dsl = RDSConexion.getDSL();
+    Result<Record2<Long, String>> result = dsl.select(PROVEEDOR_TABLE_ID, PROVEEDOR_TABLE_COLUMNA)
+            .from(PROVEEDOR_TABLE)
+            .leftJoin(RESPONSABLE_TABLE)
+            .on(CUSTODIOID_PROVEEDOR_TABLE.eq(id))
+            .fetch();
+
+    return result.into(Proveedor.class);
+  }*/
