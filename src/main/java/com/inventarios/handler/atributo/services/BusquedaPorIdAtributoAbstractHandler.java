@@ -113,6 +113,7 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
         Custodio custodio = new Custodio();
         custodio.setId(record.get(ATRIBUTO_RESPONSABLE_ID));
         custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
+        custodio.setProveedores(new ArrayList<>());
         atributo.setCustodio(custodio);
 
         Articulo articulo = new Articulo();
@@ -137,9 +138,10 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
       Proveedor proveedor = new Proveedor();
       proveedor.setId(record.get(PROVEEDOR_TABLE_ID));
       proveedor.setRazonsocial(record.getValue(PROVEEDOR_TABLE_RAZONSOCIAL));
-      Custodio custodio=new Custodio();
+
+      /*Custodio custodio=new Custodio();
       custodio.setId(record.get(CUSTODIOID_PROVEEDOR_TABLE));
-      proveedor.setCustodio(custodio);
+      proveedor.setCustodio(custodio);*/
       //proveedor.setCustodioid();
 
       Atributo atributoExistente = atributosMap.get(atributoId);
@@ -152,7 +154,7 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
     return listaAtributos;
   }
 
-
+/*
   protected List<Atributo> convertResultToList2(Result<Record6<Long, Long, Long, Long, Long, String>> result) throws SQLException {
     List<Atributo> listaAtributos = new ArrayList<>();
     for (Record record : result) {
@@ -188,7 +190,7 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
     }
     return listaAtributos;
   }
-
+/*
   protected List<Atributo> convertResultToList0(Result<Record5<Long, Long, Long, Long, Long>> result) throws SQLException {
     List<Atributo> listaAtributos = new ArrayList<>();
     for (Record record : result) {
@@ -221,7 +223,7 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
     }
     return listaAtributos;
   }
-
+*/
 
 
 

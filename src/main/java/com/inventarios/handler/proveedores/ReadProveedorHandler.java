@@ -17,18 +17,28 @@ public class ReadProveedorHandler extends ReadProveedorAbstractHandler {
     return dsl.select().from(PROVEEDOR_TABLE).fetch();
   }*/
 
-  protected Result<Record9<Long, String, String, String, String, String, String, Long, String>> read() throws SQLException {
+    protected Result<Record9<Long, String, String, String, String, String, String, Long, String>> read() throws SQLException {
     var dsl = RDSConexion.getDSL();
     return dsl.select(
                     PROVEEDOR_TABLE_ID, PROVEEDOR_TABLE_RAZONSOCIAL, PROVEEDOR_TABLE_RUC,
                     PROVEEDOR_TABLE_DIRECCIONFISCAL, PROVEEDOR_TABLE_CONTACTO, PROVEEDOR_TABLE_TELEFONO,
                     PROVEEDOR_TABLE_CORREO,
-                    CUSTODIOID_PROVEEDOR_TABLE, CUSTODIO_AREA_RESPONSABLE
+                    PROVEEDOR_CUSTODIO_ID, CUSTODIO_AREA_RESPONSABLE
             )
             .from(PROVEEDOR_TABLE)
             .leftJoin(CUSTODIO_TABLE)
-            .on(CUSTODIOID_PROVEEDOR_TABLE.eq(CUSTODIO_TABLE_ID))
+            .on(PROVEEDOR_CUSTODIO_ID.eq(CUSTODIO_TABLE_ID))
             .fetch();
-  }
+    }
+
+    ///@Override
+    protected String mostrarCustodio(Long id) throws SQLException {
+        var dsl = RDSConexion.getDSL();
+        Record record = dsl.select(CUSTODIO_AREA_RESPONSABLE)
+                .from(CUSTODIO_TABLE)
+                .where(DSL.field("id", Long.class).eq(id))
+                .fetchOne();
+        return record != null ? record.getValue(CUSTODIO_AREA_RESPONSABLE) : null;
+    }
 
 }

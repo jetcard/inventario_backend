@@ -30,7 +30,7 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
   protected final static Table<Record> PROVEEDOR_TABLE = DSL.table("proveedor");
   protected final static Table<Record> CUSTODIO_TABLE = DSL.table("custodio");
   protected final static Field<Long> CUSTODIO_TABLE_ID = field(name("custodio", "id"), Long.class);
-  protected static final Field<Long> CUSTODIOID_PROVEEDOR_TABLE = field(name("proveedor", "custodioid"), Long.class);
+  protected static final Field<Long> PROVEEDOR_CUSTODIO_ID = field(name("proveedor", "custodioid"), Long.class);
   protected static final Field<String> CUSTODIO_AREA_RESPONSABLE = field(name("custodio", "arearesponsable"), String.class);
 
   final static Map<String, String> headers = new HashMap<>();
@@ -44,6 +44,7 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
   }
 
   protected abstract Result<Record9<Long, String, String, String, String, String, String, Long, String>> read() throws SQLException;
+  protected abstract String mostrarCustodio(Long id) throws SQLException;
 
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
@@ -67,7 +68,8 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
     }
   }
 
-  protected List<Proveedor> convertResultToList(Result<Record9<Long, String, String, String, String, String, String, Long, String>> result) {
+  protected List<Proveedor> convertResultToList(Result<Record9<Long, String, String, String, String, String, String, Long, String>> result)
+          throws SQLException {
     Map<Long, Proveedor> proveedorMap = new HashMap<>();
     for (Record9<Long, String, String, String, String, String, String, Long, String> record : result) {
       Long proveedorId = record.get(PROVEEDOR_TABLE_ID);
@@ -75,6 +77,12 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
       if (proveedor == null) {
         proveedor = new Proveedor();
         proveedor.setId(proveedorId);
+
+        Custodio custodio = new Custodio();
+        custodio.setId(record.get(PROVEEDOR_CUSTODIO_ID));
+        custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
+        proveedor.setCustodio(custodio);
+
         proveedor.setRuc(record.get(PROVEEDOR_TABLE_RUC));
         proveedor.setRazonsocial(record.get(PROVEEDOR_TABLE_RAZONSOCIAL));
         proveedor.setDireccionfiscal(record.get(PROVEEDOR_TABLE_DIRECCIONFISCAL));
@@ -85,7 +93,7 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
         ///proveedor.setAtributos(new ArrayList<>());
         proveedorMap.put(proveedorId, proveedor);
       }
-      Long custodioId = record.get(CUSTODIO_TABLE_ID);
+      /*Long custodioId = record.get(CUSTODIO_TABLE_ID);
       if (custodioId != null) {
         Custodio custodio = new Custodio();
         custodio.setId(custodioId);
@@ -93,7 +101,7 @@ public abstract class ReadProveedorAbstractHandler implements RequestHandler<API
         //atributos.setNombresyapellidos(record.get(ATRIBUTOS_NOMBREATRIBUTO));
         //proveedor.getCustodio().add(atributos);
         proveedor.setCustodio(custodio);
-      }
+      }*/
     }
     return new ArrayList<>(proveedorMap.values());
 
