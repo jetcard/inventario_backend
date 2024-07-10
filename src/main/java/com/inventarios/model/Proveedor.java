@@ -17,14 +17,17 @@ public class Proveedor  implements Serializable{
     private String contacto;
     private String telefono;
     private String correo;
+
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JsonIgnoreProperties( {"hibernateLazyInitializer", "handler"})
     private Custodio custodio;
-    @OneToMany(mappedBy = "custodio", cascade = CascadeType.ALL, orphanRemoval = true)
+    /*@OneToMany(mappedBy = "custodio", cascade = CascadeType.ALL, orphanRemoval = true)
     //private Custodio custodio;
     /*@ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties( {"hibernateLazyInitializer", "handler"})*/
 
     //@Column(name = "custodioid")
-    private Long custodioid;
+    //private Long custodioid;
 
     public Long getId() {
         return id;
@@ -90,11 +93,11 @@ public class Proveedor  implements Serializable{
         this.custodio = custodio;
     }
 
-    public Long getCustodioid() {
+    /*public Long getCustodioid() {
         return custodioid;
     }
 
     public void setCustodioid(Long custodioid) {
         this.custodioid = custodioid;
-    }
+    }*/
 }

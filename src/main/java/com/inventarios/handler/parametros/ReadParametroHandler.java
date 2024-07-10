@@ -5,8 +5,6 @@ import com.inventarios.handler.parametros.services.ReadParametroAbstractHandler;
 import java.sql.SQLException;
 import org.jooq.Record;
 import org.jooq.Result;
-import org.jooq.impl.DSL;
-
 public class ReadParametroHandler extends ReadParametroAbstractHandler {
   protected Result<Record> read() throws SQLException {
     var dsl = RDSConexion.getDSL();

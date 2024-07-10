@@ -5719,6 +5719,11 @@ Resources:
       - MarcaPostMethod
       - MarcaUpdateMethod
       - MarcaDeleteMethod
+      - ParametroGetMethod
+      - ParametroGetByIdMethod
+      - ParametroPostMethod
+      - ParametroUpdateMethod
+      - ParametroDeleteMethod
       - ProveedorGetMethod
       - ProveedorGetByIdMethod
       - ProveedorPostMethod

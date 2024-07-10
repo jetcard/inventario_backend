@@ -61,16 +61,14 @@ CREATE TABLE custodio (
 
 CREATE TABLE proveedor (
     id SERIAL PRIMARY KEY,
-    --custodioId INTEGER NOT NULL,--
     custodioId INTEGER NOT NULL,
     razonsocial VARCHAR(255) NOT NULL,
     ruc VARCHAR(18) NOT NULL,
     direccionfiscal VARCHAR(255) NOT NULL,
     contacto VARCHAR(255) NOT NULL,
     telefono VARCHAR(255) NOT NULL,
-    correo VARCHAR(255) NOT NULL
-    --,
-    --FOREIGN KEY (custodioId) REFERENCES custodio(id)
+    correo VARCHAR(255) NOT NULL,
+    FOREIGN KEY (custodioId) REFERENCES custodio(id)
 );
 
 CREATE TABLE tipo (

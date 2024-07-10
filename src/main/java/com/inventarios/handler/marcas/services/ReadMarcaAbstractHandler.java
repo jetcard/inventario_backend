@@ -4,10 +4,8 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-
 import java.sql.SQLException;
 import java.util.*;
-
 import com.inventarios.handler.marcas.response.MarcaResponseRest;
 import com.inventarios.model.*;
 import com.inventarios.util.GsonFactory;
@@ -15,11 +13,8 @@ import org.jooq.Table;
 import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
-
 public abstract class ReadMarcaAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-
   protected final static Table<Record> MARCA_TABLE = DSL.table("marca");
-
   final static Map<String, String> headers = new HashMap<>();
 
   static {
@@ -29,9 +24,7 @@ public abstract class ReadMarcaAbstractHandler implements RequestHandler<APIGate
     headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     headers.put("Access-Control-Allow-Methods", "GET");
   }
-
   protected abstract Result<Record> read() throws SQLException;
-
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
     input.setHeaders(headers);
@@ -69,15 +62,15 @@ public abstract class ReadMarcaAbstractHandler implements RequestHandler<APIGate
   }*/
 
   protected List<Marca> convertResultToList(Result<Record> result) throws SQLException {
-    List<Marca> listaMarcaes = new ArrayList<>();
+    List<Marca> listaMarcas = new ArrayList<>();
     for (Record record : result) {
       Marca marca = new Marca();
       marca.setId(record.getValue("id", Long.class));
       marca.setNombre(record.getValue("nombre", String.class));
       marca.setDescripcion(record.getValue("descripcion", String.class));
-      listaMarcaes.add(marca);
+      listaMarcas.add(marca);
     }
-    return listaMarcaes;
+    return listaMarcas;
   }
 
 }

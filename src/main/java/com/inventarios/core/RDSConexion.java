@@ -25,10 +25,10 @@ public class RDSConexion {
     config.setJdbcUrl("jdbc:postgresql://" + rdsEndpoint() + "/" + rdsDatabase());
     config.setUsername(rdsUserDB());
     config.setPassword(rdsPassDB());
-    config.setMaximumPoolSize(100);
+    config.setMaximumPoolSize(150);
     config.setUsername(rdsUserDB());
     config.setPassword(rdsPassDB());
-    config.setMinimumIdle(5); // Número máximo de conexiones inactivas en el pool
+    config.setMinimumIdle(15); // Número máximo de conexiones inactivas en el pool
     config.setIdleTimeout(30000); // Tiempo máximo de inactividad antes de cerrar una conexión
     config.setConnectionTimeout(30000); // Tiempo máximo de espera para obtener una conexión del pool
     config.setMaxLifetime(1800000);
@@ -43,11 +43,11 @@ public class RDSConexion {
     return System.getenv(DATABASE_NAME_ENV);
   }
   public static String rdsSecretArn() {
-    //return "arn:aws:secretsmanager:ap-southeast-2:905418357889:secret:RDSSecret-z1PfolwvijN4-llDO0c";
+    //return "arn:aws:secretsmanager:ap-southeast-2:905418357889:secret:RDSSecret-j511ScBfxQT5-xT9Wwm";
     return System.getenv(POSTGRES_SECRET_ARN_ENV);
   }
   public static String rdsEndpoint() {
-    //return "sam-app-rdsinstance-tmgsvlke1bkb.ctcosak24j76.ap-southeast-2.rds.amazonaws.com";
+    //return "sam-app-rdsinstance-k8vqxmtu1kkm.ctcosak24j76.ap-southeast-2.rds.amazonaws.com";
     return System.getenv(DB_ENDPOINT);
   }
   public static String rdsUserDB() {

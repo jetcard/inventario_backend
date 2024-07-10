@@ -137,7 +137,10 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
       Proveedor proveedor = new Proveedor();
       proveedor.setId(record.get(PROVEEDOR_TABLE_ID));
       proveedor.setRazonsocial(record.getValue(PROVEEDOR_TABLE_RAZONSOCIAL));
-      proveedor.setCustodioid(record.get(CUSTODIOID_PROVEEDOR_TABLE));
+      Custodio custodio=new Custodio();
+      custodio.setId(record.get(CUSTODIOID_PROVEEDOR_TABLE));
+      proveedor.setCustodio(custodio);
+      //proveedor.setCustodioid();
 
       Atributo atributoExistente = atributosMap.get(atributoId);
       atributoExistente.getCustodio().getProveedores().add(proveedor);
@@ -161,10 +164,10 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
       custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
       List<Proveedor> proveedoresLista = listaCustodioProveedores(custodio.getId());
       for (Proveedor proveedor : proveedoresLista) {
-        proveedor.setCustodioid(custodio.getId());
+        //proveedor.setCustodioId(custodio.getId());
         proveedor.setRazonsocial(record.getValue(PROVEEDOR_TABLE_RAZONSOCIAL, String.class));
       }
-      custodio.setProveedores(proveedoresLista);
+      //custodio.setProveedores(proveedoresLista);
       atributo.setCustodio(custodio);
 
       Articulo articulo = new Articulo();
@@ -196,7 +199,7 @@ public abstract class BusquedaPorIdAtributoAbstractHandler implements RequestHan
       custodio.setId(record.get(ATRIBUTO_RESPONSABLE_ID));
       custodio.setArearesponsable(mostrarCustodio(custodio.getId()));
       List<Proveedor> proveedoresLista = listaCustodioProveedores(custodio.getId());
-      custodio.setProveedores(proveedoresLista);
+      //custodio.setProveedores(proveedoresLista);
       atributo.setCustodio(custodio);
 
       Articulo articulo = new Articulo();

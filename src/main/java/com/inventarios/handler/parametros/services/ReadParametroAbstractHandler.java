@@ -4,23 +4,17 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.google.gson.Gson;
 import java.sql.SQLException;
 import java.util.*;
-
 import com.inventarios.handler.parametros.response.ParametroResponseRest;
 import com.inventarios.model.*;
 import com.inventarios.util.GsonFactory;
-import org.jooq.Field;
 import org.jooq.Table;
 import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
-
 public abstract class ReadParametroAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-
   protected final static Table<Record> PARAMETRO_TABLE = DSL.table("parametros");
-
   final static Map<String, String> headers = new HashMap<>();
 
   static {
@@ -30,9 +24,7 @@ public abstract class ReadParametroAbstractHandler implements RequestHandler<API
     headers.put("Access-Control-Allow-Headers", "content-type,X-Custom-Header,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     headers.put("Access-Control-Allow-Methods", "GET");
   }
-
   protected abstract Result<Record> read() throws SQLException;
-
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
     input.setHeaders(headers);
@@ -54,9 +46,6 @@ public abstract class ReadParametroAbstractHandler implements RequestHandler<API
               .withStatusCode(500);
     }
   }
-
-
-
   protected List<Parametro> convertResultToList(Result<Record> result) throws SQLException {
     List<Parametro> listaParametros = new ArrayList<>();
     for (Record record : result) {

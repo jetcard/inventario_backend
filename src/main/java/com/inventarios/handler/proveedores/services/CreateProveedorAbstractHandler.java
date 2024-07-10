@@ -17,7 +17,6 @@ import com.inventarios.util.GsonFactory;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
-
 public abstract class CreateProveedorAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   protected final static Table<Record> PROVEEDOR_TABLE = DSL.table("proveedor");
@@ -36,7 +35,6 @@ public abstract class CreateProveedorAbstractHandler implements RequestHandler<A
                                String telefono,
                                String correo,
                                long custodioId) throws SQLException;
-
   @Override
   public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
     input.setHeaders(headers);
@@ -45,8 +43,7 @@ public abstract class CreateProveedorAbstractHandler implements RequestHandler<A
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
       .withHeaders(headers);
     String body = input.getBody();
-    /*String body =
-            "{\"ruc\":\"27798362723\",\"razonsocial\":\"CONSULTORES\",\"direccionfiscal\":\"DIRECCION\",\"contacto\":\"HJASJSD\", \"telefono\": \"888888111\",\"correo\": \"kahh@ddkk.com\"}";*/
+    //String body = "{\"custodioId\":3,\"ruc\":\"27798362723\",\"razonsocial\":\"CONSULTORES\",\"direccionfiscal\":\"DIRECCION\",\"contacto\":\"HJASJSD\", \"telefono\": \"888888111\",\"correo\": \"kahh@ddkk.com\"}";
     context.getLogger().log("body " + body);
     try {
       ObjectMapper mapper = new ObjectMapper();
@@ -63,15 +60,15 @@ public abstract class CreateProveedorAbstractHandler implements RequestHandler<A
               logger.log("custodioId = "+custodioId);
             }
           } catch (NumberFormatException e) {
-            logger.log("Error al convertir parámetro de inserción a long: " + e.getMessage());
-            responseRest.setMetadata("Respuesta nok", "-1", "Error al convertir parámetros de consulta a long");
+            logger.log("Error al convertir custodioId a long: " + e.getMessage());
+            responseRest.setMetadata("Respuesta nok", "-1", "Error al convertir custodioId a long");
             String output = GsonFactory.createGson().toJson(responseRest);
             return response.withStatusCode(400).withBody(output);
           }
           Custodio custodio =new Custodio();
           custodio.setId(custodioId);
 
-//          proveedor.setCustodio(custodio);
+          proveedor.setCustodio(custodio);
 //          proveedor.getCustodio().setId(custodioId);
 
           save(proveedor.getRuc(),
@@ -80,8 +77,7 @@ public abstract class CreateProveedorAbstractHandler implements RequestHandler<A
               proveedor.getContacto().toUpperCase(),
               proveedor.getTelefono().toUpperCase(),
               proveedor.getCorreo().toLowerCase(),
-                  proveedor.getCustodioid()
-//              proveedor.getCustodio().getId()
+              proveedor.getCustodio().getId()
           );
           responseRest.setMetadata("Respuesta ok", "00", "Proveedor guardado");
         }
