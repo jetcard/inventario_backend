@@ -46,8 +46,10 @@ public abstract class CreateActivoAbstractHandler implements RequestHandler<APIG
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(input.getBody());
 
-            String body = input.getBody();
+            //String body = input.getBody();
             //String body = "{\"custodioId\":4,\"articuloId\":3,\"tipoId\":1,\"categoriaId\":1,\"codinventario\":\"VQVREE\",\"modelo\":\"NINAS\",\"marca\":\"ZZDZCSCW\",\"nroserie\":\"V1VV3A\",\"fechaingreso\":\"2024-06-12\",\"fechaingresostr\":\"2024-06-12\",\"importe\":\"522515\",\"moneda\":\"S/\",\"descripcion\":\"As\",\"proveedorId\":1,\"especificaciones\":[{\"nombreatributo\":\"COLOR\",\"descripcionatributo\":\"AZUL\"}]}";
+
+            String body = "{\"custodioId\":4,\"articuloId\": 4,\"tipoId\": 1,\"categoriaId\": 2,\"codinventario\":\"AFAFS\",\"modelo\":\"FDAWEX\",\"marca\":\"\",\"nroserie\":\"ASC\",\"fechaingreso\":\"2024-07-05\",\"fechaingresostr\":\"2024-07-05\",\"importe\":\"53225\",\"moneda\":\"S/\",\"descripcion\":\"As\",\"proveedorId\": 4,\"especificaciones\":[{\"nombreatributo\":\"COLOR\",\"descripcionatributo\":\"ROJO\"}]}";
             if (body != null && !body.isEmpty()) {
                 logger.log(body);
                 Activo activo = GsonFactory.createGson().fromJson(body, Activo.class);
