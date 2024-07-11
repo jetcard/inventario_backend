@@ -7,22 +7,18 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.inventarios.handler.activo.response.ActivoResponseRest;
 import com.inventarios.model.*;
-
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
 import com.inventarios.util.Conversiones;
 import com.inventarios.util.GsonFactory;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
-
 import static org.jooq.impl.DSL.*;
 import static org.jooq.impl.DSL.name;
-
 public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   protected final static Table<Record> ACTIVO_TABLE = table("activo");
@@ -31,9 +27,7 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
   protected final static Field<Long> ACTIVO_RESPONSABLE_ID = field(name("activo", "custodioid"), Long.class);
   protected final static Field<Long> ACTIVO_ARTICULO_ID = field(name("activo", "articuloid"), Long.class);
   protected final static Field<Long> ACTIVO_GRUPO_ID = field(name("activo", "categoriaid"), Long.class);
-
   protected final static Field<Long> ACTIVO_PROVEEDOR_ID = field(name("activo", "proveedorid"), Long.class);
-
   protected final static Field<Long> ESPECIFICACIONES_ID = field(name("especificaciones", "id"), Long.class);
   protected final static Field<Long> ESPECIFICACIONES_ESPECIFICOID = field(name("especificaciones", "especificacionid"), Long.class);
   protected final static Field<String> ESPECIFICACIONES_NOMBREESPECIFICO = field(name("especificaciones", "nombreatributo"), String.class);
@@ -171,10 +165,12 @@ public abstract class BusquedaPorIdActivoAbstractHandler implements RequestHandl
         activo.setCategoria(categoria);
 
         //
+        /*
         Proveedor proveedor=new Proveedor();
         proveedor.setId(record.get(ACTIVO_PROVEEDOR_ID));
         proveedor.setRazonsocial(mostrarProveedor(proveedor.getId()));
-        activo.setProveedor(proveedor);
+        activo.setProveedor(proveedor);*/
+        activo.setProveedorId(record.get(ACTIVO_PROVEEDOR_ID));
 
         activo.setCodinventario(record.getValue("codinventario", String.class));
         activo.setModelo(record.getValue("modelo", String.class));

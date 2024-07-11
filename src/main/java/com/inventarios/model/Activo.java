@@ -36,9 +36,9 @@ public class Activo implements Serializable {
     private String fechaingresostr;
     private String moneda;
     private BigDecimal importe;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Proveedor proveedor;
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    //private Proveedor proveedor;
 //Tiene que haber una tabla que guarde los las especificaciones técnicas
     //Si se está utilizando específicos mandarlo a Comunes y utilizar Especificos
     //como la nueva tabla que albergue a las especificaciones técnicas de Activos
@@ -47,7 +47,7 @@ public class Activo implements Serializable {
     @JsonManagedReference
     private List<Especificaciones> especificaciones;
     private String descripcion;
-
+private Long proveedorId;
 
     public Long getId() {
         return id;
@@ -153,14 +153,6 @@ public class Activo implements Serializable {
         this.importe = importe;
     }
 
-    public Proveedor getProveedor() {
-        return proveedor;
-    }
-
-    public void setProveedor(Proveedor proveedor) {
-        this.proveedor = proveedor;
-    }
-
     public List<Especificaciones> getEspecificaciones() {
         return especificaciones;
     }
@@ -175,5 +167,13 @@ public class Activo implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public Long getProveedorId() {
+        return proveedorId;
+    }
+
+    public void setProveedorId(Long proveedorId) {
+        this.proveedorId = proveedorId;
     }
 }

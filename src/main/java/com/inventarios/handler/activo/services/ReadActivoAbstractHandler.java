@@ -177,11 +177,12 @@ public abstract class ReadActivoAbstractHandler //implements RequestHandler<APIG
           categoria.setNombregrupo(mostrarCategoria(categoria.getId()));
           activo.setCategoria(categoria);
 
-          //
+          /*
           Proveedor proveedor=new Proveedor();
           proveedor.setId(record.get(ACTIVO_PROVEEDOR_ID));
           proveedor.setRazonsocial(mostrarProveedor(proveedor.getId()));
-          activo.setProveedor(proveedor);
+          activo.setProveedor(proveedor);*/
+          activo.setProveedorId(record.getValue(ACTIVO_PROVEEDOR_ID));
 
           activo.setCodinventario(record.getValue("codinventario", String.class));
           activo.setModelo(record.getValue("modelo", String.class));

@@ -8,7 +8,6 @@ import org.jooq.impl.DSL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 public class RDSConexion {
   public static final String DATABASE_NAME_ENV = "DBName";
   public static final String POSTGRES_SECRET_ARN_ENV = "RDSSecretArn";
@@ -43,11 +42,11 @@ public class RDSConexion {
     return System.getenv(DATABASE_NAME_ENV);
   }
   public static String rdsSecretArn() {
-    //return "arn:aws:secretsmanager:ap-southeast-2:905418357889:secret:RDSSecret-ILEA9ECbG4JM-laNdHa";
+    //return "arn:aws:secretsmanager:ap-southeast-2:905418357889:secret:RDSSecret-gXBQwT33fVbY-MWJKlE";
     return System.getenv(POSTGRES_SECRET_ARN_ENV);
   }
   public static String rdsEndpoint() {
-    //return "sam-app-rdsinstance-sqma7bvnbfv3.ctcosak24j76.ap-southeast-2.rds.amazonaws.com";
+    //return "sam-app-rdsinstance-pbkahi7csthj.ctcosak24j76.ap-southeast-2.rds.amazonaws.com";
     return System.getenv(DB_ENDPOINT);
   }
   public static String rdsUserDB() {

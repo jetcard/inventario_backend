@@ -76,7 +76,7 @@ public abstract class CreateProveedorAbstractHandler implements RequestHandler<A
               proveedor.getDireccionfiscal().toUpperCase(),
               proveedor.getContacto().toUpperCase(),
               proveedor.getTelefono().toUpperCase(),
-              proveedor.getCorreo().toLowerCase(),
+              proveedor.getCorreo().toUpperCase(),
               proveedor.getCustodio().getId()
           );
           responseRest.setMetadata("Respuesta ok", "00", "Proveedor guardado");

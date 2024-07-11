@@ -100,7 +100,7 @@ public class CreateActivoHandler extends CreateActivoAbstractHandler {
             .set(DSL.field("importe"), activo.getImporte())
             .set(DSL.field("moneda"), activo.getMoneda())
             .set(DSL.field("descripcion"), activo.getDescripcion().toUpperCase())
-            .set(DSL.field("proveedorId"), activo.getProveedor().getId())
+            .set(DSL.field("proveedorid"), activo.getProveedorId())
             .returningResult(DSL.field("id"))
             .fetchOne()
             .getValue(DSL.field("id", Integer.class));

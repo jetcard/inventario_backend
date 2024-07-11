@@ -66,7 +66,8 @@ public class ActivoExcelExporter {
             int columnCount = 0;
             createCell(row, columnCount++, String.valueOf(result.getId()), style);
             createCell(row, columnCount++, result.getCustodio(), style);
-            createCell(row, columnCount++, result.getProveedor().getRazonsocial(), style);
+            //createCell(row, columnCount++, result.getProveedor().getRazonsocial(), style);
+            createCell(row, columnCount++, result.getCustodio().getProveedores().get(0).getRazonsocial(), style);
             createCell(row, columnCount++, result.getTipo().getNombretipo(), style);
             createCell(row, columnCount++, result.getCategoria().getNombregrupo(), style);
             createCell(row, columnCount++, result.getArticulo().getNombrearticulo(), style);

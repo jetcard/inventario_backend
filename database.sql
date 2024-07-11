@@ -119,11 +119,11 @@ CREATE TABLE activo (
     articuloId INTEGER NOT NULL,
     tipoId INTEGER NOT NULL,
     categoriaId INTEGER NOT NULL,
-    proveedorId INTEGER NULL,
-    codinventario VARCHAR(50)  NULL,
-    modelo VARCHAR(255)  NULL,
-    marca VARCHAR(255) NOT NULL,
-    nroserie VARCHAR(255) NOT NULL,
+    proveedorid INTEGER NULL,
+    codinventario VARCHAR(50) NULL,
+    modelo VARCHAR(255) NULL,
+    marca VARCHAR(255) NULL,
+    nroserie VARCHAR(255) NULL,
     fechaingreso DATE NOT NULL,
     fechaingresostr VARCHAR(20) NULL,
     moneda VARCHAR(10) NOT NULL,
@@ -132,8 +132,8 @@ CREATE TABLE activo (
     FOREIGN KEY (custodioId) REFERENCES custodio(id),
     FOREIGN KEY (articuloId) REFERENCES articulo(id),
     FOREIGN KEY (tipoId) REFERENCES tipo(id),
-    FOREIGN KEY (categoriaId) REFERENCES categoria(id),
-    FOREIGN KEY (proveedorId) REFERENCES proveedor(id)
+    FOREIGN KEY (categoriaId) REFERENCES categoria(id)
+    --FOREIGN KEY (proveedorId) REFERENCES proveedor(id)
 );
 
 CREATE TABLE especificaciones (--especificos

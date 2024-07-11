@@ -17,10 +17,10 @@ public class UpdateActivoHandler extends UpdateActivoAbstractHandler {
                         Categoria categoria) throws SQLException {
     var dsl = RDSConexion.getDSL();
     dsl.update(ACTIVO_TABLE)
-      .set(DSL.field("responsable"), custodio)
-      .set(DSL.field("articulo"), articulo)
-            .set(DSL.field("tipo"), tipo)
-            .set(DSL.field("grupo"), categoria)
+      .set(DSL.field("custodioId"), custodio)
+      .set(DSL.field("articuloId"), articulo)
+            .set(DSL.field("tipoId"), tipo)
+            .set(DSL.field("categoriaId"), categoria)
             .where(DSL.field("id", Long.class).eq(id))
       .execute();
   }
